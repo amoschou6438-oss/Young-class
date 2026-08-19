@@ -1,0 +1,2622 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 青少班：iPhone / PWA 主畫面圖示 -->
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<meta name="apple-mobile-web-app-title" content="青少班管理">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#faf6ef">
+
+<title>蕭氏青少班 管理系統</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink2: #16213e;
+    --teal: #0f3460;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --cream: #faf6ef;
+    --red: #c0392b;
+    --green: #1e7e5e;
+    --blue: #1565c0;
+    --purple: #6a1b9a;
+    --muted: #6b7280;
+    --border: #d4c4a8;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(26,26,46,0.12);
+    --shadow-lg: 0 8px 40px rgba(26,26,46,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+  .header {
+    background: var(--ink);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(201,168,76,0.05) 30px, rgba(201,168,76,0.05) 31px),
+      repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(201,168,76,0.05) 30px, rgba(201,168,76,0.05) 31px);
+    padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 100; height: 64px;
+  }
+  .header-title {
+    font-family: 'Noto Serif TC', serif; font-size: 1.2rem; font-weight: 700;
+    color: var(--gold); letter-spacing: 0.08em; display: flex; align-items: center; gap: 0.6rem;
+  }
+  .header-title .dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+  .header-badge {
+    background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-light); font-size: 0.72rem; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.05em;
+  }
+
+  .nav {
+    background: var(--ink2); display: flex; padding: 0 2rem;
+    border-bottom: 1px solid rgba(201,168,76,0.2); overflow-x: auto;
+  }
+  .nav-btn {
+    font-family: 'Noto Sans TC', sans-serif; font-size: 0.82rem; font-weight: 500;
+    color: rgba(255,255,255,0.5); background: none; border: none;
+    padding: 0.7rem 1.2rem; cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all 0.2s; white-space: nowrap; letter-spacing: 0.04em;
+  }
+  .nav-btn:hover { color: rgba(255,255,255,0.85); }
+  .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .section-title {
+    font-family: 'Noto Serif TC', serif; font-size: 1.5rem; font-weight: 700;
+    color: var(--teal); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.7rem;
+  }
+  .section-title::before {
+    content: ''; width: 4px; height: 1.5rem; background: var(--gold);
+    border-radius: 2px; display: inline-block;
+  }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card {
+    background: var(--white); border-radius: 12px; padding: 1.4rem 1.2rem;
+    box-shadow: var(--shadow); border-top: 4px solid var(--gold);
+    transition: transform 0.2s; position: relative; overflow: hidden;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .stat-card.teal  { border-top-color: var(--teal); }
+  .stat-card.green { border-top-color: var(--green); }
+  .stat-card.purple{ border-top-color: var(--purple); }
+  .stat-num { font-family: 'Noto Serif TC', serif; font-size: 2.8rem; font-weight: 900; color: var(--teal); line-height: 1; }
+  .stat-card.green  .stat-num { color: var(--green); }
+  .stat-card.purple .stat-num { color: var(--purple); }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; font-weight: 500; }
+
+  .area-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .area-card { background: var(--white); border-radius: 10px; padding: 1.2rem; box-shadow: var(--shadow); border-left: 4px solid var(--teal); }
+  .area-name { font-family: 'Noto Serif TC', serif; font-size: 1rem; font-weight: 700; color: var(--teal); margin-bottom: 0.6rem; }
+  .area-breakdown { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 8px; }
+  .area-tag { font-size: 0.72rem; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+  .tag-student { background: #e8f5e9; color: #1e7e5e; }
+  .tag-support { background: #e3f2fd; color: #1565c0; }
+  .tag-res    { background: #f3e5f5; color: #6a1b9a; }
+  .tag-parent { background: #fff3e0; color: #e65100; }
+
+  .table-wrap { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); overflow-x: auto; margin-bottom: 2rem; }
+  #members-table-wrap { overflow-x: auto; }
+  .table-header-row {
+    display: flex; align-items: center; flex-wrap: wrap;
+    padding: 1rem 1.4rem; border-bottom: 1px solid var(--border); gap: 0.5rem;
+  }
+  .table-header-row h3 { font-family: 'Noto Serif TC', serif; font-size: 1rem; font-weight: 700; color: var(--teal); margin-right: 0.5rem; }
+  .search-box {
+    margin-left: auto; display: flex; align-items: center; gap: 0.4rem;
+    background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 0.35rem 0.8rem;
+  }
+  .search-box input { border: none; background: none; font-size: 0.82rem; font-family: 'Noto Sans TC', sans-serif; color: var(--ink); outline: none; width: 140px; }
+  .filter-btn {
+    font-size: 0.75rem; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--cream); cursor: pointer; color: var(--muted);
+    font-family: 'Noto Sans TC', sans-serif; transition: all 0.15s;
+  }
+  .filter-btn.active, .filter-btn:hover { background: var(--teal); color: white; border-color: var(--teal); }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--teal); }
+  thead th { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.9); padding: 0.5rem 0.4rem; text-align: left; letter-spacing: 0; }
+  #members-table thead th { padding: 0.45rem 0.3rem; }
+  #members-table th:nth-child(1), #members-table td:nth-child(1) { width: 32px; }   /* 序號 */
+  #members-table th:nth-child(2), #members-table td:nth-child(2) { width: 48px; }   /* 職位 */
+  #members-table th:nth-child(3), #members-table td:nth-child(3) { width: 44px; }   /* 乾坤 */
+  #members-table th:nth-child(4), #members-table td:nth-child(4) { width: 36px; }   /* 地區 */
+  #members-table th:nth-child(5), #members-table td:nth-child(5) { width: 34px; }   /* 代號 */
+  #members-table th:nth-child(6), #members-table td:nth-child(6) { width: 46px; }   /* 姓名 */
+  #members-table th:nth-child(7), #members-table td:nth-child(7) { width: 58px; }   /* 參班 */
+  #members-table th:nth-child(8), #members-table td:nth-child(8) { width: 58px; }   /* 茶會 */
+  #members-table th:nth-child(9), #members-table td:nth-child(9) { width: 46px; }   /* 家庭 */
+  #members-table th:nth-child(10), #members-table td:nth-child(10) { width: 58px; } /* 操作 */
+  tbody tr { border-bottom: 1px solid #f0e8d8; transition: background 0.15s; }
+  tbody tr:hover { background: #fdf8f0; }
+  tbody tr:last-child { border-bottom: none; }
+  td { font-size: 0.82rem; padding: 0.45rem 0.5rem; color: var(--ink); }
+  #members-table td { padding: 0.4rem 0.3rem; }
+  td.name { font-weight: 700; font-size: 0.9rem; }
+
+  .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 2px 9px; border-radius: 20px; letter-spacing: 0.03em; }
+  #members-table .badge { padding: 1px 6px; }
+  .badge-資輔 { background: #f3e5f5; color: var(--purple); }
+  .badge-學輔 { background: #e3f2fd; color: var(--blue); }
+  .badge-學員 { background: #e8f5e9; color: var(--green); }
+  .badge-家長 { background: #fff3e0; color: #e65100; }
+  .badge-乾道 { background: #fff3e0; color: #e65100; }
+  .badge-坤道 { background: #fce4ec; color: #c2185b; }
+
+  /* Toggle buttons */
+  .toggle-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    border: none; cursor: pointer; transition: all 0.18s;
+    font-family: 'Noto Sans TC', sans-serif; white-space: nowrap;
+  }
+  #members-table .toggle-btn { padding: 2px 8px; }
+  .toggle-btn.on-attend  { background: #e8f5e9; color: var(--green); }
+  .toggle-btn.off-attend { background: #f5f5f5; color: #9e9e9e; }
+  .toggle-btn.on-tea  { background: #f3e5f5; color: var(--purple); }
+  .toggle-btn.off-tea { background: #f5f5f5; color: #9e9e9e; }
+  .toggle-btn:hover { opacity: 0.8; transform: scale(1.04); }
+
+  /* Attendance grid */
+  .attend-grid-wrap { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); overflow-x: auto; margin-bottom: 2rem; }
+  .attend-grid-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+  .attend-grid-table th {
+    background: var(--teal); color: white; font-size: 0.78rem; font-weight: 600;
+    padding: 0.65rem 0.7rem; text-align: center; border: 1px solid rgba(255,255,255,0.15);
+  }
+  .attend-grid-table td { font-size: 0.8rem; padding: 0.6rem 0.7rem; border: 1px solid #eee; text-align: center; vertical-align: middle; }
+  .attend-grid-table .row-label { font-weight: 700; color: white; text-align: justify; text-align-last: justify; white-space: nowrap; width: 4em; min-width: 4em; }
+  .attend-grid-table .row-label.green  { background: var(--green); }
+  .attend-grid-table .row-label.blue   { background: var(--blue); }
+  .attend-grid-table .row-label.purple { background: var(--purple); }
+  .attend-grid-table .row-label.orange { background: #e65100; }
+  .attend-grid-table .row-label.dark   { background: var(--ink); }
+  .attend-grid-table .total-cell { font-weight: 900; font-size: 1rem; color: var(--teal); background: #e8f4f6; }
+  .attend-grid-table .grand-total { font-weight: 900; font-size: 1.05rem; color: white; background: var(--teal); }
+  .attend-grid-table .names-cell { line-height: 1.9; text-align: left; word-break: keep-all; }
+  .attend-grid-table .names-cell .name-item { display: inline-block; white-space: nowrap; }
+  .count-chip { display: inline-block; background: var(--teal); color: white; border-radius: 20px; font-size: 0.68rem; font-weight: 700; padding: 1px 7px; margin-left: 4px; }
+  .attend-grid-table tr:nth-child(even) td:not(.row-label):not(.total-cell):not(.grand-total) { background: #faf6ef; }
+
+  /* Summary bar */
+  .summary-bar {
+    background: var(--ink); color: white; border-radius: 10px;
+    padding: 1rem 1.5rem; display: flex; gap: 2rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;
+  }
+  .s-item { display: flex; flex-direction: column; }
+  .s-val { font-family: 'Noto Serif TC', serif; font-size: 1.6rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .s-label { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .divider-v { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
+
+  /* Bento subtotal */
+  .bento-subtotal {
+    background: #f0f8fa; border-top: 2px solid var(--border);
+    padding: 1rem 1.4rem; display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;
+  }
+  .subtotal-item { display: flex; align-items: baseline; gap: 6px; }
+  .subtotal-num { font-family: 'Noto Serif TC', serif; font-size: 1.6rem; font-weight: 900; color: var(--teal); }
+  .subtotal-label { font-size: 0.78rem; color: var(--muted); }
+  .subtotal-divider { width: 1px; height: 30px; background: var(--border); }
+  .subtotal-item.total .subtotal-num { color: #b8860b; font-size: 1.6rem; }
+
+  .bento-count { display: inline-flex; align-items: center; gap: 4px; background: var(--teal); color: white; border-radius: 20px; padding: 2px 10px; font-size: 0.75rem; font-weight: 700; }
+  .bento-count.two   { background: var(--gold); color: var(--ink); }
+  .bento-count.three { background: #7b3f9e; color: white; }
+  .bento-count.four  { background: var(--red); color: white; }
+
+  .note-box { background: #fffbf0; border: 1px solid #e8d5a0; border-radius: 10px; padding: 1rem 1.3rem; margin-bottom: 1.5rem; }
+  .note-box .note-title { font-size: 0.78rem; font-weight: 700; color: #8B6914; margin-bottom: 0.4rem; }
+  .note-box .note-text { font-size: 0.82rem; color: #6b5a2e; line-height: 1.7; }
+
+
+  /* ── ADD MEMBER MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--paper); border-radius: 14px;
+    padding: 1.5rem; width: 92%; max-width: 480px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-title {
+    font-family: 'Noto Serif TC', serif; font-size: 1.1rem;
+    font-weight: 700; color: var(--teal); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .modal-field { margin-bottom: 1rem; }
+  .modal-field label {
+    font-size: 0.78rem; font-weight: 700; color: var(--brown);
+    display: block; margin-bottom: 0.35rem;
+  }
+  .modal-field select, .modal-field input[type=text] {
+    width: 100%; padding: 0.5rem 0.7rem;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 0.9rem; font-family: 'Noto Sans TC', sans-serif;
+    color: var(--ink); background: white; outline: none;
+  }
+  .modal-field select:focus, .modal-field input:focus { border-color: var(--gold); }
+  .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .modal-actions { display: flex; gap: 0.8rem; margin-top: 1.4rem; justify-content: flex-end; }
+  .btn-cancel {
+    padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border);
+    background: white; color: var(--muted); cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif; font-size: 0.82rem;
+  }
+  .btn-confirm {
+    padding: 8px 24px; border-radius: 20px; border: none;
+    background: var(--teal); color: white; cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif; font-size: 0.82rem; font-weight: 700;
+  }
+  .btn-add-member {
+    margin-left: auto; padding: 6px 16px; border-radius: 20px;
+    border: none; background: var(--teal); color: white;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif; display: flex; align-items: center; gap: 4px;
+    white-space: nowrap; transition: opacity 0.15s;
+  }
+  .btn-add-member:hover { opacity: 0.85; }
+  .btn-edit-member {
+    margin-left: 0.5rem; padding: 6px 16px; border-radius: 20px;
+    border: none; background: var(--teal); color: white;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif; display: flex; align-items: center; gap: 4px;
+    white-space: nowrap; transition: opacity 0.15s;
+  }
+  .btn-edit-member:hover { opacity: 0.85; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ══ 新版人員名單 ══ */
+  .roster-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .roster-panel {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .roster-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem 1.2rem;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .roster-panel-header.attend { background: var(--teal); color: white; }
+  .roster-panel-header.tea   { background: #6a1b9a; color: white; }
+  .roster-panel-header .count-pill {
+    font-size: 0.75rem; font-weight: 700;
+    background: rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 2px 12px; letter-spacing: 0;
+  }
+  .roster-areas {
+    display: grid;
+    grid-template-columns: auto 1fr;
+  }
+  .roster-area-label {
+    display: flex; align-items: flex-start; justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: 0.7rem 0.55rem;
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid #f0e8d8;
+    border-right: 2px solid var(--border);
+    background: #f7f3ec;
+    color: var(--teal);
+    white-space: nowrap;
+    min-height: 48px;
+  }
+  .roster-area-label:last-of-type { border-bottom: none; }
+  .roster-names-cell {
+    padding: 0.55rem 0.9rem;
+    border-bottom: 1px solid #f0e8d8;
+    display: flex; flex-wrap: wrap; gap: 0.35rem; align-content: flex-start;
+    min-height: 48px;
+  }
+  .roster-names-cell:last-child { border-bottom: none; }
+  .roster-name-chip {
+    display: inline-flex; align-items: center;
+    font-size: 0.88rem; font-weight: 600;
+    padding: 4px 11px; border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: #f7f3ec; color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s; user-select: none;
+    white-space: nowrap; letter-spacing: 0.02em;
+  }
+  .roster-name-chip:hover { transform: scale(1.06); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  .roster-name-chip.attend-on {
+    background: #1565c0; color: white; border-color: #1565c0;
+  }
+  .roster-name-chip.tea-on {
+    background: #6a1b9a; color: white; border-color: #6a1b9a;
+  }
+  .roster-name-chip.delete-mode-chip {
+    border-color: #c0392b; color: #c0392b;
+  }
+  .roster-name-chip.delete-mode-chip:hover { background: #ffebee; }
+
+  @media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .area-grid  { grid-template-columns: repeat(2, 1fr); }
+    .main { padding: 1rem; }
+    .header-badge { display: none; }
+    .roster-panels { grid-template-columns: 1fr; }
+  }
+
+  /* ── RECORD PAGE（與學人班相同）── */
+  .record-wrap { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); overflow-x: auto; margin-bottom: 2rem; }
+  .record-table { width: 100%; border-collapse: collapse; min-width: 900px; }
+  .record-table thead th { background: var(--teal); color: white; font-size: 0.75rem; font-weight: 600; padding: 0.55rem 0.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.15); white-space: nowrap; }
+  .record-table thead th.month-col { min-width: 52px; }
+  .record-table td { font-size: 0.8rem; padding: 0.38rem 0.4rem; border: 1px solid #f0e8d8; text-align: center; vertical-align: middle; }
+  .record-table td.name-col { text-align: left; font-weight: 700; white-space: nowrap; padding-left: 0.6rem; }
+  .record-table td.no-col { color: var(--muted); font-size: 0.72rem; }
+  .record-table td.total-col { font-weight: 900; color: var(--teal); background: #e8f4f6; font-size: 0.88rem; }
+  .record-table tr:nth-child(even) td { background-color: #faf6ef; }
+  .record-table tr:nth-child(even) td.total-col { background: #daeef2; }
+  .record-table tbody tr:hover td { background: #fff8e8 !important; }
+  .rec-check { width: 20px; height: 20px; cursor: pointer; accent-color: var(--teal); }
+  .record-filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+  .record-sep-row td { background: var(--teal) !important; color: white; font-weight: 700; font-size: 0.8rem; padding: 0.3rem 0.6rem; text-align: left; }
+  .record-export-btn { padding: 6px 16px; border-radius: 20px; border: none; background: var(--green); color: white; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: 'Noto Sans TC', sans-serif; display: inline-flex; align-items: center; gap: 4px; }
+  .record-export-btn:hover { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title"><span class="dot"></span>蕭氏青少班 管理系統</div>
+  <div class="header-badge">中一區 ‧ 2026年版 ‧ <span id="date-badge"></span></div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage('dashboard',this)">📊 總覽</button>
+  <button class="nav-btn" onclick="showPage('members',this)">👥 人員名單</button>
+  <button class="nav-btn" onclick="showPage('attendance',this)">✅ 出席統計</button>
+  <button class="nav-btn" onclick="showPage('bento',this)">🍱 便當分配</button>
+  <button class="nav-btn" onclick="showPage('record',this);renderRecord()">📅 出席記錄</button>
+  <button class="nav-btn" onclick="showPage('manage',this);renderManagePage()">⚙️ 資料輸入及編輯</button>
+</nav>
+
+<div class="main">
+
+  <!-- ══ PAGE 1: DASHBOARD ══ -->
+  <div class="page active" id="page-dashboard">
+    <div class="section-title">總覽儀表板</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" id="dash-total">68</div><div class="stat-label">登記總人數</div></div>
+      <div class="stat-card teal"><div class="stat-num" id="dash-attend">0</div><div class="stat-label">參班人數</div></div>
+      <div class="stat-card green"><div class="stat-num" id="dash-tea">0</div><div class="stat-label">參加茶會</div></div>
+      <div class="stat-card purple"><div class="stat-num" id="dash-bento">0</div><div class="stat-label">便當總份數</div></div>
+    </div>
+
+    <div class="section-title" style="font-size:1.1rem;">各地區人數</div>
+    <div class="area-grid" id="dash-area-grid"></div>
+
+    <div class="note-box" style="background:#f0f8ff;border-color:#b8d4e8;">
+      <div class="note-title" style="color:#1565c0;">🍱 便當備餐資訊</div>
+      <div class="note-text" style="color:#1a3a5c;">
+        <span id="dash-bento-area">本月負責：計算中</span>　｜　開始月份：第3月　｜　輪流次數：9次<br>
+        組別順序：太平區 → 台中區 → 坪林區
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE 2: MEMBERS ══ -->
+  <div class="page" id="page-members">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:1.2rem;">
+      <div class="section-title" style="margin-bottom:0;">蕭氏青少班人員名單</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+        <button onclick="triggerExcelAttendMembers()" style="padding:7px 18px;background:#0f6e3a;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">📂 匯入參班名單</button>
+        <button onclick="resetAllAttend();" style="padding:7px 18px;background:#6a1b9a;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">🔄 清除出席記錄</button>
+      </div>
+    </div>
+    <div id="members-excel-result" style="margin-bottom:0.8rem;font-size:0.8rem;line-height:1.8;"></div>
+
+    <!-- 編輯/刪除模式提示列 -->
+    <div id="edit-done-bar" style="display:none;background:#e8f5e9;border:2px solid var(--green);border-radius:10px;padding:0.7rem 1.2rem;margin-bottom:1rem;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <span style="color:var(--green);font-weight:700;font-size:0.9rem;">✏️ 修改模式已開啟</span>
+      <button onclick="toggleEditMode()" style="padding:7px 22px;background:var(--green);color:white;border:none;border-radius:20px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;margin-left:auto;">✔ 完成修改</button>
+    </div>
+    <div id="delete-done-bar" style="display:none;background:#ffebee;border:2px solid #c0392b;border-radius:10px;padding:0.7rem 1.2rem;margin-bottom:1rem;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <span style="color:#b71c1c;font-weight:700;font-size:0.9rem;">🗑 刪除模式已開啟</span>
+      <button type="button" id="delete-mode-btn" onclick="toggleDeleteMode()" style="padding:7px 22px;background:var(--green);color:white;border:none;border-radius:20px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;margin-left:auto;">✔ 完成刪除</button>
+    </div>
+
+    <!-- ══ 人員名單：新版雙欄六地區 ══ -->
+    <div id="members-roster-wrap"></div>
+  </div>
+
+  <!-- ══ PAGE 3: ATTENDANCE ══ -->
+  <div class="page" id="page-attendance">
+    <div class="section-title"><span id="date-attend"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 報名人員統計表</div>
+    <div class="attend-grid-wrap">
+      <table class="attend-grid-table">
+        <thead>
+          <tr>
+            <th style="width:80px;">類別</th>
+            <th>台中 1-1</th><th>彰化 1-2</th><th>太平 1-3</th><th>坪林 1-4</th><th>嘉義 2-1</th><th>斗六 2-3</th>
+            <th style="width:60px;">合計</th>
+          </tr>
+        </thead>
+        <tbody id="attend-grid-tbody"></tbody>
+      </table>
+    </div>
+    <div class="note-box">
+      <div class="note-title">🍵 參加茶會人員</div>
+      <div class="note-text" id="tea-members-note">（尚未選擇）</div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE 4: BENTO ══ -->
+  <div class="page" id="page-bento">
+    <div class="section-title"><span id="date-bento"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 便當分配表　<span id="bento-area-badge-wrap" style="position:relative;display:inline-block;vertical-align:middle;">
+      <span id="bento-area-badge"
+        onclick="toggleAreaDropdown(event)"
+        title="點擊切換本月負責區"
+        style="font-size:0.85rem;font-weight:600;background:var(--gold);color:var(--ink);padding:3px 14px;border-radius:20px;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:6px;"></span>
+      <div id="bento-area-dropdown"
+        style="display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:130px;
+               background:white;border-radius:10px;box-shadow:0 6px 24px rgba(26,26,46,0.18);
+               border:1px solid var(--border);z-index:999;overflow:hidden;font-family:'Noto Sans TC',sans-serif;">
+        <div id="bento-area-options"></div>
+      </div>
+    </span></div>
+    <div class="table-wrap">
+      <div class="table-header-row">
+        <h3>便當領取明細</h3>
+        <span id="bento-filter-bar" style="display:flex;gap:0.5rem;flex-wrap:wrap;"></span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>序號</th><th>便當數量</th><th>包含成員</th></tr>
+        </thead>
+        <tbody id="bento-tbody"></tbody>
+      </table>
+      <div class="bento-subtotal" id="bento-subtotal"></div>
+      <!-- 茶會區塊 -->
+      <div id="bento-tea-section" style="background:#faf0ff;border-top:2px solid #d4b8e8;padding:1rem 1.4rem;">
+        <div style="font-size:0.88rem;font-weight:700;color:var(--purple);margin-bottom:0.6rem;">🍵 茶會參與名單</div>
+        <div id="bento-tea-names" style="font-size:0.82rem;color:#4a1a6e;line-height:2;margin-bottom:0.6rem;">（尚未選擇）</div>
+        <div style="display:flex;gap:2rem;align-items:baseline;flex-wrap:wrap;">
+          <div style="display:flex;align-items:baseline;gap:6px;">
+            <span style="font-size:0.82rem;color:var(--muted);">茶會參加人數：</span>
+            <span id="bento-tea-count-display" style="font-family:'Noto Serif TC',serif;font-size:1.6rem;font-weight:900;color:var(--purple);">0</span>
+            <span style="font-size:0.78rem;color:var(--muted);">人</span>
+          </div>
+
+        </div>
+      </div>
+      <!-- 備餐人員＋總計 -->
+      <div style="background:#fff8f0;border-top:1px dashed var(--border);padding:1rem 1.4rem;">
+        <div style="font-size:0.88rem;font-weight:700;color:#8B6914;margin-bottom:0.6rem;">🍳 備餐人員便當</div>
+        <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;">
+            <label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:0.4rem;">請輸入備餐人員姓名</label>
+            <div style="display:flex;gap:0.5rem;align-items:flex-start;">
+              <textarea id="meal-staff-names" rows="2"
+                placeholder="例：文強、青黎 或 銀龍+銀國+碧純"
+                oninput="renderBento()"
+                onfocus="showMealStaffHint()"
+                style="width:100%;padding:0.5rem 0.7rem;border:1.5px solid #f0d080;border-radius:8px;
+                       font-size:0.85rem;font-family:'Noto Sans TC',sans-serif;color:var(--ink);
+                       resize:none;outline:none;line-height:1.6;background:white;"></textarea>
+            </div>
+            <div id="meal-staff-feedback" style="margin-top:0.5rem;font-size:0.78rem;line-height:1.8;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:center;min-width:80px;">
+            <label style="font-size:0.78rem;color:var(--muted);">人數</label>
+            <div style="display:flex;align-items:baseline;gap:4px;">
+              <span id="meal-staff-count-display" style="font-family:'Noto Serif TC',serif;font-size:1.6rem;font-weight:900;color:#8B6914;">0</span>
+              <span style="font-size:0.78rem;color:var(--muted);">個</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 不要便當區塊 -->
+      <div style="background:#fff0f0;border-top:2px solid #f5c0c0;padding:1rem 1.4rem;">
+        <div style="font-size:0.88rem;font-weight:700;color:var(--red);margin-bottom:0.6rem;">🚫 不要便當人員</div>
+        <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;">
+            <label style="font-size:0.78rem;color:var(--muted);display:block;margin-bottom:0.4rem;">請輸入不要便當人員姓名（以頓號或逗號分隔）</label>
+            <textarea id="no-bento-names" rows="2"
+              placeholder="例：家銘、普文、靜兒"
+              oninput="renderBento()"
+              style="width:100%;padding:0.5rem 0.7rem;border:1.5px solid #f5c0c0;border-radius:8px;
+                     font-size:0.85rem;font-family:'Noto Sans TC',sans-serif;color:var(--ink);
+                     resize:none;outline:none;line-height:1.6;background:white;"></textarea>
+            <div id="no-bento-validate" style="margin-top:0.5rem;line-height:1.8;"></div>
+            <div id="no-bento-note" style="font-size:0.75rem;color:var(--red);margin-top:0.4rem;line-height:1.7;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:center;min-width:80px;">
+            <label style="font-size:0.78rem;color:var(--muted);">人數</label>
+            <div style="display:flex;align-items:baseline;gap:4px;">
+              <span id="no-bento-count-display" style="font-family:'Noto Serif TC',serif;font-size:1.6rem;font-weight:900;color:var(--red);">0</span>
+              <span style="font-size:0.78rem;color:var(--muted);">人</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE 5: RECORD ══ -->
+  <div class="page" id="page-record">
+    <div class="section-title">📅 學員出席記錄表（2026/3～2027/1，不含 7 月、11 月）</div>
+    <div id="record-page-content"></div>
+  </div>
+
+  <!-- ══ PAGE 6: MANAGE ══ -->
+  <div class="page" id="page-manage">
+    <div class="section-title">⚙️ 資料輸入及編輯</div>
+
+    <!-- 長條格整合卡片 -->
+    <div id="manage-buttons-wrap" style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;border:1px solid var(--border);margin-bottom:1.5rem;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;min-height:180px;">
+
+        <!-- 格1：人員管理 -->
+        <div style="padding:1.4rem 1.2rem;border-right:1px solid var(--border);display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.9rem;">
+            <span style="font-size:1rem;">👥</span>
+            <span style="font-size:0.82rem;font-weight:700;color:var(--teal);letter-spacing:0.05em;">人員管理</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;flex:1;justify-content:center;">
+            <button onclick="openAddMember();" style="padding:8px 0;width:100%;background:var(--teal);color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">➕ 新增人員</button>
+            <button id="manage-edit-btn" onclick="startManageMode('edit')" style="padding:8px 0;width:100%;background:#1565c0;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">✏️ 修改人員</button>
+            <button id="manage-delete-btn" onclick="startManageMode('delete')" style="padding:8px 0;width:100%;background:#c0392b;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🗑 刪除人員</button>
+          </div>
+        </div>
+
+        <!-- 格2：出席記錄 -->
+        <div style="padding:1.4rem 1.2rem;border-right:1px solid var(--border);display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.9rem;">
+            <span style="font-size:1rem;">📋</span>
+            <span style="font-size:0.82rem;font-weight:700;color:#c0392b;letter-spacing:0.05em;">出席記錄</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;flex:1;justify-content:center;">
+            <button onclick="resetAllAttend();" style="padding:8px 0;width:100%;background:#6a1b9a;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🔄 清除出席記錄</button>
+          </div>
+        </div>
+
+        <!-- 格3：Excel 匯入 -->
+        <div style="padding:1.4rem 1.2rem;border-right:1px solid var(--border);display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.9rem;">
+            <span style="font-size:1rem;">📊</span>
+            <span style="font-size:0.82rem;font-weight:700;color:#0f6e3a;letter-spacing:0.05em;">Excel 匯入</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;flex:1;justify-content:center;">
+            <button onclick="triggerExcelAttend()" style="padding:8px 0;width:100%;background:#0f6e3a;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">📂 匯入參班名單</button>
+            <button onclick="triggerExcelTea()" style="padding:8px 0;width:100%;background:#6a1b9a;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🍵 匯入茶會名單</button>
+          </div>
+          <div id="manage-photo-result" style="font-size:0.72rem;line-height:1.6;margin-top:0.4rem;"></div>
+        </div>
+
+        <!-- 格4：語音辨識 -->
+        <div style="padding:1.4rem 1.2rem;display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.9rem;">
+            <span style="font-size:1rem;">🎙</span>
+            <span style="font-size:0.82rem;font-weight:700;color:#7b3f9e;letter-spacing:0.05em;">語音辨識</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;flex:1;justify-content:center;">
+            <button id="tp-voice-attend-btn" onclick="toggleTpVoice('attend')" style="padding:8px 0;width:100%;background:#c0392b;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;justify-content:center;gap:4px;"><span id="tp-va-icon">🎙</span><span id="tp-va-text">辨識參班</span></button>
+            <button id="tp-voice-tea-btn" onclick="toggleTpVoice('tea')" style="padding:8px 0;width:100%;background:#7b3f9e;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;justify-content:center;gap:4px;"><span id="tp-vt-icon">🎙</span><span id="tp-vt-text">辨識茶會</span></button>
+          </div>
+          <div id="tp-voice-transcript" style="font-size:0.72rem;color:var(--muted);font-style:italic;margin-top:0.4rem;"></div>
+          <div id="tp-voice-result" style="font-size:0.72rem;line-height:1.6;margin-top:0.2rem;"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 修改/刪除模式的人員名單 -->
+    <div id="manage-roster-wrap" style="display:none;">
+      <div id="manage-mode-bar" style="background:#e8f5e9;border:2px solid var(--green);border-radius:10px;padding:0.8rem 1.2rem;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+        <span id="manage-mode-label" style="font-weight:700;font-size:0.95rem;color:var(--green);"></span>
+        <button onclick="exitManageMode()" style="padding:7px 22px;background:var(--green);color:white;border:none;border-radius:20px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;margin-left:auto;">✔ 完成</button>
+      </div>
+      <div id="manage-roster-content"></div>
+    </div>
+  </div>
+
+  <!-- ══ ADD MEMBER MODAL ══ -->
+  <div class="modal-overlay" id="add-member-modal">
+    <div class="modal">
+      <div class="modal-title">➕ 新增人員</div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>職位</label>
+          <select id="new-role">
+            <option value="資輔">資輔</option>
+            <option value="學輔">學輔</option>
+            <option value="學員" selected>學員</option>
+            <option value="家長">家長</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>乾坤</label>
+          <select id="new-gender">
+            <option value="乾道">乾道</option>
+            <option value="坤道">坤道</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>地區</label>
+          <select id="new-area" onchange="updateCodeOptions()">
+            <option value="台中">台中</option>
+            <option value="彰化">彰化</option>
+            <option value="太平">太平</option>
+            <option value="坪林">坪林</option>
+            <option value="嘉義">嘉義</option>
+            <option value="斗六">斗六</option>
+            <option value="馬光">馬光</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>代號</label>
+          <select id="new-code">
+            <option value="1-1">1-1</option>
+            <option value="1-2">1-2</option>
+            <option value="1-3">1-3</option>
+            <option value="1-4">1-4</option>
+            <option value="2-1">2-1</option>
+            <option value="2-3">2-3</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>姓名</label>
+          <input type="text" id="new-name" placeholder="請輸入姓名">
+        </div>
+        <div class="modal-field">
+          <label>家庭</label>
+          <input type="text" id="new-family" placeholder="請輸入家庭（留空同姓名）">
+        </div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field" style="flex:1;max-width:none;">
+          <label>長幼（家庭排序，與便當領取順序相同）</label>
+          <select id="new-family-order">
+            <option value="1">1（爸爸／最長）</option>
+            <option value="2">2（媽媽／次長）</option>
+            <option value="3">3（哥哥／第三）</option>
+            <option value="4">4（姊姊／第四）</option>
+            <option value="5">5（弟弟／第五）</option>
+            <option value="6">6（妹妹／第六）</option>
+            <option value="7">7（第七）</option>
+            <option value="8">8（第八）</option>
+            <option value="9">9（最小）</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeAddMember()">取消</button>
+        <button class="btn-confirm" onclick="confirmAddMember()">✔ 確認新增</button>
+      </div>
+    </div>
+  </div>
+  <!-- ══ 備餐人員說明 Modal ══ -->
+  <div id="meal-staff-hint-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:400;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:14px;padding:1.5rem;width:92%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,0.25);">
+      <div style="font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--teal);margin-bottom:1rem;">🍳 備餐人員輸入說明</div>
+      <div style="font-size:0.88rem;color:var(--ink);line-height:2;background:#fffbf0;border-radius:10px;padding:1rem;border:1px solid #e8d5a0;">
+        <p>請輸入備餐人員姓名，以頓號或逗號分隔。</p>
+        <p style="color:var(--muted);margin-top:0.4rem;">例如：文強、青黎、文森</p>
+        <p style="margin-top:0.8rem;">如果是同一家庭的備餐人員，請用 <strong style="color:var(--teal);">＋</strong> 來表示。</p>
+        <p style="color:var(--muted);margin-top:0.4rem;">例如：銀龍+銀國+碧純</p>
+        <p style="margin-top:0.8rem;">如果有參加茶會，請在名字後加入 <strong style="color:var(--teal);">＊</strong>（半形 * 亦可）。該名不計入備餐，並列入茶會名單與茶會便當。</p>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:1.2rem;">
+        <button onclick="closeMealStaffHint()" style="padding:8px 28px;background:var(--teal);color:white;border:none;border-radius:20px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">✔ 已閱讀，開始輸入</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const allMembers = [
+  {no:1, role:"資輔", gender:"乾道", area:"台中", code:"1-1", name:"家銘",  attend:false, tea:false, family:"家銘"},
+  {no:2, role:"資輔", gender:"乾道", area:"台中", code:"1-1", name:"普文",  attend:false, tea:false, family:"普文"},
+  {no:3, role:"資輔", gender:"乾道", area:"台中", code:"1-1", name:"佳俊",  attend:false, tea:false, family:"佳俊"},
+  {no:4, role:"資輔", gender:"坤道", area:"台中", code:"1-1", name:"嫺雅",  attend:false, tea:false, family:"家銘"},
+  {no:5, role:"資輔", gender:"坤道", area:"台中", code:"1-1", name:"瓊瑤",  attend:false, tea:false, family:"瓊瑤"},
+  {no:6, role:"資輔", gender:"坤道", area:"台中", code:"1-1", name:"靜兒",  attend:true, tea:false, family:"靜兒"},
+  {no:7, role:"資輔", gender:"坤道", area:"台中", code:"1-1", name:"玫芳",  attend:false, tea:false, family:"普文"},
+  {no:8, role:"資輔", gender:"坤道", area:"台中", code:"1-1", name:"姿利",  attend:false, tea:false, family:"姿利"},
+  {no:9, role:"學員", gender:"乾道", area:"台中", code:"1-1", name:"皓程",  attend:false, tea:false, family:"家銘"},
+  {no:10,role:"學員", gender:"乾道", area:"台中", code:"1-1", name:"智穎",  attend:false, tea:false, family:"智憲"},
+  {no:11,role:"學員", gender:"乾道", area:"台中", code:"1-1", name:"少庸",  attend:false, tea:false, family:"普文"},
+  {no:12,role:"學員", gender:"乾道", area:"台中", code:"1-1", name:"子暘",  attend:false, tea:false, family:"普文"},
+  {no:13,role:"學員", gender:"乾道", area:"台中", code:"1-1", name:"星瑋",  attend:false, tea:false, family:"姿利"},
+  {no:14,role:"學員", gender:"乾道", area:"台中", code:"1-1", name:"立祐",  attend:false, tea:false, family:"佳俊"},
+  {no:15,role:"學員", gender:"坤道", area:"台中", code:"1-1", name:"沛希",  attend:false, tea:false, family:"沛希"},
+  {no:16,role:"學員", gender:"坤道", area:"台中", code:"1-1", name:"易真",  attend:false, tea:false, family:"易真"},
+  {no:17,role:"學員", gender:"坤道", area:"台中", code:"1-1", name:"詠晴",  attend:false, tea:false, family:"家銘"},
+  {no:18,role:"學員", gender:"坤道", area:"台中", code:"1-1", name:"若彤",  attend:false, tea:false, family:"普文"},
+  {no:19,role:"學輔", gender:"乾道", area:"台中", code:"1-1", name:"智憲",  attend:false, tea:false, family:"智憲"},
+  {no:20,role:"學輔", gender:"坤道", area:"台中", code:"1-1", name:"佩君",  attend:false, tea:false, family:"瓊瑤"},
+  {no:21,role:"學輔", gender:"坤道", area:"台中", code:"1-1", name:"宛君",  attend:false, tea:false, family:"瓊瑤"},
+  {no:22,role:"資輔", gender:"乾道", area:"彰化", code:"1-2", name:"松欽",  attend:false, tea:false, family:"松欽"},
+  {no:23,role:"學輔", gender:"坤道", area:"彰化", code:"1-2", name:"琇尹",  attend:false, tea:false, family:"松欽"},
+  {no:24,role:"資輔", gender:"乾道", area:"太平", code:"1-3", name:"鄭強",  attend:false, tea:false, family:"鄭強"},
+  {no:25,role:"家長", gender:"乾道", area:"太平", code:"1-3", name:"宏銘",  attend:false, tea:false, family:"宏銘"},
+  {no:26,role:"資輔", gender:"坤道", area:"太平", code:"1-3", name:"銘季",  attend:false, tea:false, family:"銘季"},
+  {no:27,role:"資輔", gender:"坤道", area:"太平", code:"1-3", name:"麗雪",  attend:false, tea:false, family:"麗雪"},
+  {no:28,role:"資輔", gender:"坤道", area:"太平", code:"1-3", name:"小清",  attend:false, tea:false, family:"小清"},
+  {no:29,role:"資輔", gender:"坤道", area:"太平", code:"1-3", name:"月嬌",  attend:false, tea:false, family:"鄭強"},
+  {no:30,role:"資輔", gender:"坤道", area:"太平", code:"1-3", name:"益美",  attend:true, tea:false, family:"益美"},
+  {no:31,role:"資輔", gender:"坤道", area:"太平", code:"1-3", name:"惠雯",  attend:true, tea:false, family:"惠雯"},
+  {no:32,role:"學員", gender:"乾道", area:"太平", code:"1-3", name:"桓毅",  attend:false, tea:false, family:"桓毅"},
+  {no:33,role:"學員", gender:"乾道", area:"太平", code:"1-3", name:"凱鈦",  attend:false, tea:false, family:"凱鈦"},
+  {no:34,role:"學員", gender:"坤道", area:"太平", code:"1-3", name:"亞宸",  attend:false, tea:false, family:"惠雯"},
+  {no:35,role:"學員", gender:"坤道", area:"太平", code:"1-3", name:"玟娜",  attend:false, tea:false, family:"玟娜"},
+  {no:36,role:"學員", gender:"坤道", area:"太平", code:"1-3", name:"妤嫻",  attend:false, tea:false, family:"鄭強"},
+  {no:37,role:"學員", gender:"乾道", area:"太平", code:"1-3", name:"亞奕",  attend:false, tea:false, family:"惠雯"},
+  {no:38,role:"學輔", gender:"乾道", area:"太平", code:"1-3", name:"士華",  attend:false, tea:false, family:"士華"},
+  {no:39,role:"學輔", gender:"乾道", area:"太平", code:"1-3", name:"忠緯",  attend:false, tea:false, family:"銘季"},
+  {no:40,role:"學輔", gender:"乾道", area:"太平", code:"1-3", name:"耀輝",  attend:false, tea:false, family:"士華"},
+  {no:41,role:"學輔", gender:"乾道", area:"太平", code:"1-3", name:"勝利",  attend:false, tea:false, family:"勝利"},
+  {no:42,role:"學輔", gender:"坤道", area:"太平", code:"1-3", name:"婕妤",  attend:false, tea:false, family:"銘季"},
+  {no:43,role:"資輔", gender:"乾道", area:"坪林", code:"1-4", name:"明輝",  attend:false, tea:false, family:"明輝"},
+  {no:44,role:"資輔", gender:"乾道", area:"坪林", code:"1-4", name:"昆秦",  attend:false, tea:false, family:"昆秦"},
+  {no:45,role:"資輔", gender:"乾道", area:"坪林", code:"1-4", name:"文聰",  attend:false, tea:false, family:"文聰"},
+  {no:46,role:"資輔", gender:"坤道", area:"坪林", code:"1-4", name:"怡珍",  attend:false, tea:false, family:"怡珍"},
+  {no:47,role:"資輔", gender:"坤道", area:"坪林", code:"1-4", name:"湘梅",  attend:false, tea:false, family:"湘梅"},
+  {no:48,role:"資輔", gender:"坤道", area:"坪林", code:"1-4", name:"靜瑜",  attend:false, tea:false, family:"文聰"},
+  {no:49,role:"學員", gender:"乾道", area:"坪林", code:"1-4", name:"川磊",  attend:false, tea:false, family:"川磊"},
+  {no:50,role:"學員", gender:"乾道", area:"坪林", code:"1-4", name:"川陞",  attend:false, tea:false, family:"川陞"},
+  {no:51,role:"學員", gender:"乾道", area:"坪林", code:"1-4", name:"柏謙",  attend:false, tea:false, family:"文聰"},
+  {no:52,role:"學員", gender:"乾道", area:"坪林", code:"1-4", name:"士博",  attend:false, tea:false, family:"文聰"},
+  {no:53,role:"學員", gender:"乾道", area:"坪林", code:"1-4", name:"立勤",  attend:false, tea:false, family:"立勤"},
+  {no:54,role:"學員", gender:"坤道", area:"坪林", code:"1-4", name:"珮安",  attend:false, tea:false, family:"珮安"},
+  {no:55,role:"學員", gender:"坤道", area:"坪林", code:"1-4", name:"芊衣",  attend:false, tea:false, family:"文聰"},
+  {no:56,role:"學員", gender:"坤道", area:"坪林", code:"1-4", name:"晏瑄",  attend:false, tea:false, family:"晏瑄"},
+  {no:57,role:"學員", gender:"坤道", area:"坪林", code:"1-4", name:"珮綸",  attend:false, tea:false, family:"珮綸"},
+  {no:58,role:"學輔", gender:"坤道", area:"嘉義", code:"2-1", name:"雅如",  attend:false, tea:false, family:"雅如"},
+  {no:59,role:"學員", gender:"坤道", area:"嘉義", code:"2-1", name:"妙慧",  attend:false, tea:false, family:"雅如"},
+  {no:60,role:"資輔", gender:"乾道", area:"嘉義", code:"2-1", name:"議法",  attend:false, tea:false, family:"議法"},
+  {no:61,role:"資輔", gender:"坤道", area:"嘉義", code:"2-1", name:"美容",  attend:false, tea:false, family:"議法"},
+  {no:62,role:"資輔", gender:"乾道", area:"斗六", code:"2-3", name:"錫章",  attend:false, tea:false, family:"錫章"},
+  {no:63,role:"資輔", gender:"乾道", area:"斗六", code:"2-3", name:"弘書",  attend:false, tea:false, family:"弘書"},
+  {no:64,role:"資輔", gender:"坤道", area:"斗六", code:"2-3", name:"淑貞",  attend:false, tea:false, family:"弘書"},
+  {no:65,role:"學員", gender:"乾道", area:"斗六", code:"2-3", name:"瑄承",  attend:false, tea:false, family:"弘書"},
+  {no:66,role:"學員", gender:"坤道", area:"斗六", code:"2-3", name:"瑜霠",  attend:false, tea:false, family:"弘書"},
+  {no:67,role:"學員", gender:"坤道", area:"斗六", code:"2-3", name:"咏恩",  attend:false, tea:false, family:"錫章"},
+  {no:68,role:"學員", gender:"坤道", area:"斗六", code:"2-3", name:"藝芯",  attend:false, tea:false, family:"弘書"},
+];
+allMembers.forEach(m => { if (m.familyOrder == null) m.familyOrder = 1; });
+
+// ══════════════════════════════════════════
+// localStorage 自動儲存
+// ══════════════════════════════════════════
+const LS_KEY_QSB = 'qsb_data';
+
+function saveData() {
+  const data = {
+    members: allMembers.map(m => ({
+      no: m.no, role: m.role, gender: m.gender, area: m.area, code: m.code,
+      name: m.name, family: m.family, familyOrder: m.familyOrder ?? 1,
+      attend: m.attend, tea: m.tea
+    })),
+    staffNames:   document.getElementById('meal-staff-names')?.value || '',
+    noBentoNames: document.getElementById('no-bento-names')?.value || ''
+  };
+  localStorage.setItem(LS_KEY_QSB, JSON.stringify(data));
+}
+
+function loadData() {
+  try {
+    const d = JSON.parse(localStorage.getItem(LS_KEY_QSB));
+    if (!d) return;
+    // 新格式：完整 members 陣列
+    if (d.members && Array.isArray(d.members) && d.members.length > 0) {
+      // 清空並重建 allMembers
+      allMembers.length = 0;
+      d.members.forEach(m => allMembers.push({
+        no: m.no, role: m.role, gender: m.gender, area: m.area, code: m.code,
+        name: m.name, family: m.family,
+        familyOrder: m.familyOrder != null ? m.familyOrder : 1,
+        attend: !!m.attend, tea: !!m.tea
+      }));
+    } else {
+      // 舊格式相容
+      if (d.attend   && d.attend.length   === allMembers.length) d.attend.forEach((v,i)   => allMembers[i].attend = v);
+      if (d.tea      && d.tea.length      === allMembers.length) d.tea.forEach((v,i)      => allMembers[i].tea = v);
+      if (d.names    && d.names.length    === allMembers.length) d.names.forEach((v,i)    => allMembers[i].name = v);
+      if (d.families && d.families.length === allMembers.length) d.families.forEach((v,i) => allMembers[i].family = v);
+      if (d.roles    && d.roles.length    === allMembers.length) d.roles.forEach((v,i)    => allMembers[i].role = v);
+      if (d.genders  && d.genders.length  === allMembers.length) d.genders.forEach((v,i)  => allMembers[i].gender = v);
+      if (d.areas    && d.areas.length    === allMembers.length) d.areas.forEach((v,i)    => allMembers[i].area = v);
+      if (d.codes    && d.codes.length    === allMembers.length) d.codes.forEach((v,i)    => allMembers[i].code = v);
+    }
+    allMembers.forEach(m => { if (m.familyOrder == null) m.familyOrder = 1; });
+    if (d.staffNames)   { const el = document.getElementById('meal-staff-names'); if (el) el.value = d.staffNames; }
+    if (d.noBentoNames) { const el = document.getElementById('no-bento-names');   if (el) el.value = d.noBentoNames; }
+  } catch(e) {}
+}
+
+// ── 出席記錄月份（須在 syncAll 之前定義）──
+const RECORD_MONTHS = [
+  {year:2026,month:3,label:'2026/3'},
+  {year:2026,month:4,label:'2026/4'},
+  {year:2026,month:5,label:'2026/5'},
+  {year:2026,month:6,label:'2026/6'},
+  {year:2026,month:8,label:'2026/8'},
+  {year:2026,month:9,label:'2026/9'},
+  {year:2026,month:10,label:'2026/10'},
+  {year:2026,month:12,label:'2026/12'},
+  {year:2027,month:1,label:'2027/1'},
+];
+const LS_RECORD_KEY = 'qsb_monthly_record_v1';
+let monthlyRecord = {};
+
+function loadMonthlyRecord() {
+  try {
+    const d = JSON.parse(localStorage.getItem(LS_RECORD_KEY));
+    if (d && typeof d === 'object') monthlyRecord = d;
+  } catch(e) {}
+}
+
+function saveMonthlyRecord() {
+  localStorage.setItem(LS_RECORD_KEY, JSON.stringify(monthlyRecord));
+}
+
+// ══════════════════════════════════════════
+// MEMBERS PAGE
+// ══════════════════════════════════════════
+let memberFilter = 'all', memberSearch = '', globalEditMode = false, deleteMode = false;
+
+function toggleEditMode() {
+  globalEditMode = !globalEditMode;
+  if (globalEditMode) { deleteMode = false; updateDeleteBtn(); }
+  const btn = document.getElementById('edit-mode-btn');
+  const th  = document.getElementById('action-th');
+  if (btn) {
+    btn.textContent = globalEditMode ? '✔ 完成修改' : '✏️ 修改人員';
+    btn.style.background = globalEditMode ? 'var(--green)' : '';
+  }
+  if (th) th.textContent = globalEditMode ? '刪除' : (deleteMode ? '刪除' : '');
+  // 顯示/隱藏頁面上方的完成修改按鈕
+  const doneBar = document.getElementById('edit-done-bar');
+  if (doneBar) doneBar.style.display = globalEditMode ? 'flex' : 'none';
+  if (!globalEditMode) { saveData(); syncAll(); }
+  renderMembers();
+}
+
+function toggleDeleteMode() {
+  deleteMode = !deleteMode;
+  if (deleteMode) {
+    globalEditMode = false;
+    const editBar = document.getElementById('edit-done-bar');
+    if (editBar) editBar.style.display = 'none';
+    updateEditBtn();
+  }
+  updateDeleteBtn();
+  const th = document.getElementById('action-th');
+  if (th) th.textContent = deleteMode ? '刪除' : '';
+  renderMembers();
+}
+
+function updateDeleteBtn() {
+  const bar = document.getElementById('delete-done-bar');
+  const btn = document.getElementById('delete-mode-btn');
+  if (bar) bar.style.display = deleteMode ? 'flex' : 'none';
+  if (btn) {
+    btn.textContent = '✔ 完成刪除';
+    if (deleteMode) {
+      btn.style.background = 'var(--green)';
+      btn.style.color = 'white';
+    } else {
+      btn.style.background = '';
+      btn.style.color = '';
+    }
+  }
+}
+
+function updateEditBtn() {
+  const btn = document.getElementById('edit-mode-btn');
+  if (btn) {
+    btn.textContent = '✏️ 修改人員';
+    btn.style.background = '';
+  }
+}
+
+
+
+// ══ 新版人員名單 renderMembers ══
+function renderMembers() {
+  const AREAS = [
+    { name: '台中', code: '1-1' },
+    { name: '彰化', code: '1-2' },
+    { name: '太平', code: '1-3' },
+    { name: '坪林', code: '1-4' },
+    { name: '嘉義', code: '2-1' },
+    { name: '斗六', code: '2-3' },
+  ];
+  const roleOrder = { '資輔': 0, '家長': 1, '學輔': 2, '學員': 3 };
+
+  function sortArea(members) {
+    return [...members].sort((a, b) => {
+      const ra = roleOrder[a.role] ?? 9, rb = roleOrder[b.role] ?? 9;
+      if (ra !== rb) return ra - rb;
+      const ga = a.gender === '乾道' ? 0 : 1, gb = b.gender === '乾道' ? 0 : 1;
+      if (ga !== gb) return ga - gb;
+      return (a.no ?? 9999) - (b.no ?? 9999);
+    });
+  }
+
+  const attendCount = allMembers.filter(m => m.attend).length;
+  const teaCount    = allMembers.filter(m => m.tea).length;
+
+  function buildAreaRows(mode) {
+    return AREAS.map(area => {
+      const members = sortArea(allMembers.filter(m => m.area === area.name));
+      const chips = members.map(m => {
+        const idx = allMembers.indexOf(m);
+        const isOn = mode === 'attend' ? m.attend : m.tea;
+        const notAttendInTea = mode === 'tea' && !m.attend;
+        const baseClass = 'roster-name-chip';
+        const onClass   = mode === 'attend' ? 'attend-on' : 'tea-on';
+        const chipClass = isOn ? `${baseClass} ${onClass}` : baseClass;
+        let onclick = '';
+        if (deleteMode || globalEditMode) {
+          onclick = `onclick="deleteMember(${idx})"`;
+        } else if (mode === 'attend') {
+          onclick = `onclick="toggleAttendIdx(${idx})"`;
+        } else if (!notAttendInTea) {
+          onclick = `onclick="toggleTeaIdx(${idx})"`;
+        }
+        let chipStyle = '';
+        if (deleteMode || globalEditMode) {
+          chipStyle = 'border-color:#c0392b;color:#c0392b;';
+        } else if (notAttendInTea) {
+          chipStyle = 'border-color:#e8e0d0;color:#d0c8bc;background:#faf8f5;cursor:default;opacity:0.55;';
+        }
+        const roleLabel = m.role === '學員'
+          ? `<span style="font-size:0.62rem;opacity:0.72;margin-left:3px;">學員</span>`
+          : `<span style="font-size:0.62rem;opacity:0.72;margin-left:3px;">${m.role}</span>`;
+        return `<span class="${chipClass}" style="${chipStyle}" ${onclick}>${m.name}${roleLabel}</span>`;
+      }).join('');
+      return `<div class="roster-area-label">${area.name}</div>` +
+             `<div class="roster-names-cell">${chips || '<span style=\"color:var(--muted);font-size:0.8rem;\">（無）</span>'}</div>`;
+    }).join('');
+  }
+
+  const wrap = document.getElementById('members-roster-wrap');
+  if (!wrap) return;
+  wrap.innerHTML =
+    `<div class="roster-panels">
+      <div class="roster-panel">
+        <div class="roster-panel-header attend">
+          <span>✅ 青少班參班報名</span><span style="font-size:0.72rem;font-weight:400;color:white;margin-left:0.3em;letter-spacing:0.02em;">（請在姓名上點選代表參班）</span>
+          <span class="count-pill">${attendCount} 人參班</span>
+        </div>
+        <div class="roster-areas">${buildAreaRows('attend')}</div>
+      </div>
+      <div class="roster-panel">
+        <div class="roster-panel-header tea">
+          <span>🍵 茶會報名　<span style="font-size:0.72rem;font-weight:400;opacity:0.85;">（如要參加茶會，在姓名處點一下）</span></span>
+          <span class="count-pill">${teaCount} 人參加</span>
+        </div>
+        <div class="roster-areas">${buildAreaRows('tea')}</div>
+      </div>
+    </div>`;
+}
+
+function toggleAttendIdx(idx) {
+  const m = allMembers[idx];
+  if (!m) return;
+  m.attend = !m.attend;
+  if (!m.attend) m.tea = false;
+  saveData(); syncAll(); renderMembers();
+}
+function toggleTeaIdx(idx) {
+  const m = allMembers[idx];
+  if (!m) return;
+  if (!m.attend) return;
+  m.tea = !m.tea;
+  saveData(); syncAll(); renderMembers();
+}
+
+function editArea(no, area) {
+  const m = allMembers.find(x => x.no === no+1);
+  if (!m) return;
+  m.area = area;
+  m.code = areaCodeMap[area] || m.code;
+  saveData();
+  renderMembers();
+}
+
+function editField(no, field, value) {
+  const m = allMembers.find(x => x.no === no+1);
+  if (!m) return;
+  if (field === 'familyOrder') m.familyOrder = parseInt(value, 10) || 1;
+  else m[field] = value;
+  saveData();
+  syncAll();
+}
+
+function renameMember(no, newName) {
+  const m = allMembers.find(x => x.no === no+1);
+  if (!m) return;
+  const oldName = m.name;
+  m.name = newName;
+  if (m.family === oldName) m.family = newName;
+  allMembers.forEach(x => { if (x.family === oldName) x.family = newName; });
+  saveData();
+  syncAll();
+}
+
+function renameFamily(no, newFamily) {
+  const m = allMembers.find(x => x.no === no+1);
+  if (!m) return;
+  m.family = newFamily;
+  saveData();
+  syncAll();
+}
+
+function deleteMember(no) {
+  const idx = allMembers.findIndex(x => x.no === no+1);
+  if (idx === -1) return;
+  const name = allMembers[idx].name;
+  const pwd = prompt(`請輸入密碼以刪除「${name}」：`);
+  if (pwd === null) return;
+  if (pwd !== 'amos6438') { alert('密碼錯誤，無法刪除。'); return; }
+  allMembers.splice(idx, 1);
+  allMembers.forEach((m, i) => m.no = i + 1);
+  saveData();
+  renderMembers();
+  syncAll();
+}
+
+function resetAllAttend() {
+  if (!confirm('確定要將所有人的參班設為未參、茶會設為不參，並清除備餐人員、不要便當名單嗎？\n（「出席記錄」分頁的月份勾選將保留。）')) return;
+  for (var i = 0; i < allMembers.length; i++) {
+    allMembers[i].attend = false;
+    allMembers[i].tea = false;
+  }
+  var el1 = document.getElementById('meal-staff-names');
+  var el2 = document.getElementById('no-bento-names');
+  var el3 = document.getElementById('no-bento-validate');
+  var el4 = document.getElementById('no-bento-note');
+  if (el1) el1.value = '';
+  if (el2) el2.value = '';
+  if (el3) el3.innerHTML = '';
+  if (el4) el4.textContent = '';
+  saveData();
+  syncAll();
+  renderMembers();
+  if (document.getElementById('page-record')?.classList.contains('active')) renderRecord();
+}
+
+function toggleAttend(idx, btn) {
+  allMembers[idx].attend = !allMembers[idx].attend;
+  const m = allMembers[idx];
+  // 若取消參班，同時取消茶會
+  if (!m.attend && m.tea) m.tea = false;
+  btn.className = 'toggle-btn ' + (m.attend ? 'on-attend' : 'off-attend');
+  btn.textContent = m.attend ? '✓ 參班' : '— 未參';
+  syncAll();
+  renderMembers();
+}
+
+function toggleTea(idx, btn) {
+  allMembers[idx].tea = !allMembers[idx].tea;
+  const m = allMembers[idx];
+  btn.className = 'toggle-btn ' + (m.tea ? 'on-tea' : 'off-tea');
+  btn.textContent = m.tea ? '🍵 參加' : '— 不參';
+  syncAll();
+}
+
+function filterMembers(f, btn) {
+  memberFilter = f;
+  document.querySelectorAll('#page-members .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMembers();
+}
+function searchMembers(v) { memberSearch = v; renderMembers(); }
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+const areaDefs = [
+  {code:'1-1', label:'台中 1-1'},
+  {code:'1-2', label:'彰化 1-2'},
+  {code:'1-3', label:'太平 1-3'},
+  {code:'1-4', label:'坪林 1-4'},
+  {code:'2-1', label:'嘉義 2-1'},
+  {code:'2-3', label:'斗六 2-3'},
+];
+
+function updateDashboard() {
+  const attending = allMembers.filter(m => m.attend);
+  const { staffTeaMarkedNames } = parseMealStaffInput(document.getElementById('meal-staff-names')?.value || '');
+  const staffTeaOffRosterDash = [...staffTeaMarkedNames].filter(n => !allMembers.some(m => m.name === n));
+  const teaCount  = allMembers.filter(m => m.tea).length + staffTeaOffRosterDash.length;
+  const bentoTotal = calcBentoTotal();
+  document.getElementById('dash-total').textContent  = allMembers.length;
+  document.getElementById('dash-attend').textContent = attending.length;
+  document.getElementById('dash-tea').textContent    = teaCount;
+  document.getElementById('dash-bento').textContent  = bentoTotal;
+
+  // area cards
+  const grid = document.getElementById('dash-area-grid');
+  grid.innerHTML = areaDefs.map(a => {
+    const grp = attending.filter(m => m.code === a.code);
+    return `<div class="area-card">
+      <div class="area-name">${a.label}</div>
+      <div style="font-size:2rem;font-family:'Noto Serif TC';font-weight:900;color:var(--teal);line-height:1;">${grp.length}</div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:4px;">人</div>
+      <div class="area-breakdown">
+        <span class="area-tag tag-student">學員 ${grp.filter(m=>m.role==='學員').length}</span>
+        <span class="area-tag tag-support">學輔 ${grp.filter(m=>m.role==='學輔').length}</span>
+        <span class="area-tag tag-res">資輔 ${grp.filter(m=>m.role==='資輔').length}</span>
+        ${grp.filter(m=>m.role==='家長').length>0?`<span class="area-tag tag-parent">家長 ${grp.filter(m=>m.role==='家長').length}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// ATTENDANCE GRID
+// ══════════════════════════════════════════
+function renderAttendGrid() {
+  const attending = allMembers.filter(m => m.attend);
+  const codes = areaDefs.map(a => a.code);
+
+  const roles = [
+    {label:'學員', cls:'green',  role:'學員'},
+    {label:'學輔', cls:'blue',   role:'學輔'},
+    {label:'資輔', cls:'purple', role:'資輔'},
+    {label:'家長', cls:'orange', role:'家長'},
+  ];
+
+  let html = '';
+  roles.forEach(r => {
+    const rowTotal = codes.reduce((s,c) => s + attending.filter(m=>m.role===r.role&&m.code===c).length, 0);
+    if (rowTotal === 0) return; // 跳過無人的職位
+    html += `<tr><td class="row-label ${r.cls}"><span style="display:inline-block;width:3.5em;text-align:justify;text-align-last:justify;">${r.label}</span></td>`;
+    codes.forEach(c => {
+      const allNames = attending.filter(m=>m.role===r.role&&m.code===c);
+      const males   = allNames.filter(m=>m.gender==='乾道').map(m=>m.name);
+      const females = allNames.filter(m=>m.gender==='坤道').map(m=>m.name);
+      const renderGroup = (arr, color) => arr.map((n, i) => {
+        const sep = i < arr.length - 1 ? '、' : '';
+        const br  = (i + 1) % 3 === 0 && i < arr.length - 1 ? '<br>' : '';
+        return `<span class="name-item" style="color:${color};">${n}${sep}</span>${br}`;
+      }).join('');
+      let nameHtml = '';
+      if (males.length)   nameHtml += renderGroup(males, '#1565c0');
+      if (males.length && females.length) nameHtml += '<br>';
+      if (females.length) nameHtml += renderGroup(females, '#b5245a');
+      if (nameHtml) nameHtml += `<span class="count-chip">${allNames.length}</span>`;
+      else nameHtml = '<span style="color:#ccc;">—</span>';
+      html += `<td class="names-cell">${nameHtml}</td>`;
+    });
+    html += `<td class="total-cell">${rowTotal}</td></tr>`;
+  });
+
+  // 合計行
+  const grand = codes.reduce((s,c) => s + attending.filter(m=>m.code===c).length, 0);
+  html += `<tr><td class="row-label dark"><span style="display:inline-block;width:3.5em;text-align:justify;text-align-last:justify;">人員合計</span></td>`;
+  codes.forEach(c => {
+    html += `<td class="grand-total">${attending.filter(m=>m.code===c).length}</td>`;
+  });
+  html += `<td class="grand-total">${grand}</td></tr>`;
+
+  document.getElementById('attend-grid-tbody').innerHTML = html;
+
+  // 茶會人員備註（乾道全部一行：資輔→學輔→學員，換行，坤道全部一行：資輔→學輔→學員）
+  const teaAll = allMembers.filter(m=>m.tea);
+  const { staffTeaMarkedNames: _stm } = parseMealStaffInput(document.getElementById('meal-staff-names')?.value || '');
+  const teaOffRosterNote = [..._stm].filter(n => !allMembers.some(m => m.name === n));
+  const _teaRoleOrder = {'資輔':0,'學輔':1,'學員':2,'家長':3};
+  const _codeOrder = {'1-1':0,'1-2':1,'1-3':2,'1-4':3,'2-1':4,'2-2':5,'2-3':6,'2區':7};
+  const _teaSort = (a,b) => {
+    const ra = _teaRoleOrder[a.role]??9, rb = _teaRoleOrder[b.role]??9;
+    if (ra !== rb) return ra - rb;
+    return (_codeOrder[a.code]??9) - (_codeOrder[b.code]??9);
+  };
+  const teaMales   = teaAll.filter(m=>m.gender==='乾道').sort(_teaSort);
+  const teaFemales = teaAll.filter(m=>m.gender!=='乾道').sort(_teaSort);
+  const teaNoteEl = document.getElementById('tea-members-note');
+  const teaTotalNote = teaAll.length + teaOffRosterNote.length;
+  if (teaTotalNote) {
+    let html = '';
+    if (teaMales.length)   html += teaMales.map(m=>m.name).join('、');
+    if (teaMales.length && teaFemales.length) html += '<br>';
+    if (teaFemales.length) html += teaFemales.map(m=>m.name).join('、');
+    if (teaOffRosterNote.length) {
+      if (html) html += '、';
+      html += teaOffRosterNote.join('、');
+    }
+    html += `　共${teaTotalNote}人`;
+    teaNoteEl.innerHTML = html;
+  } else {
+    teaNoteEl.textContent = '（尚未選擇）';
+  }
+}
+
+// ══════════════════════════════════════════
+// BENTO
+// ══════════════════════════════════════════
+const bentoCountColors = ['','two','three','four'];
+let bentoFilter = 'all';
+let _cachedAreaText = '';
+let _cachedAreaBg = 'var(--gold)';
+
+/** 解析備餐輸入：名字尾端 ＊ 或 * 表示參加茶會（不計備餐）。回傳 staffTeaMarkedNames、供便當計算用的 staffGroups。 */
+function parseMealStaffInput(raw) {
+  const staffTeaMarkedNames = new Set();
+  const staffGroups = [];
+  const s = (raw || '').trim();
+  if (!s) return { staffTeaMarkedNames, staffGroups };
+  s.split(/[、，,\n]/).map(x => x.trim()).filter(x => x.length > 0).forEach(seg => {
+    const rawParts = seg.split(/[+＋]/).map(n => n.trim()).filter(n => n.length > 0);
+    const parsed = rawParts.map(part => {
+      const tea = /[＊*]+\s*$/.test(part);
+      const base = part.replace(/[＊*]+\s*$/, '').trim();
+      return { base, tea };
+    }).filter(x => x.base.length > 0);
+    parsed.forEach(({ base, tea }) => { if (tea) staffTeaMarkedNames.add(base); });
+    const staffNamesOnly = parsed.filter(x => !x.tea).map(x => x.base);
+    if (staffNamesOnly.length === 0) return;
+    staffGroups.push({
+      names: staffNamesOnly,
+      bentoCnt: staffNamesOnly.length,
+      isPlus: staffNamesOnly.length > 1
+    });
+  });
+  return { staffTeaMarkedNames, staffGroups };
+}
+
+function calcBentoList() {
+  const familyMap = {};
+  allMembers.filter(m=>m.attend && !m.tea).forEach(m => {
+    if (!familyMap[m.family]) familyMap[m.family] = [];
+    familyMap[m.family].push(m.name);
+  });
+  return Object.entries(familyMap)
+    .map(([family, names]) => {
+      const getMember = name => allMembers.find(m => m.name === name);
+      const sortFn = (a, b) => {
+        const ma = getMember(a), mb = getMember(b);
+        const oa = ma?.familyOrder ?? 99, ob = mb?.familyOrder ?? 99;
+        if (oa !== ob) return oa - ob;
+        return (ma?.no ?? 9999) - (mb?.no ?? 9999);
+      };
+      const reordered = [...names].sort(sortFn);
+      return {family, names: reordered, count: reordered.length};
+    })
+    .sort((a,b) => {
+      if (a.count !== b.count) return a.count - b.count;
+      const familyIdx = {};
+      allMembers.forEach((m, i) => { if (!(m.family in familyIdx)) familyIdx[m.family] = i; });
+      const ia = familyIdx[a.family] ?? 9999;
+      const ib = familyIdx[b.family] ?? 9999;
+      return ia - ib;
+    })
+    .map((e,i) => ({no:i+1, family:e.family, receiver:e.names[0], count:e.count, members:e.names.join('、')}));
+}
+
+function calcBentoTotal() {
+  const noBentoEl = document.getElementById('no-bento-names');
+  const rawNoBento = noBentoEl ? noBentoEl.value : '';
+  const noBentoNames = rawNoBento.split(/[、，,\n]/).map(n => n.trim()).filter(n => n.length > 0);
+  const rawStaff = (document.getElementById('meal-staff-names')?.value || '').trim();
+  const { staffTeaMarkedNames, staffGroups } = parseMealStaffInput(rawStaff);
+  const inTeaMark = m => m.tea || staffTeaMarkedNames.has(m.name);
+  const famMap = {};
+  allMembers.filter(m => m.attend && !inTeaMark(m) && !noBentoNames.includes(m.name)).forEach(m => {
+    famMap[m.family] = (famMap[m.family] || 0) + 1;
+  });
+  const bentoBase = Object.values(famMap).reduce((s, n) => s + n, 0);
+  const staffTeaOffRoster = [...staffTeaMarkedNames].filter(n => !allMembers.some(m => m.name === n));
+  const teaBento =
+    allMembers.filter(m => m.attend && inTeaMark(m) && !noBentoNames.includes(m.name)).length +
+    staffTeaOffRoster.filter(n => !noBentoNames.includes(n)).length;
+  const staffTotal = staffGroups.reduce((s, g) => s + g.bentoCnt, 0);
+  return bentoBase + teaBento + staffTotal;
+}
+
+function renderBento() {
+  saveData();
+
+  // 括號內成員：先依職位（資輔→家長→學輔→學員），再依長幼 familyOrder，同序則依名單 no
+  const _bentoRoleOrd = { '資輔': 0, '家長': 1, '學輔': 2, '學員': 3 };
+  function sortFamilyMembers(names) {
+    const getMember = n => allMembers.find(m => m.name === n);
+    return [...names].sort((a, b) => {
+      const ma = getMember(a), mb = getMember(b);
+      const ra = _bentoRoleOrd[ma?.role] ?? 9, rb = _bentoRoleOrd[mb?.role] ?? 9;
+      if (ra !== rb) return ra - rb;
+      const oa = ma?.familyOrder ?? 99, ob = mb?.familyOrder ?? 99;
+      if (oa !== ob) return oa - ob;
+      return (ma?.no ?? 9999) - (mb?.no ?? 9999);
+    });
+  }
+
+  // ── 取得不要便當名單（即時解析，不需按鈕）──
+  const noBentoEl = document.getElementById('no-bento-names');
+  const rawNoBento = noBentoEl ? noBentoEl.value : '';
+  const noBentoNames = rawNoBento.split(/[、，,\n]/).map(n => n.trim()).filter(n => n.length > 0);
+
+  // 即時驗證不要便當名單
+  const noBentoValidateEl = document.getElementById('no-bento-validate');
+  if (noBentoValidateEl && noBentoNames.length > 0) {
+    const nbNotFound  = noBentoNames.filter(n => !allMembers.find(m => m.name === n));
+    const nbNotAttend = noBentoNames.filter(n => { const m = allMembers.find(x => x.name === n); return m && !m.attend; });
+    const nbValid     = noBentoNames.filter(n => { const m = allMembers.find(x => x.name === n); return m && m.attend; });
+    let nbHtml = '';
+    if (nbNotFound.length)  nbHtml += `<div style="font-size:0.78rem;color:#c0392b;font-weight:700;">❌ 不在名單中：${nbNotFound.map(n=>`<span style="background:#ffd0d0;padding:1px 6px;border-radius:4px;">${n}</span>`).join(' ')}</div>`;
+    if (nbNotAttend.length) nbHtml += `<div style="font-size:0.78rem;color:#e65100;font-weight:700;margin-top:2px;">⚠️ 未參班不列入：${nbNotAttend.map(n=>`<span style="background:#ffe0cc;padding:1px 6px;border-radius:4px;">${n}</span>`).join(' ')}</div>`;
+    if (nbValid.length)     nbHtml += `<div style="font-size:0.78rem;color:#1e7e5e;font-weight:700;margin-top:2px;">✅ 已扣除：${nbValid.map(n=>`<span style="background:#d0f0e0;padding:1px 6px;border-radius:4px;">${n}</span>`).join(' ')}</div>`;
+    noBentoValidateEl.innerHTML = nbHtml;
+  } else if (noBentoValidateEl) {
+    noBentoValidateEl.innerHTML = '';
+  }
+
+  // ── 解析備餐（名字尾端 ＊／* ＝茶會：不計備餐，並為名單內參班者自動勾選茶會）──
+  const rawStaffInput = (document.getElementById('meal-staff-names')?.value || '').trim();
+  const { staffTeaMarkedNames, staffGroups } = parseMealStaffInput(rawStaffInput);
+
+  let staffTeaSyncChanged = false;
+  allMembers.forEach(m => {
+    if (m.attend && staffTeaMarkedNames.has(m.name) && !m.tea) {
+      m.tea = true;
+      staffTeaSyncChanged = true;
+    }
+  });
+  if (staffTeaSyncChanged) {
+    saveData();
+    renderMembers();
+  }
+
+  // ── 茶會人員（含備餐欄＊、但不在人員名單者；便當數再扣不要便當）──
+  const teaMembers = allMembers.filter(m => m.attend && m.tea);
+  const staffTeaOffRoster = [...staffTeaMarkedNames].filter(n => !allMembers.some(m => m.name === n));
+  const teaMemberNames = teaMembers.map(m => m.name);
+  const totalTeaHeadcount = teaMembers.length + staffTeaOffRoster.length;
+  const noBentoInTea = noBentoNames.filter(n => teaMemberNames.includes(n) || staffTeaOffRoster.includes(n));
+  const effectiveTeaCount =
+    teaMembers.filter(m => !noBentoNames.includes(m.name)).length +
+    staffTeaOffRoster.filter(n => !noBentoNames.includes(n)).length;
+
+  // 備餐人員分類：
+  // A. 在名單中 + 家庭有人參班 → 加入對應家庭的便當行（以家庭參班人數決定幾個便當），不另計便當
+  // B. 在名單中 + 無人參班  → 放到1個便當行末「備餐：xxx」，計1個便當
+  // C. 不在名單中（單名）    → 放到1個便當行末「備餐：xxx」，計1個便當
+  // D. ＋分組               → 放到對應便當數行末「備餐：xxx」，計N個便當
+
+  // staffRosterMap: { staffName -> familyKey } 只含 A 類
+  const staffRosterMap = {}; // staffName -> family
+  // staffSingleDisplay: B+C 類名字（放1個便當行末）
+  const staffSingleDisplay = [];
+  // staffPlusGroups: D 類 [{names, bentoCnt}]
+  const staffPlusGroups = [];
+
+  let staffTotalBento = 0;
+
+  staffGroups.forEach(grp => {
+    if (grp.isPlus) {
+      // D 類
+      staffPlusGroups.push(grp);
+      staffTotalBento += grp.bentoCnt;
+    } else {
+      const name = grp.names[0];
+      const inRoster = allMembers.find(m => m.name === name);
+      if (inRoster) {
+        // 看家庭是否有人參班（不含茶會，不含不要便當）
+        const famAttend = allMembers.filter(m =>
+          m.family === inRoster.family && m.attend && !m.tea && !noBentoNames.includes(m.name) && m.name !== name
+        );
+        if (famAttend.length > 0) {
+          // A 類：加入家庭行，不另計便當
+          staffRosterMap[name] = inRoster.family;
+          // 不加 staffTotalBento，因為便當數已包含在家庭行（此備餐人屬於同家庭）
+          staffTotalBento += 1; // 備餐人員本人需1個便當
+        } else {
+          // B 類：家庭無人參班
+          staffSingleDisplay.push(name);
+          staffTotalBento += 1;
+        }
+      } else {
+        // C 類
+        staffSingleDisplay.push(name);
+        staffTotalBento += 1;
+      }
+    }
+  });
+
+  // ── 建立便當明細（含備餐A類：家庭便當數+1）──
+  // 每個家庭的便當數 = 參班人數（不含茶會、不含不要便當、不含備餐人員）+ A類備餐人數
+  const allStaffNames = new Set(Object.keys(staffRosterMap).concat(staffSingleDisplay));
+  staffPlusGroups.forEach(g => g.names.forEach(n => allStaffNames.add(n)));
+  const familyMap = {};
+  allMembers.filter(m => m.attend && !m.tea && !noBentoNames.includes(m.name) && !allStaffNames.has(m.name)).forEach(m => {
+    if (!familyMap[m.family]) familyMap[m.family] = { members: [], staffNames: [] };
+    familyMap[m.family].members.push(m.name);
+  });
+  // 把 A 類備餐加入對應家庭
+  Object.entries(staffRosterMap).forEach(([staffName, family]) => {
+    if (!familyMap[family]) familyMap[family] = { members: [], staffNames: [] };
+    familyMap[family].staffNames.push(staffName);
+  });
+
+  // 建構家庭名字在 allMembers 中第一次出現的順序索引（用於排序）
+  const familyFirstIndex = {};
+  allMembers.forEach((m, i) => {
+    if (!(m.family in familyFirstIndex)) familyFirstIndex[m.family] = i;
+  });
+
+  // 建構每筆資料
+  const allData = Object.entries(familyMap)
+    .filter(([, v]) => v.members.length > 0 || v.staffNames.length > 0)
+    .map(([family, v]) => {
+      const realMembers = v.members;
+      const staffInFamily = v.staffNames;
+      const sortedReal = sortFamilyMembers(realMembers);
+      const receiver = sortedReal[0] || staffInFamily[0];
+      const allNamesInOrder = [...sortedReal, ...staffInFamily].filter(Boolean);
+      const count = realMembers.length + staffInFamily.length;
+      return { family, receiver, count, membersArr: allNamesInOrder, staffInFamily };
+    })
+    .sort((a, b) => {
+      if (a.count !== b.count) return a.count - b.count;
+      // 同份數（2個以上）：依家庭名字在人員名單中的出現順序排列
+      const ia = familyFirstIndex[a.family] ?? 9999;
+      const ib = familyFirstIndex[b.family] ?? 9999;
+      return ia - ib;
+    });
+
+  const staffOnlyCounts = new Set();
+  if (staffSingleDisplay.length) staffOnlyCounts.add(1);
+  staffPlusGroups.forEach(g => staffOnlyCounts.add(g.bentoCnt));
+  const allCounts = [...new Set([...allData.map(b => b.count), ...staffOnlyCounts])].sort((a, b) => a - b);
+
+  // ── 動態篩選按鈕 ──
+  const filterBar = document.getElementById('bento-filter-bar');
+  if (filterBar) {
+    filterBar.innerHTML =
+      `<button class="filter-btn ${bentoFilter === 'all' ? 'active' : ''}" onclick="filterBento('all',this)">全部</button>` +
+      allCounts.map(c => `<button class="filter-btn ${bentoFilter === String(c) ? 'active' : ''}" onclick="filterBento('${c}',this)">${c}份</button>`).join('');
+  }
+
+  let data = allData;
+  if (bentoFilter !== 'all') data = data.filter(b => b.count === Number(bentoFilter));
+
+  // ── 分組 ──
+  const countGroups = {};
+  allData.forEach(b => {
+    if (!countGroups[b.count]) countGroups[b.count] = [];
+    countGroups[b.count].push(b);
+  });
+
+  const receiverColor = 'var(--teal)';
+  const multiCounts = [...new Set([
+    ...allData.filter(b => b.count > 1).map(b => b.count),
+    ...staffPlusGroups.filter(g => g.bentoCnt > 1).map(g => g.bentoCnt)
+  ])].sort((a, b) => a - b);
+  const oneGroup = countGroups[1] || [];
+
+  // ── 小計（基礎：僅計參班，不含備餐）──
+  // 參班人員便當小計 = 以實際參班人數為準，不含備餐
+  const attendOnlyFamilyMap = {};
+  allMembers.filter(m => m.attend && !m.tea && !noBentoNames.includes(m.name)).forEach(m => {
+    attendOnlyFamilyMap[m.family] = (attendOnlyFamilyMap[m.family] || 0) + 1;
+  });
+  const baseTotal = Object.values(attendOnlyFamilyMap).reduce((s, cnt) => s + cnt, 0);
+
+  // 各「N個便當」份數：與便當表列一致（含 A 類已併入家庭列；另加 B/C/D 類備餐）
+  const subtotalByCount = {};
+  allData.forEach(b => {
+    subtotalByCount[b.count] = (subtotalByCount[b.count] || 0) + 1;
+  });
+  staffSingleDisplay.forEach(() => {
+    subtotalByCount[1] = (subtotalByCount[1] || 0) + 1;
+  });
+  staffPlusGroups.forEach(grp => {
+    subtotalByCount[grp.bentoCnt] = (subtotalByCount[grp.bentoCnt] || 0) + 1;
+  });
+
+  let rows = [];
+
+  // ── 1個便當行 ──
+  // 排列順序：乾資輔→乾家長→乾學輔→乾學員，坤換行坤同
+  const _roleOrder1 = { '資輔': 0, '家長': 1, '學輔': 2, '學員': 3 };
+  if ((oneGroup.length || staffSingleDisplay.length) && (bentoFilter === 'all' || bentoFilter === '1')) {
+    const _getRole1 = b => allMembers.find(m => m.name === b.receiver)?.role;
+    const _sortOne = (a, b) => {
+      const ra = _roleOrder1[_getRole1(a)] ?? 9, rb = _roleOrder1[_getRole1(b)] ?? 9;
+      if (ra !== rb) return ra - rb;
+      const ia = familyFirstIndex[a.family] ?? 9999;
+      const ib = familyFirstIndex[b.family] ?? 9999;
+      return ia - ib;
+    };
+    const oneMales   = oneGroup.filter(b => allMembers.find(m => m.name === b.receiver)?.gender === '乾道').sort(_sortOne);
+    const oneFemales = oneGroup.filter(b => allMembers.find(m => m.name === b.receiver)?.gender !== '乾道').sort(_sortOne);
+    const renderOne = g => g.map((b, i) => {
+      const sep = i < g.length - 1 ? '、' : '';
+      const br  = (i + 1) % 10 === 0 && i < g.length - 1 ? '<br>' : '';
+      return `<span style="color:${receiverColor};font-weight:700;">${b.receiver}</span>${sep}${br}`;
+    }).join('');
+    let nameStr = '';
+    if (oneMales.length)   nameStr += renderOne(oneMales);
+    if (oneMales.length && oneFemales.length) nameStr += '<br>';
+    if (oneFemales.length) nameStr += renderOne(oneFemales);
+    // B+C類備餐放1個便當行末
+    if (staffSingleDisplay.length) {
+      nameStr += (nameStr ? '<br>' : '') +
+        `<span style="color:#8B6914;font-size:0.82rem;font-style:italic;">備餐：${staffSingleDisplay.join('、')}</span>`;
+    }
+    rows.push(`<tr>
+      <td style="color:var(--muted);font-size:0.75rem;">${rows.length + 1}</td>
+      <td><span class="bento-count">🍱 1 個</span></td>
+      <td style="color:var(--muted);line-height:2.2;">${nameStr}</td>
+    </tr>`);
+  }
+
+  // ── 2個以上便當行 ──
+  const _roleOrderM = { '資輔': 0, '家長': 0, '學輔': 1, '學員': 2 };
+  multiCounts.forEach(cnt => {
+    const group = countGroups[cnt] || [];
+    const plusForCnt = staffPlusGroups.filter(g => g.bentoCnt === cnt);
+    if (!group.length && !plusForCnt.length) return;
+    if (bentoFilter !== 'all' && Number(cnt) !== Number(bentoFilter)) return;
+    const cls = bentoCountColors[cnt - 1] || 'two';
+
+    const _sortM = (a, b) => {
+      const ia = familyFirstIndex[a.family] ?? 9999;
+      const ib = familyFirstIndex[b.family] ?? 9999;
+      return ia - ib;
+    };
+    const getGender = b => {
+      const fm = allMembers.find(x => x.name === b.family && x.attend);
+      return (fm || allMembers.find(x => x.name === b.receiver))?.gender;
+    };
+    const maleGroups   = group.filter(b => getGender(b) === '乾道').sort(_sortM);
+    const femaleGroups = group.filter(b => getGender(b) !== '乾道').sort(_sortM);
+
+    const renderGroup = g => g.map((b, i) => {
+      // 括號內：除領取人外的成員（已按名單順序排列），備餐人放最後並加標籤
+      const otherMembers = b.membersArr.filter(n => n !== b.receiver && !b.staffInFamily.includes(n));
+      const staffLabels = b.staffInFamily.map(n =>
+        `${n}<span style="font-size:0.68rem;background:#fef3c7;color:#92400e;border:1px solid #fcd34d;border-radius:3px;padding:0 3px;margin-left:2px;vertical-align:middle;">備餐</span>`
+      );
+      const allInParens = [...otherMembers, ...staffLabels];
+      const membersHtml = allInParens.length
+        ? `<span style="white-space:nowrap;">(${allInParens.join('、')})</span>`
+        : '';
+      const sep = i < g.length - 1 ? '、' : '';
+      const br  = (i + 1) % 3 === 0 && i < g.length - 1 ? '<br>' : '';
+      return `<span style="color:${receiverColor};font-weight:700;">${b.receiver}</span>${membersHtml}${sep}${br}`;
+    }).join('');
+
+    let nameStr = '';
+    if (maleGroups.length)   nameStr += renderGroup(maleGroups);
+    if (maleGroups.length && femaleGroups.length) nameStr += '<br>';
+    if (femaleGroups.length) nameStr += renderGroup(femaleGroups);
+
+    // D類（＋分組）備餐放對應便當數行末
+    plusForCnt.forEach(grp => {
+      nameStr += (nameStr ? '<br>' : '') +
+        `<span style="color:#8B6914;font-size:0.82rem;font-style:italic;">備餐：${grp.names.join('、')}</span>`;
+    });
+
+    rows.push(`<tr>
+      <td style="color:var(--muted);font-size:0.75rem;">${rows.length + 1}</td>
+      <td><span class="bento-count ${cls}">🍱 ${cnt} 個</span></td>
+      <td style="color:var(--muted);line-height:2.2;">${nameStr}</td>
+    </tr>`);
+  });
+
+  document.getElementById('bento-tbody').innerHTML = rows.join('');
+
+  // ── 小計：各份數顯示（已含備餐對應份數），備餐總個數另列 ──
+  const parts = Object.entries(subtotalByCount).sort(([a], [b]) => Number(a) - Number(b))
+    .map(([c, n]) =>
+      `<div class="subtotal-item"><span class="subtotal-label" style="font-size:1rem;font-weight:700;color:var(--ink);">${c}個便當：</span><span class="subtotal-num" style="font-size:1.4rem;">${n}</span><span class="subtotal-label" style="font-size:1rem;">份</span></div>`
+    ).join('<span style="font-size:1rem;color:var(--border);margin:0 0.3rem;">│</span>');
+
+  document.getElementById('bento-subtotal').innerHTML = `
+    ${parts}
+    ${parts ? '<div class="subtotal-divider"></div>' : ''}
+    <div class="subtotal-item total"><span class="subtotal-label" style="font-size:1rem;font-weight:700;color:var(--ink);">參班人員便當小計：</span><span class="subtotal-num">${baseTotal}</span><span class="subtotal-label" style="font-size:1rem;">個</span></div>
+    <div class="subtotal-divider"></div>
+    <div class="subtotal-item"><span class="subtotal-label" style="font-size:1rem;font-weight:700;color:var(--ink);">🍵 茶會便當：</span><span class="subtotal-num" id="bento-subtotal-tea" style="font-size:1.4rem;">0</span><span class="subtotal-label" style="font-size:1rem;">個</span></div>
+    <span style="font-size:1rem;color:var(--border);margin:0 0.3rem;">│</span>
+    <div class="subtotal-item"><span class="subtotal-label" style="font-size:1rem;font-weight:700;color:var(--ink);">🍳 備餐人員便當：</span><span class="subtotal-num" id="bento-subtotal-staff" style="font-size:1.4rem;">0</span><span class="subtotal-label" style="font-size:1rem;">個</span></div>
+    <span style="font-size:1rem;color:var(--border);margin:0 0.3rem;">│</span>
+    <div style="display:inline-flex;align-items:baseline;gap:6px;background:linear-gradient(135deg,#e8c96a,#c9a84c,#e8c96a);color:var(--ink);padding:8px 32px;border-radius:50px;box-shadow:0 4px 16px rgba(201,168,76,0.45);white-space:nowrap;"><span style="font-size:1rem;font-weight:700;">🍱 全部便當數量總計：</span><span id="bento-grand-total" style="font-family:'Noto Serif TC',serif;font-size:2.1rem;font-weight:900;color:#7a3a00;line-height:1;">0</span><span style="font-size:1rem;font-weight:700;">個</span></div>
+    ${bentoFilter !== 'all' ? '<span style="font-size:0.75rem;color:var(--muted);">（篩選結果）</span>' : ''}
+  `;
+
+  // ── 茶會區塊 ──
+  const teaCountEl  = document.getElementById('bento-tea-count-display');
+  const teaBentoEl  = document.getElementById('bento-tea-bento-display');
+  const teaNamesEl  = document.getElementById('bento-tea-names');
+  if (teaNamesEl) {
+    if (teaMembers.length || staffTeaOffRoster.length) {
+      const _teaRO = { '資輔': 0, '學輔': 1, '學員': 2, '家長': 3 };
+      const _teaCO = { '1-1': 0, '1-2': 1, '1-3': 2, '1-4': 3, '2-1': 4, '2-2': 5, '2-3': 6, '2區': 7 };
+      const _teaSort = (a, b) => {
+        const ra = _teaRO[a.role] ?? 9, rb = _teaRO[b.role] ?? 9;
+        if (ra !== rb) return ra - rb;
+        return (_teaCO[a.code] ?? 9) - (_teaCO[b.code] ?? 9);
+      };
+      const normalTea     = teaMembers.filter(m => !noBentoNames.includes(m.name));
+      const noBentoTea    = teaMembers.filter(m =>  noBentoNames.includes(m.name));
+      const normalMales   = normalTea.filter(m => m.gender === '乾道').sort(_teaSort);
+      const normalFemales = normalTea.filter(m => m.gender !== '乾道').sort(_teaSort);
+      let html = '';
+      if (normalMales.length)   html += normalMales.map(m => m.name).join('、');
+      if (normalMales.length && normalFemales.length) html += '<br>';
+      if (normalFemales.length) html += normalFemales.map(m => m.name).join('、');
+      const offRosterNorm = staffTeaOffRoster.filter(n => !noBentoNames.includes(n));
+      const offRosterNoBento = staffTeaOffRoster.filter(n => noBentoNames.includes(n));
+      if (offRosterNorm.length) {
+        if (html) html += '、';
+        html += offRosterNorm.join('、');
+      }
+      const allNoBentoTeaNames = [...noBentoTea.map(m => m.name), ...offRosterNoBento];
+      if (allNoBentoTeaNames.length) {
+        if (html) html += '<br>';
+        html += '不要便當人員：' + allNoBentoTeaNames.map(n =>
+          `<span style="color:var(--red);font-weight:700;">${n}</span>`
+        ).join('、');
+      }
+      teaNamesEl.innerHTML = html || '（尚未選擇）';
+    } else {
+      teaNamesEl.textContent = '（尚未選擇）';
+    }
+  }
+  if (teaCountEl) teaCountEl.textContent = totalTeaHeadcount;
+  if (teaBentoEl) teaBentoEl.textContent = effectiveTeaCount;
+  const subtotalTeaEl = document.getElementById('bento-subtotal-tea');
+  if (subtotalTeaEl) subtotalTeaEl.textContent = effectiveTeaCount;
+
+  // ── 更新備餐人數、總計 ──
+  const staffCountEl = document.getElementById('meal-staff-count-display');
+  if (staffCountEl) staffCountEl.textContent = staffTotalBento;
+  const subtotalStaffEl = document.getElementById('bento-subtotal-staff');
+  if (subtotalStaffEl) subtotalStaffEl.textContent = staffTotalBento;
+  const grandTotal = baseTotal + effectiveTeaCount + staffTotalBento;
+  const grandEl = document.getElementById('bento-grand-total');
+  if (grandEl) grandEl.textContent = grandTotal;
+
+  // ── 同步儀表板 ──
+  const dashBento = document.getElementById('dash-bento');
+  if (dashBento) dashBento.textContent = grandTotal;
+  const dashTeaEl = document.getElementById('dash-tea');
+  if (dashTeaEl) dashTeaEl.textContent = totalTeaHeadcount;
+
+  // ── 同步本月負責橢圓 ──
+  const _subBadge = document.getElementById('bento-area-badge-sub');
+  if (_subBadge && _cachedAreaText) {
+    _subBadge.textContent = _cachedAreaText;
+    _subBadge.style.background = _cachedAreaBg;
+  }
+
+  // ── 不要便當統計 ──
+  const noBentoCountEl = document.getElementById('no-bento-count-display');
+  if (noBentoCountEl) noBentoCountEl.textContent = noBentoNames.length;
+
+  // ── 不要便當分類說明 ──
+  const noBentoInBento = noBentoNames.filter(n => !teaMemberNames.includes(n));
+  const noBentoNote = document.getElementById('no-bento-note');
+  if (noBentoNote) {
+    let notes = [];
+    if (noBentoInTea.length > 0)    notes.push(`茶會扣除：${noBentoInTea.join('、')}（茶會便當 ${totalTeaHeadcount} → ${effectiveTeaCount} 個）`);
+    if (noBentoInBento.length > 0)  notes.push(`便當明細移除：${noBentoInBento.join('、')}`);
+    noBentoNote.textContent = notes.length ? notes.join('　') : '';
+  }
+}
+
+function confirmNoBento() {
+  const el = document.getElementById('no-bento-names');
+  const validateEl = document.getElementById('no-bento-validate');
+  const inputs = el ? el.value.split(/[\u3001\uff0c,\n]/).map(n=>n.trim()).filter(n=>n.length>0) : [];
+
+  let notFound = [];
+  let notAttend = [];
+  let valid = [];
+
+  inputs.forEach(name => {
+    const member = allMembers.find(m => m.name === name);
+    if (!member) {
+      notFound.push(name);
+    } else if (!member.attend) {
+      notAttend.push(name);
+    } else {
+      valid.push(name);
+    }
+  });
+
+  let html = '';
+  if (notFound.length) {
+    html += '<div style="font-size:0.78rem;color:#c0392b;font-weight:700;">\u274c \u59d3\u540d\u6709\u8aa4\uff08\u4e0d\u5728\u4eba\u54e1\u540d\u55ae\uff09\uff1a' + notFound.map(n=>'<span style="background:#ffd0d0;padding:1px 6px;border-radius:4px;">'+n+'</span>').join(' ') + '</div>';
+  }
+  if (notAttend.length) {
+    html += '<div style="font-size:0.78rem;color:#e65100;font-weight:700;margin-top:4px;">\u26a0\ufe0f \u672a\u53c3\u52a0\u672c\u6b21\u6d3b\u52d5\uff0c\u4e0d\u5217\u5165\uff1a' + notAttend.map(n=>'<span style="background:#ffe0cc;padding:1px 6px;border-radius:4px;">'+n+'</span>').join(' ') + '</div>';
+  }
+  if (valid.length) {
+    html += '<div style="font-size:0.78rem;color:#1e7e5e;font-weight:700;margin-top:4px;">\u2705 \u5df2\u78ba\u8a8d\u4e0d\u8981\u4fbf\u7576\uff1a' + valid.map(n=>'<span style="background:#d0f0e0;padding:1px 6px;border-radius:4px;">'+n+'</span>').join(' ') + '</div>';
+  }
+  if (!inputs.length) html = '';
+  if (validateEl) validateEl.innerHTML = html;
+
+  if (el && (notFound.length || notAttend.length)) {
+    el.value = valid.join('\u3001');
+  }
+
+  saveData();
+  renderBento();
+}
+
+function filterBento(f) { bentoFilter = f; renderBento(); }
+
+
+// ══════════════════════════════════════════
+// ADD MEMBER
+// ══════════════════════════════════════════
+const areaCodeMap = {
+  '台中':'1-1','彰化':'1-2','太平':'1-3','坪林':'1-4','嘉義':'2-1','馬光':'2-2','斗六':'2-3'
+};
+
+function openAddMember() {
+  document.getElementById('add-member-modal').classList.add('open');
+  document.getElementById('new-name').focus();
+}
+
+function closeAddMember() {
+  document.getElementById('add-member-modal').classList.remove('open');
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-family').value = '';
+}
+
+function updateCodeOptions() {
+  const area = document.getElementById('new-area').value;
+  const code = areaCodeMap[area] || '1-1';
+  document.getElementById('new-code').value = code;
+}
+
+function confirmAddMember() {
+  const name = document.getElementById('new-name').value.trim();
+  if (!name) { alert('請輸入姓名'); return; }
+  const family = document.getElementById('new-family').value.trim() || name;
+  const newMember = {
+    no: allMembers.length + 1,
+    role:   document.getElementById('new-role').value,
+    gender: document.getElementById('new-gender').value,
+    area:   document.getElementById('new-area').value,
+    code:   document.getElementById('new-code').value,
+    name, family,
+    familyOrder: parseInt(document.getElementById('new-family-order').value, 10) || 1,
+    attend: false, tea: false
+  };
+  allMembers.push(newMember);
+  allMembers.forEach((m, i) => m.no = i + 1);
+  saveData();
+  syncAll();
+  renderMembers();
+  closeAddMember();
+}
+
+
+// ══════════════════════════════════════════
+// MANAGE PAGE
+// ══════════════════════════════════════════
+let manageMode = ''; // 'edit' or 'delete'
+
+function renderManagePage() {
+  // 重置狀態，只顯示功能按鈕區
+  manageMode = '';
+  const rosterWrap = document.getElementById('manage-roster-wrap');
+  const buttonsWrap = document.getElementById('manage-buttons-wrap');
+  if (rosterWrap) rosterWrap.style.display = 'none';
+  if (buttonsWrap) buttonsWrap.style.display = 'flex';
+  const editBtn = document.getElementById('manage-edit-btn');
+  const delBtn  = document.getElementById('manage-delete-btn');
+  if (editBtn) { editBtn.style.background = 'var(--teal)'; editBtn.textContent = '✏️ 修改人員'; }
+  if (delBtn)  { delBtn.style.background  = '#c0392b';     delBtn.textContent  = '🗑 刪除人員'; }
+}
+
+function startManageMode(mode) {
+  manageMode = mode;
+  const rosterWrap   = document.getElementById('manage-roster-wrap');
+  const modeBar      = document.getElementById('manage-mode-bar');
+  const modeLabel    = document.getElementById('manage-mode-label');
+  const rosterContent = document.getElementById('manage-roster-content');
+
+  // 更新提示列樣式與文字
+  if (mode === 'edit') {
+    modeBar.style.background = '#e8f5e9';
+    modeBar.style.borderColor = 'var(--green)';
+    modeLabel.style.color = 'var(--green)';
+    modeLabel.textContent = '✏️ 修改模式：點選姓名片即可修改該人員資料';
+    const editBtn = document.getElementById('manage-edit-btn');
+    if (editBtn) { editBtn.style.background = 'var(--green)'; editBtn.textContent = '✏️ 修改中…'; }
+  } else {
+    modeBar.style.background = '#ffebee';
+    modeBar.style.borderColor = '#c0392b';
+    modeLabel.style.color = '#b71c1c';
+    modeLabel.textContent = '🗑 刪除模式：點選姓名片即可刪除該人員';
+    const delBtn = document.getElementById('manage-delete-btn');
+    if (delBtn) { delBtn.style.background = '#8b1a1a'; delBtn.textContent = '🗑 刪除中…'; }
+  }
+
+  rosterWrap.style.display = 'block';
+  renderManageRoster(rosterContent, mode);
+}
+
+function exitManageMode() {
+  manageMode = '';
+  const rosterWrap = document.getElementById('manage-roster-wrap');
+  if (rosterWrap) rosterWrap.style.display = 'none';
+  const editBtn = document.getElementById('manage-edit-btn');
+  const delBtn  = document.getElementById('manage-delete-btn');
+  if (editBtn) { editBtn.style.background = 'var(--teal)'; editBtn.textContent = '✏️ 修改人員'; }
+  if (delBtn)  { delBtn.style.background  = '#c0392b';     delBtn.textContent  = '🗑 刪除人員'; }
+  saveData(); syncAll(); renderMembers();
+}
+
+function renderManageRoster(container, mode) {
+  const AREAS = [
+    { name: '台中', code: '1-1' },
+    { name: '彰化', code: '1-2' },
+    { name: '太平', code: '1-3' },
+    { name: '坪林', code: '1-4' },
+    { name: '嘉義', code: '2-1' },
+    { name: '斗六', code: '2-3' },
+  ];
+  const roleOrder = { '資輔': 0, '家長': 1, '學輔': 2, '學員': 3 };
+  function sortArea(members) {
+    return [...members].sort((a, b) => {
+      const ra = roleOrder[a.role] ?? 9, rb = roleOrder[b.role] ?? 9;
+      if (ra !== rb) return ra - rb;
+      const ga = a.gender === '乾道' ? 0 : 1, gb = b.gender === '乾道' ? 0 : 1;
+      if (ga !== gb) return ga - gb;
+      return (a.no ?? 9999) - (b.no ?? 9999);
+    });
+  }
+
+  const isDelete = mode === 'delete';
+  const chipBorder = isDelete ? '#c0392b' : '#1565c0';
+  const chipColor  = isDelete ? '#c0392b' : '#1565c0';
+  const onClickFn  = isDelete ? 'manageDeleteChip' : 'manageEditChip';
+
+  const areaRows = AREAS.map(area => {
+    const members = sortArea(allMembers.filter(m => m.area === area.name));
+    const chips = members.map(m => {
+      const idx = allMembers.indexOf(m);
+      const roleLabel = `<span style="font-size:0.6rem;opacity:0.75;margin-left:2px;">${m.role}</span>`;
+      return `<span class="roster-name-chip" style="border-color:${chipBorder};color:${chipColor};cursor:pointer;"
+        onclick="${onClickFn}(${idx})">${m.name}${roleLabel}</span>`;
+    }).join('');
+    return `<div class="roster-area-label">${area.name}</div>` +
+           `<div class="roster-names-cell">${chips || '<span style="color:var(--muted);font-size:0.8rem;">（無）</span>'}</div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="roster-panels" style="grid-template-columns:1fr;">
+      <div class="roster-panel">
+        <div class="roster-panel-header ${isDelete ? '' : 'attend'}" style="${isDelete ? 'background:#c0392b;color:white;' : ''}">
+          <span>${isDelete ? '🗑 點選姓名片以刪除人員' : '✏️ 點選姓名片以修改人員'}</span>
+          <span class="count-pill">${allMembers.length} 人</span>
+        </div>
+        <div class="roster-areas">${areaRows}</div>
+      </div>
+    </div>`;
+}
+
+function manageDeleteChip(idx) {
+  const m = allMembers[idx];
+  if (!m) return;
+  const pwd = prompt(`請輸入密碼以刪除「${m.name}」：`);
+  if (pwd === null) return;
+  if (pwd !== 'amos6438') { alert('密碼錯誤，無法刪除。'); return; }
+  allMembers.splice(idx, 1);
+  allMembers.forEach((x, i) => x.no = i + 1);
+  saveData(); syncAll(); renderMembers();
+  // 重新渲染名單
+  const rosterContent = document.getElementById('manage-roster-content');
+  if (rosterContent) renderManageRoster(rosterContent, 'delete');
+  // 更新人數
+  const pill = document.querySelector('#manage-roster-content .count-pill');
+  if (pill) pill.textContent = allMembers.length + ' 人';
+}
+
+function manageEditChip(idx) {
+  const m = allMembers[idx];
+  if (!m) return;
+  openEditMemberModal(idx);
+}
+
+// ══ 修改人員 Modal ══
+function openEditMemberModal(idx) {
+  const m = allMembers[idx];
+  if (!m) return;
+  // 若已有 modal 則移除
+  const existing = document.getElementById('edit-member-modal');
+  if (existing) existing.remove();
+
+  const areaOpts = ['台中','彰化','太平','坪林','嘉義','斗六','馬光'].map(a =>
+    `<option value="${a}" ${m.area===a?'selected':''}>${a}</option>`).join('');
+  const codeOpts = ['1-1','1-2','1-3','1-4','2-1','2-2','2-3'].map(c =>
+    `<option value="${c}" ${m.code===c?'selected':''}>${c}</option>`).join('');
+  const roleOpts = ['資輔','學輔','學員','家長'].map(r =>
+    `<option value="${r}" ${m.role===r?'selected':''}>${r}</option>`).join('');
+  const genderOpts = ['乾道','坤道'].map(g =>
+    `<option value="${g}" ${m.gender===g?'selected':''}>${g}</option>`).join('');
+  const orderOpts = [1,2,3,4,5,6,7,8,9].map(n => {
+    const labels = {1:'1（爸爸／最長）',2:'2（媽媽／次長）',3:'3（哥哥／第三）',4:'4（姊姊／第四）',5:'5（弟弟／第五）',6:'6（妹妹／第六）',7:'7（第七）',8:'8（第八）',9:'9（最小）'};
+    return `<option value="${n}" ${(m.familyOrder||1)===n?'selected':''}>${labels[n]}</option>`;
+  }).join('');
+
+  const modal = document.createElement('div');
+  modal.id = 'edit-member-modal';
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `
+    <div class="modal">
+      <div class="modal-title">✏️ 修改人員 — ${m.name}</div>
+      <div class="modal-row">
+        <div class="modal-field"><label>職位</label><select id="edit-role">${roleOpts}</select></div>
+        <div class="modal-field"><label>乾坤</label><select id="edit-gender">${genderOpts}</select></div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field"><label>地區</label><select id="edit-area">${areaOpts}</select></div>
+        <div class="modal-field"><label>代號</label><select id="edit-code">${codeOpts}</select></div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field"><label>姓名</label><input type="text" id="edit-name" value="${m.name}"></div>
+        <div class="modal-field"><label>家庭</label><input type="text" id="edit-family" value="${m.family||m.name}"></div>
+      </div>
+      <div class="modal-row">
+        <div class="modal-field" style="max-width:none;flex:1;">
+          <label>長幼（家庭排序）</label>
+          <select id="edit-family-order">${orderOpts}</select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="document.getElementById('edit-member-modal').remove()">取消</button>
+        <button class="btn-confirm" onclick="confirmEditMember(${idx})">✔ 確認修改</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function confirmEditMember(idx) {
+  const m = allMembers[idx];
+  if (!m) return;
+  const newName = document.getElementById('edit-name').value.trim();
+  if (!newName) { alert('請輸入姓名'); return; }
+  const oldName = m.name;
+  m.role   = document.getElementById('edit-role').value;
+  m.gender = document.getElementById('edit-gender').value;
+  m.area   = document.getElementById('edit-area').value;
+  m.code   = document.getElementById('edit-code').value;
+  m.name   = newName;
+  m.family = document.getElementById('edit-family').value.trim() || newName;
+  m.familyOrder = parseInt(document.getElementById('edit-family-order').value, 10) || 1;
+  // 若原本家庭等於原名，跟著改
+  if (m.family === oldName && oldName !== newName) m.family = newName;
+  allMembers.forEach(x => { if (x.family === oldName) x.family = newName; });
+  saveData(); syncAll(); renderMembers();
+  document.getElementById('edit-member-modal').remove();
+  // 重新渲染 manage roster
+  const rosterContent = document.getElementById('manage-roster-content');
+  if (rosterContent && manageMode === 'edit') renderManageRoster(rosterContent, 'edit');
+}
+
+// 舊的 openToolPanel/closeToolPanel 保留空函式以免報錯
+function openToolPanel() {}
+function closeToolPanel() {}
+
+// Excel 匯入（參班）— 從人員名單頁呼叫，結果顯示在該頁
+function triggerExcelAttendMembers() {
+  const resultEl = document.getElementById('members-excel-result');
+  if (resultEl) resultEl.innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.xlsx,.xls,.csv';
+  input.onchange = function(e) {
+    allMembers.forEach(m => { m.attend = false; m.tea = false; });
+    const mealEl = document.getElementById('meal-staff-names');
+    if (mealEl) mealEl.value = '';
+    const noBentoEl = document.getElementById('no-bento-names');
+    if (noBentoEl) noBentoEl.value = '';
+    saveData(); syncAll(); renderMembers();
+    handleExcelImport(e, 'attend', 'members-excel-result');
+  };
+  input.click();
+}
+// Excel 匯入（參班）— 從資料輸入頁呼叫
+function triggerExcelAttend() {
+  document.getElementById('manage-photo-result').innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.xlsx,.xls,.csv';
+  input.onchange = (e) => handleExcelImport(e, 'attend', 'manage-photo-result');
+  input.click();
+}
+// Excel 匯入（茶會）
+function triggerExcelTea() {
+  document.getElementById('manage-photo-result').innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.xlsx,.xls,.csv';
+  input.onchange = (e) => handleExcelImport(e, 'tea', 'manage-photo-result');
+  input.click();
+}
+
+async function handleExcelImport(event, mode, resultElId) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const color = mode === 'attend' ? '#0f6e3a' : '#6a1b9a';
+  const resultEl = document.getElementById(resultElId || 'manage-photo-result');
+  resultEl.innerHTML = `<span style="color:${color};">⏳ 讀取 Excel 中，請稍候...</span>`;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+
+      // 關鍵字判斷（備註欄）
+      const NO_BENTO_KEYWORDS = ['不要便當', '不要', '不用便當', '不訂便當', '不吃便當'];
+      function isNoBento(str) {
+        if (!str) return false;
+        return NO_BENTO_KEYWORDS.some(kw => String(str).includes(kw));
+      }
+
+      // 從字串中萃取可能的姓名（2~5字）
+      function extractNames(str) {
+        if (!str) return [];
+        // 清除全形空白、不換行空白、BOM 等不可見字元
+        const s = String(str).replace(/[\u3000\u00a0\ufeff]/g, ' ').trim();
+        const parts = s.split(/[\s、，,\/\n\r]+/).map(p => p.trim()).filter(p => p.length >= 2 && p.length <= 5);
+        const result = new Set(parts);
+        if (s.length >= 2 && s.length <= 5) result.add(s);
+        return [...result];
+      }
+
+      // 姓名正規化比對（去除所有空白類字元）
+      function normName(n) { return String(n).replace(/[\u3000\u00a0\ufeff\s]/g, ''); }
+
+      const MEAL_STAFF_KEYWORDS = ['備餐人員', '備餐', '備餐者'];
+      function isMealStaff(str) {
+        if (!str) return false;
+        return MEAL_STAFF_KEYWORDS.some(kw => String(str).includes(kw));
+      }
+
+      // 逐列讀取，嘗試找出姓名欄與備註欄
+      const allNames = new Set();         // 所有出現的姓名
+      const noBentoNames = new Set();     // 備註為「不要便當」的姓名
+      const mealStaffNames = new Set();   // 備註為「備餐人員」的姓名
+
+      workbook.SheetNames.forEach(sheetName => {
+        const sheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+        if (!rows.length) return;
+
+        // 尋找標題列（含「姓名」或「備註」的列）
+        // 優先順序：整理姓名 > 姓名/名字 > 其他含「姓名」的欄位（排除「原始姓名」）
+        let nameColIdx = -1, remarkColIdx = -1, headerRowIdx = -1;
+        for (let r = 0; r < Math.min(rows.length, 6); r++) {
+          const row = rows[r];
+          let bestNameCol = -1, bestNamePriority = 99;
+          for (let c = 0; c < row.length; c++) {
+            const cell = String(row[c]).trim();
+            // 姓名欄優先順序：整理姓名(0) > 姓名/名字(1) > 其他含姓名但不含原始(2)
+            if (cell === '整理姓名' && bestNamePriority > 0) { bestNameCol = c; bestNamePriority = 0; headerRowIdx = r; }
+            else if ((cell === '姓名' || cell === '名字') && bestNamePriority > 1) { bestNameCol = c; bestNamePriority = 1; headerRowIdx = r; }
+            else if (cell.includes('姓名') && !cell.includes('原始') && bestNamePriority > 2) { bestNameCol = c; bestNamePriority = 2; headerRowIdx = r; }
+            if (cell.includes('備註') || cell.includes('說明') || cell.includes('備注') || cell === '備註事項') {
+              remarkColIdx = c;
+            }
+          }
+          if (bestNameCol >= 0) { nameColIdx = bestNameCol; break; }
+        }
+
+        // 逐列處理
+        const startRow = headerRowIdx >= 0 ? headerRowIdx + 1 : 0;
+        rows.slice(startRow).forEach(row => {
+          // 取得姓名：優先用找到的姓名欄，否則掃描整列
+          let rowNames = [];
+          if (nameColIdx >= 0 && row[nameColIdx]) {
+            rowNames = extractNames(row[nameColIdx]);
+          } else {
+            // 沒有標題欄：掃描整列所有儲存格
+            row.forEach(cell => { rowNames.push(...extractNames(cell)); });
+          }
+
+          // 判斷備註欄是否含「不要便當」或「備餐人員」
+          let hasNoBento = false, hasMealStaff = false;
+          if (remarkColIdx >= 0) {
+            hasNoBento  = isNoBento(row[remarkColIdx]);
+            hasMealStaff = isMealStaff(row[remarkColIdx]);
+          } else {
+            // 沒有備註欄：掃描整列是否有任一格含關鍵字
+            hasNoBento   = row.some(cell => isNoBento(cell));
+            hasMealStaff = row.some(cell => isMealStaff(cell));
+          }
+
+          rowNames.forEach(name => {
+            allNames.add(name);
+            if (hasNoBento)   noBentoNames.add(name);
+            if (hasMealStaff) mealStaffNames.add(name);
+          });
+        });
+      });
+
+      // 比對人員名單，標記參班 / 茶會（備餐人員不列入參班）
+      let matched = [], notFound = [], notAttend = [];
+      allMembers.forEach(m => {
+        const normed = normName(m.name);
+        if ([...allNames].some(n => normName(n) === normed)) {
+          // 若此人在備餐人員名單中，不勾選參班
+          const isMeal = [...mealStaffNames].some(n => normName(n) === normed);
+          if (isMeal) return;
+          if (mode === 'attend') {
+            m.attend = true;
+            matched.push(m.name);
+          } else {
+            if (!m.attend) { notAttend.push(m.name); }
+            else { m.tea = true; matched.push(m.name); }
+          }
+        }
+      });
+
+      // 處理不要便當：覆蓋便當頁的不要便當欄位
+      const addedNoBento = [];
+      if (noBentoNames.size > 0) {
+        const noBentoEl = document.getElementById('no-bento-names');
+        if (noBentoEl) {
+          const names = [];
+          noBentoNames.forEach(name => {
+            const matched = allMembers.find(m => normName(m.name) === normName(name));
+            if (matched) { names.push(matched.name); addedNoBento.push(matched.name); }
+          });
+          noBentoEl.value = names.join('、');
+        }
+      }
+
+      // 處理備餐人員：直接覆蓋便當頁的備餐人員欄位（不保留舊資料）
+      const addedMealStaff = [];
+      if (mealStaffNames.size > 0) {
+        const mealEl = document.getElementById('meal-staff-names');
+        if (mealEl) {
+          // 直接覆蓋，不合併，確保不會有舊版原始姓名殘留
+          const names = [...mealStaffNames];
+          mealEl.value = names.join('、');
+          addedMealStaff.push(...names);
+        }
+      }
+
+      saveData(); syncAll(); renderMembers();
+
+      // 組結果訊息
+      let html = '';
+      if (matched.length) {
+        html += `<div style="color:${color};font-weight:700;">✅ 已自動勾選${mode==='attend'?'參班':'茶會'}（${matched.length} 人）：${matched.join('、')}</div>`;
+      }
+      if (addedNoBento.length) {
+        html += `<div style="color:#c0392b;font-weight:700;margin-top:4px;">🚫 已加入不要便當名單（${addedNoBento.length} 人）：${addedNoBento.join('、')}</div>`;
+      }
+      if (addedMealStaff.length) {
+        html += `<div style="color:#8B6914;font-weight:700;margin-top:4px;">🍳 已加入備餐人員名單（${addedMealStaff.length} 人）：${addedMealStaff.join('、')}</div>`;
+      }
+      if (notAttend.length) {
+        html += `<div style="color:#e65100;margin-top:4px;">⚠️ 尚未參班，無法勾選茶會：${notAttend.join('、')}</div>`;
+      }
+      if (notFound.length) {
+        const filtered = notFound.filter(n => n.length >= 2 && n.length <= 4);
+        if (filtered.length) {
+          html += `<div style="color:#9e9e9e;margin-top:4px;font-size:0.68rem;">📋 Excel 中有但不在名單：${filtered.join('、')}</div>`;
+        }
+      }
+      if (!html) {
+        html = '<div style="color:#c0392b;">❌ 未在 Excel 中找到任何名單成員，請確認檔案格式或姓名是否正確。</div>';
+      } else {
+        html += `<div style="color:var(--muted);margin-top:4px;font-size:0.68rem;">📄 已讀取：${file.name}（${workbook.SheetNames.length} 個工作表）</div>`;
+      }
+      resultEl.innerHTML = html;
+    } catch(err) {
+      resultEl.innerHTML = '<div style="color:#c0392b;">❌ 讀取失敗，請確認檔案為有效的 Excel 格式。</div>';
+      console.error(err);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// 舊函式保留空殼以免其他地方呼叫報錯
+function triggerPhotoAttend() { triggerExcelAttend(); }
+function triggerPhotoTea() { triggerExcelTea(); }
+async function handleTpPhoto() {}
+
+// 語音辨識（整合版）
+let tpVoiceRec = null, tpVoiceActive = false, tpVoiceMode = '';
+
+function toggleTpVoice(mode) {
+  if (tpVoiceActive) { tpVoiceRec && tpVoiceRec.stop(); return; }
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    document.getElementById('tp-voice-result').innerHTML = '<div style="color:#c0392b;">❌ 此瀏覽器不支援語音辨識，請使用 Chrome。</div>';
+    return;
+  }
+  tpVoiceMode = mode;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  tpVoiceRec = new SR();
+  tpVoiceRec.lang = 'zh-TW';
+  tpVoiceRec.continuous = true;
+  tpVoiceRec.interimResults = true;
+
+  const aBtn = document.getElementById('tp-voice-attend-btn');
+  const tBtn = document.getElementById('tp-voice-tea-btn');
+
+  tpVoiceRec.onstart = function() {
+    tpVoiceActive = true;
+    document.getElementById('tp-voice-transcript').textContent = '聆聽中...';
+    document.getElementById('tp-voice-result').innerHTML = '';
+    if (mode === 'attend') { aBtn.style.background='#e74c3c'; document.getElementById('tp-va-icon').textContent='⏹'; document.getElementById('tp-va-text').textContent='停止錄音'; }
+    else { tBtn.style.background='#9c27b0'; document.getElementById('tp-vt-icon').textContent='⏹'; document.getElementById('tp-vt-text').textContent='停止錄音'; }
+  };
+  tpVoiceRec.onresult = function(e) {
+    let t = '';
+    for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+    document.getElementById('tp-voice-transcript').textContent = '聽到：' + t;
+  };
+  tpVoiceRec.onend = function() {
+    tpVoiceActive = false;
+    if (mode === 'attend') { aBtn.style.background='#c0392b'; document.getElementById('tp-va-icon').textContent='🎙'; document.getElementById('tp-va-text').textContent='辨識參班'; }
+    else { tBtn.style.background='#7b3f9e'; document.getElementById('tp-vt-icon').textContent='🎙'; document.getElementById('tp-vt-text').textContent='辨識茶會'; }
+    const transcript = document.getElementById('tp-voice-transcript').textContent.replace('聽到：','');
+    if (!transcript || transcript === '聆聽中...') return;
+    processTpVoiceNames(transcript, mode);
+  };
+  tpVoiceRec.onerror = function(e) {
+    tpVoiceActive = false;
+    if (mode === 'attend') { aBtn.style.background='#c0392b'; document.getElementById('tp-va-icon').textContent='🎙'; document.getElementById('tp-va-text').textContent='辨識參班'; }
+    else { tBtn.style.background='#7b3f9e'; document.getElementById('tp-vt-icon').textContent='🎙'; document.getElementById('tp-vt-text').textContent='辨識茶會'; }
+    document.getElementById('tp-voice-result').innerHTML = '<div style="color:#c0392b;">❌ 錄音失敗：' + e.error + '</div>';
+  };
+  tpVoiceRec.start();
+}
+
+function processTpVoiceNames(transcript, mode) {
+  const parts = transcript.split(/[、，,\s]+/).map(s => s.trim()).filter(s => s.length > 0);
+  let matched = [], notFound = [], notAttend = [];
+  parts.forEach(name => {
+    const m = allMembers.find(x => x.name === name);
+    if (!m) { notFound.push(name); }
+    else if (mode === 'tea' && !m.attend) { notAttend.push(name); }
+    else if (mode === 'attend') { m.attend = true; matched.push(name); }
+    else { m.tea = true; matched.push(name); }
+  });
+  saveData(); syncAll(); renderMembers();
+  const color = mode === 'attend' ? '#c0392b' : '#7b3f9e';
+  let html = '';
+  if (matched.length) html += `<div style="color:${color};font-weight:700;">✅ 已自動勾選${mode==='attend'?'參班':'茶會'}（${matched.length} 人）：${matched.join('、')}</div>`;
+  if (notAttend.length) html += `<div style="color:#e65100;margin-top:4px;">⚠️ 尚未參班，無法勾選茶會：${notAttend.join('、')}</div>`;
+  if (notFound.length)  html += `<div style="color:#c0392b;margin-top:4px;">⚠️ 未在名單中找到：${notFound.join('、')}</div>`;
+  if (!html) html = '<div style="color:#c0392b;">❌ 未辨識到任何名字，請再試一次。</div>';
+  document.getElementById('tp-voice-result').innerHTML = html;
+}
+
+let _mealStaffHintShown = false;
+function showMealStaffHint() {
+  if (_mealStaffHintShown) return;
+  _mealStaffHintShown = true;
+  document.getElementById('meal-staff-hint-modal').style.display = 'flex';
+}
+function closeMealStaffHint() {
+  document.getElementById('meal-staff-hint-modal').style.display = 'none';
+  document.getElementById('meal-staff-names').focus();
+}
+
+// ══════════════════════════════════════════
+// SYNC ALL
+// ══════════════════════════════════════════
+function syncAll() {
+  saveData();
+  renderBento();
+  updateDashboard();
+  renderAttendGrid();
+  if (document.getElementById('page-record')?.classList.contains('active')) renderRecord();
+}
+
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+
+// ── 計算當月第三個禮拜日 ──
+function getThirdSunday(year, month) {
+  // month: 1-based
+  let count = 0;
+  for (let d = 1; d <= 31; d++) {
+    const date = new Date(year, month - 1, d);
+    if (date.getMonth() !== month - 1) break;
+    if (date.getDay() === 0) {
+      count++;
+      if (count === 4) return date;
+    }
+  }
+  return null;
+}
+function formatDate(date) {
+  return (date.getMonth() + 1) + '月' + date.getDate() + '日';
+}
+function getCurrentThirdSunday() {
+  const now = new Date();
+  return getThirdSunday(now.getFullYear(), now.getMonth() + 1);
+}
+
+// init
+loadData();
+loadMonthlyRecord();
+renderMembers();
+syncAll();
+// ── 更新日期為當月第四個禮拜日（可修改日） ──
+const _sun = getCurrentThirdSunday();
+let _customDay = null;
+const _defaultMonth = _sun ? (_sun.getMonth() + 1) : (new Date().getMonth() + 1);
+const _defaultDay   = _sun ? _sun.getDate() : 1;
+
+function getDisplayDateStr() {
+  const d = _customDay !== null ? _customDay : _defaultDay;
+  return _defaultMonth + '月' + d + '日';
+}
+function applyDateStr() {
+  const s = getDisplayDateStr();
+  ['date-attend','date-bento','date-badge','date-stat'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = s;
+  });
+}
+applyDateStr();
+
+function openDateEdit() {
+  const cur = _customDay !== null ? _customDay : _defaultDay;
+  const val = prompt(_defaultMonth + '月 — 請輸入日期（日）', cur);
+  if (val === null) return;
+  const n = parseInt(val, 10);
+  if (!isNaN(n) && n >= 1 && n <= 31) {
+    _customDay = n;
+    applyDateStr();
+  } else if (val.trim() === '') {
+    _customDay = null;
+    applyDateStr();
+  } else {
+    alert('請輸入 1～31 的數字，或清空以恢復預設。');
+  }
+}
+// ── 當月負責區（點擊下拉選單，同步 dashboard）──
+const _areaOrder = ['太平區','台中區','坪林區'];
+const _activeMonths = [3,4,5,6,8,9,10,12,1];
+const LS_AREA_KEY = 'qsb_bento_area';
+
+function applyBentoArea(areaName) {
+  const badge    = document.getElementById('bento-area-badge');
+  const dashArea = document.getElementById('dash-bento-area');
+  if (areaName === '本月不輪流') {
+    _cachedAreaText = '本月不輪流';
+    _cachedAreaBg   = '#ccc';
+    if (badge)    { badge.innerHTML = '本月不輪流 <span style="font-size:0.7rem;opacity:0.7;">▾</span>'; badge.style.background = '#9e9e9e'; badge.style.color = 'white'; }
+    if (dashArea) dashArea.innerHTML = '本月負責：<strong>本月不輪流</strong>';
+  } else {
+    const text = '本月負責：' + areaName;
+    _cachedAreaText = text;
+    _cachedAreaBg   = 'var(--gold)';
+    if (badge)    { badge.innerHTML = text + ' <span style="font-size:0.7rem;opacity:0.7;">▾</span>'; badge.style.background = 'var(--gold)'; badge.style.color = 'var(--ink)'; }
+    if (dashArea) dashArea.innerHTML = '本月負責：<strong>' + areaName + '</strong>';
+  }
+}
+
+function buildAreaDropdown() {
+  const opts = document.getElementById('bento-area-options');
+  if (!opts) return;
+  const choices = ['太平區','台中區','坪林區','本月不輪流'];
+  opts.innerHTML = choices.map(a =>
+    `<div onclick="selectBentoArea('${a}')"
+      style="padding:8px 16px;font-size:0.85rem;cursor:pointer;transition:background 0.12s;font-family:'Noto Sans TC',sans-serif;"
+      onmouseover="this.style.background='#fdf8f0'" onmouseout="this.style.background=''">
+      ${a}
+    </div>`
+  ).join('');
+}
+
+function toggleAreaDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('bento-area-dropdown');
+  if (!dd) return;
+  const isOpen = dd.style.display !== 'none';
+  dd.style.display = isOpen ? 'none' : 'block';
+}
+
+function selectBentoArea(areaName) {
+  applyBentoArea(areaName);
+  localStorage.setItem(LS_AREA_KEY, areaName);
+  const dd = document.getElementById('bento-area-dropdown');
+  if (dd) dd.style.display = 'none';
+}
+
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('bento-area-badge-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    const dd = document.getElementById('bento-area-dropdown');
+    if (dd) dd.style.display = 'none';
+  }
+});
+
+buildAreaDropdown();
+
+// 決定初始負責區：優先用 localStorage 手動設定，否則按月份自動推算
+(function() {
+  const saved = localStorage.getItem(LS_AREA_KEY);
+  if (saved) { applyBentoArea(saved); return; }
+  const _nowM = new Date().getMonth() + 1;
+  const _mIdx = _activeMonths.indexOf(_nowM);
+  if (_mIdx === -1) {
+    applyBentoArea('本月不輪流');
+  } else {
+    applyBentoArea(_areaOrder[_mIdx % _areaOrder.length]);
+  }
+})();
+
+// ══════════════════════════════════════════
+// ATTENDANCE RECORD（月份出席記錄，比照學人班）
+// ══════════════════════════════════════════
+function toggleRecord(name, monthLabel) {
+  if (!monthlyRecord[name]) monthlyRecord[name] = {};
+  monthlyRecord[name][monthLabel] = !monthlyRecord[name][monthLabel];
+  saveMonthlyRecord();
+  const safeName = name.replace(/[^\u4e00-\u9fff\w]/g,'_');
+  const totalEl = document.getElementById('rec-total-' + safeName);
+  if (totalEl) {
+    const total = RECORD_MONTHS.filter(m => monthlyRecord[name]?.[m.label]).length;
+    totalEl.textContent = total || '—';
+    totalEl.style.color = total > 0 ? 'var(--teal)' : 'var(--muted)';
+  }
+  updateRecordColTotals();
+}
+
+function updateRecordColTotals() {
+  const visibleMembers = getFilteredRecordMembers();
+  RECORD_MONTHS.forEach(m => {
+    const el = document.getElementById('rec-col-total-' + m.label.replace('/','_'));
+    if (!el) return;
+    const cnt = visibleMembers.filter(mem => monthlyRecord[mem.name]?.[m.label]).length;
+    el.textContent = cnt || '—';
+  });
+  const allEl = document.getElementById('rec-grand-total');
+  if (allEl) {
+    let total = 0;
+    visibleMembers.forEach(mem => {
+      RECORD_MONTHS.forEach(m => { if (monthlyRecord[mem.name]?.[m.label]) total++; });
+    });
+    allEl.textContent = total || '—';
+  }
+}
+
+function getFilteredRecordMembers() {
+  const codeOrder = {'1-1':0,'1-2':1,'1-3':2,'1-4':3,'2-1':4,'2-2':5,'2-3':6};
+  return [...allMembers].filter(m => m.role === '學員').sort((a,b) => {
+    const ca = codeOrder[a.code]??9, cb = codeOrder[b.code]??9;
+    if (ca !== cb) return ca - cb;
+    const ga = a.gender==='乾道'?0:1, gb = b.gender==='乾道'?0:1;
+    if (ga !== gb) return ga - gb;
+    if (a.family !== b.family) return a.family.localeCompare(b.family,'zh-Hant');
+    if (a.familyOrder !== b.familyOrder) return (a.familyOrder??0) - (b.familyOrder??0);
+    return a.name.localeCompare(b.name,'zh-Hant');
+  });
+}
+
+function renderRecord() {
+  loadMonthlyRecord();
+  const members = getFilteredRecordMembers();
+  const areaLabels = {
+    '1-1':'台中 1-1','1-2':'彰化 1-2','1-3':'太平 1-3','1-4':'坪林 1-4',
+    '2-1':'嘉義 2-1','2-2':'馬光 2-2','2-3':'斗六 2-3'
+  };
+
+  let html = `<div class="record-filter-bar">
+    <span style="font-size:0.82rem;color:var(--muted);">僅列學員（資輔、學輔、家長不計入此表）。各月欄位請手動勾選，與「參班」無連動。</span>
+    <button class="record-export-btn" onclick="exportRecordCSV()" style="margin-left:auto;">📥 匯出CSV</button>
+  </div>
+  <div class="record-wrap"><table class="record-table"><thead><tr>
+    <th style="width:28px;">序</th>
+    <th style="width:52px;">代號</th>
+    <th style="width:68px;">姓名</th>
+    <th style="width:36px;">乾坤</th>`;
+
+  RECORD_MONTHS.forEach(m => { html += `<th class="month-col">${m.label}</th>`; });
+  html += `<th style="width:44px;">合計</th></tr></thead><tbody>`;
+
+  let lastCode = null, idx = 0;
+  const colSpan = 4 + RECORD_MONTHS.length + 1;
+
+  members.forEach(m => {
+    if (m.code !== lastCode) {
+      lastCode = m.code;
+      html += `<tr class="record-sep-row"><td colspan="${colSpan}">▌ ${areaLabels[m.code]||m.code}</td></tr>`;
+    }
+    idx++;
+    const safeName = m.name.replace(/[^\u4e00-\u9fff\w]/g,'_');
+    const total = RECORD_MONTHS.filter(mo => monthlyRecord[m.name]?.[mo.label]).length;
+    const genderColor = m.gender==='乾道'?'#1565c0':'#c2185b';
+
+    html += `<tr>
+      <td class="no-col">${idx}</td>
+      <td style="color:var(--muted);font-size:0.75rem;">${m.code}</td>
+      <td class="name-col">${m.name}</td>
+      <td style="font-size:0.72rem;color:${genderColor};font-weight:700;">${m.gender==='乾道'?'乾':'坤'}</td>`;
+
+    RECORD_MONTHS.forEach(mo => {
+      const checked = monthlyRecord[m.name]?.[mo.label] ? 'checked' : '';
+      html += `<td><input type="checkbox" class="rec-check" ${checked} onchange="toggleRecord('${m.name}','${mo.label}')" title="${m.name} ${mo.label}"></td>`;
+    });
+
+    html += `<td class="total-col" id="rec-total-${safeName}" style="color:${total>0?'var(--teal)':'var(--muted)'};">${total||'—'}</td></tr>`;
+  });
+
+  html += `<tr><td colspan="4" style="background:var(--ink);color:white;font-weight:700;font-size:0.8rem;text-align:left;padding-left:0.6rem;border:none;">合計人次</td>`;
+  RECORD_MONTHS.forEach(m => {
+    const cnt = members.filter(mem => monthlyRecord[mem.name]?.[m.label]).length;
+    html += `<td id="rec-col-total-${m.label.replace('/','_')}" style="background:var(--ink);color:var(--gold);font-weight:900;border:none;">${cnt||'—'}</td>`;
+  });
+  const grand = members.reduce((s,mem)=>s+RECORD_MONTHS.filter(m=>monthlyRecord[mem.name]?.[m.label]).length,0);
+  html += `<td id="rec-grand-total" style="background:var(--ink);color:var(--gold-light);font-weight:900;border:none;">${grand||'—'}</td></tr>`;
+
+  html += `</tbody></table></div>`;
+  document.getElementById('record-page-content').innerHTML = html;
+}
+
+function exportRecordCSV() {
+  const members = getFilteredRecordMembers();
+  const headers = ['序號','代號','姓名','乾坤',...RECORD_MONTHS.map(m=>m.label),'合計'];
+  const rows = [headers.join(',')];
+  let idx = 0;
+  members.forEach(m => {
+    idx++;
+    const total = RECORD_MONTHS.filter(mo=>monthlyRecord[m.name]?.[mo.label]).length;
+    const cols = [idx,m.code,m.name,m.gender,...RECORD_MONTHS.map(mo=>monthlyRecord[m.name]?.[mo.label]?'✓':''),total];
+    rows.push(cols.map(c=>`"${c}"`).join(','));
+  });
+  const blob = new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '青少班學員出席記錄.csv';
+  a.click();
+}
+</script>
+</body>
+</html>
