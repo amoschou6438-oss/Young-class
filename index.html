@@ -426,6 +426,8 @@
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:1.2rem;">
       <div class="section-title" style="margin-bottom:0;">蕭氏青少班人員名單</div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+        <button onclick="exportMembersList()" style="padding:7px 18px;background:#1565c0;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">💾 人員名單備份</button>
+        <button onclick="triggerImportMembersList()" style="padding:7px 18px;background:#c9a84c;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">📥 人員名單恢復</button>
         <button onclick="triggerExcelAttendMembers()" style="padding:7px 18px;background:#0f6e3a;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">📂 匯入參班名單</button>
         <button onclick="resetAllAttend();" style="padding:7px 18px;background:#6a1b9a;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">🔄 清除出席記錄</button>
       </div>
@@ -875,6 +877,105 @@ function loadData() {
     if (d.staffNames)   { const el = document.getElementById('meal-staff-names'); if (el) el.value = d.staffNames; }
     if (d.noBentoNames) { const el = document.getElementById('no-bento-names');   if (el) el.value = d.noBentoNames; }
   } catch(e) {}
+}
+
+// ══════════════════════════════════════════
+// 人員名單 匯出／匯入（完整資料備份成檔案）
+// ══════════════════════════════════════════
+function exportMembersList() {
+  const data = {
+    exportType: 'qsb_members_backup',
+    exportVersion: 1,
+    exportDate: new Date().toISOString(),
+    members: allMembers.map(m => ({
+      no: m.no, role: m.role, gender: m.gender, area: m.area, code: m.code,
+      name: m.name, family: m.family, familyOrder: m.familyOrder ?? 1,
+      attend: m.attend, tea: m.tea
+    })),
+    staffNames:   document.getElementById('meal-staff-names')?.value || '',
+    noBentoNames: document.getElementById('no-bento-names')?.value || ''
+  };
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `蕭氏青少班人員名單備份_${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  const resultEl = document.getElementById('members-excel-result');
+  if (resultEl) resultEl.innerHTML = `<span style="color:#1565c0;font-weight:700;">✅ 已完成人員名單備份，共 ${allMembers.length} 筆資料（各區）</span>`;
+}
+
+function triggerImportMembersList() {
+  const resultEl = document.getElementById('members-excel-result');
+  if (resultEl) resultEl.innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = handleImportMembersList;
+  input.click();
+}
+
+function handleImportMembersList(event) {
+  const file = event.target.files[0];
+  const resultEl = document.getElementById('members-excel-result');
+  if (!file) return;
+  if (resultEl) resultEl.innerHTML = `<span style="color:#c9a84c;">⏳ 讀取備份檔案中，請稍候...</span>`;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const d = JSON.parse(e.target.result);
+      if (!d || !Array.isArray(d.members) || d.members.length === 0) {
+        throw new Error('檔案格式不正確，找不到人員名單資料');
+      }
+      const ok = confirm(`確定要恢復此備份嗎？\n共 ${d.members.length} 筆人員資料，恢復後將覆蓋目前所有人員名單（含姓名、出席、茶會等所有資訊）。`);
+      if (!ok) {
+        if (resultEl) resultEl.innerHTML = '';
+        event.target.value = '';
+        return;
+      }
+
+      allMembers.length = 0;
+      d.members.forEach(m => allMembers.push({
+        no: m.no, role: m.role, gender: m.gender, area: m.area, code: m.code,
+        name: m.name, family: m.family,
+        familyOrder: m.familyOrder != null ? m.familyOrder : 1,
+        attend: !!m.attend, tea: !!m.tea
+      }));
+      allMembers.forEach(m => { if (m.familyOrder == null) m.familyOrder = 1; });
+
+      if (typeof d.staffNames === 'string') {
+        const el = document.getElementById('meal-staff-names');
+        if (el) el.value = d.staffNames;
+      }
+      if (typeof d.noBentoNames === 'string') {
+        const el = document.getElementById('no-bento-names');
+        if (el) el.value = d.noBentoNames;
+      }
+
+      saveData();
+      if (typeof syncAll === 'function') syncAll();
+      renderMembers();
+
+      const timeInfo = d.exportDate ? `（備份時間：${new Date(d.exportDate).toLocaleString('zh-TW')}）` : '';
+      if (resultEl) resultEl.innerHTML = `<span style="color:#0f6e3a;font-weight:700;">✅ 已完成人員名單恢復，共 ${allMembers.length} 筆資料 ${timeInfo}</span>`;
+    } catch (err) {
+      if (resultEl) resultEl.innerHTML = `<span style="color:#c0392b;font-weight:700;">❌ 匯入失敗：${err.message}</span>`;
+    }
+    event.target.value = '';
+  };
+  reader.onerror = function() {
+    if (resultEl) resultEl.innerHTML = `<span style="color:#c0392b;font-weight:700;">❌ 讀取檔案失敗</span>`;
+  };
+  reader.readAsText(file, 'utf-8');
 }
 
 // ── 出席記錄月份（須在 syncAll 之前定義）──
