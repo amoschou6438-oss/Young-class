@@ -595,8 +595,11 @@
             <span style="font-size:0.82rem;font-weight:700;color:#c0392b;letter-spacing:0.05em;">出席記錄</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:0.5rem;flex:1;justify-content:center;">
+            <button onclick="exportMonthlyRecord();" style="padding:8px 0;width:100%;background:#1565c0;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">📥 出席記錄匯出</button>
+            <button onclick="triggerImportMonthlyRecord();" style="padding:8px 0;width:100%;background:#c9a84c;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">📤 出席記錄載入</button>
             <button onclick="resetAllAttend();" style="padding:8px 0;width:100%;background:#6a1b9a;color:white;border:none;border-radius:9px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🔄 清除出席記錄</button>
           </div>
+          <div id="record-backup-result" style="font-size:0.72rem;line-height:1.6;margin-top:0.4rem;"></div>
         </div>
 
         <!-- 格3：Excel 匯入 -->
@@ -1002,6 +1005,85 @@ function loadMonthlyRecord() {
 
 function saveMonthlyRecord() {
   localStorage.setItem(LS_RECORD_KEY, JSON.stringify(monthlyRecord));
+}
+
+// ══════════════════════════════════════════
+// 出席記錄 匯出／載入（完整資料備份成檔案）
+// ══════════════════════════════════════════
+function exportMonthlyRecord() {
+  loadMonthlyRecord();
+  const data = {
+    exportType: 'qsb_attendance_record_backup',
+    exportVersion: 1,
+    exportDate: new Date().toISOString(),
+    record: monthlyRecord
+  };
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `青少班出席記錄備份_${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  const resultEl = document.getElementById('record-backup-result');
+  const count = Object.keys(monthlyRecord).length;
+  if (resultEl) resultEl.innerHTML = `<span style="color:#1565c0;font-weight:700;">✅ 已完成出席記錄備份，共 ${count} 位學員資料</span>`;
+}
+
+function triggerImportMonthlyRecord() {
+  const resultEl = document.getElementById('record-backup-result');
+  if (resultEl) resultEl.innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = handleImportMonthlyRecord;
+  input.click();
+}
+
+function handleImportMonthlyRecord(event) {
+  const file = event.target.files[0];
+  const resultEl = document.getElementById('record-backup-result');
+  if (!file) return;
+  if (resultEl) resultEl.innerHTML = `<span style="color:#c9a84c;">⏳ 讀取備份檔案中，請稍候...</span>`;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const d = JSON.parse(e.target.result);
+      const rec = d && typeof d === 'object' ? (d.record || d) : null;
+      if (!rec || typeof rec !== 'object' || Array.isArray(rec)) {
+        throw new Error('檔案格式不正確，找不到出席記錄資料');
+      }
+      const count = Object.keys(rec).length;
+      const ok = confirm(`確定要載入此出席記錄備份嗎？\n共 ${count} 位學員資料，載入後將覆蓋目前所有出席記錄勾選。`);
+      if (!ok) {
+        if (resultEl) resultEl.innerHTML = '';
+        event.target.value = '';
+        return;
+      }
+
+      monthlyRecord = rec;
+      saveMonthlyRecord();
+      if (typeof renderRecord === 'function') renderRecord();
+
+      const timeInfo = d.exportDate ? `（備份時間：${new Date(d.exportDate).toLocaleString('zh-TW')}）` : '';
+      if (resultEl) resultEl.innerHTML = `<span style="color:#0f6e3a;font-weight:700;">✅ 已完成出席記錄載入，共 ${count} 位學員資料 ${timeInfo}</span>`;
+    } catch (err) {
+      if (resultEl) resultEl.innerHTML = `<span style="color:#c0392b;font-weight:700;">❌ 載入失敗：${err.message}</span>`;
+    }
+    event.target.value = '';
+  };
+  reader.onerror = function() {
+    if (resultEl) resultEl.innerHTML = `<span style="color:#c0392b;font-weight:700;">❌ 讀取檔案失敗</span>`;
+  };
+  reader.readAsText(file, 'utf-8');
 }
 
 // ══════════════════════════════════════════
