@@ -956,7 +956,7 @@ const allMembers = [
   {no:59,role:"資輔", gender:"坤道", area:"坪林", code:"1-4", name:"秀琴",  attend:false, tea:false, family:"秀琴"},
   {no:60,role:"家長", gender:"乾道", area:"坪林", code:"1-4", name:"志文",  attend:false, tea:false, family:"志文"},
   {no:61,role:"學輔", gender:"乾道", area:"坪林", code:"1-4", name:"晉德",  attend:false, tea:false, family:"晉德"},
-  {no:62,role:"學輔", gender:"坤道", area:"坪林", code:"1-4", name:"珮安",  attend:false, tea:false, family:"珮安"},
+  {no:62,role:"學員", gender:"坤道", area:"坪林", code:"1-4", name:"珮安",  attend:false, tea:false, family:"珮安"},
   {no:63,role:"學輔", gender:"坤道", area:"坪林", code:"1-4", name:"以心",  attend:false, tea:false, family:"以心"},
   {no:64,role:"學員", gender:"乾道", area:"坪林", code:"1-4", name:"川磊",  attend:false, tea:false, family:"川磊"},
   {no:65,role:"學員", gender:"乾道", area:"坪林", code:"1-4", name:"川陞",  attend:false, tea:false, family:"川陞"},
@@ -1048,6 +1048,44 @@ function attachBirthdates() {
     }
     m.bd = bd;
   });
+  promoteAdultStudents();
+}
+
+// 依出生日期字串（格式如 "1991/07/31"，若僅有年份如 "1980年（無月日資料）" 則以該年 1/1 估算）
+// 計算「今天」滿幾歲；無法解析則回傳 null
+function computeAge(bd) {
+  if (!bd) return null;
+  const full = bd.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+  const yearOnly = bd.match(/^(\d{4})年/);
+  const today = new Date();
+  let y, m, d;
+  if (full) {
+    y = parseInt(full[1], 10); m = parseInt(full[2], 10); d = parseInt(full[3], 10);
+  } else if (yearOnly) {
+    y = parseInt(yearOnly[1], 10); m = 1; d = 1;
+  } else {
+    return null;
+  }
+  let age = today.getFullYear() - y;
+  const beforeBirthdayThisYear = (today.getMonth() + 1 < m) || (today.getMonth() + 1 === m && today.getDate() < d);
+  if (beforeBirthdayThisYear) age--;
+  return age;
+}
+
+// 學員年滿 30 歲時，身份自動由「學員」變更為「學輔」（人員名單同步更新）
+// 每次 attachBirthdates() 執行（載入資料／匯入備份／修改生日）時都會自動檢查一次
+function promoteAdultStudents() {
+  let changed = false;
+  allMembers.forEach(m => {
+    if (m.role === '學員') {
+      const age = computeAge(m.bd);
+      if (age !== null && age >= 30) {
+        m.role = '學輔';
+        changed = true;
+      }
+    }
+  });
+  return changed;
 }
 
 // 人員姓名修正對照表：若瀏覽器 localStorage／備份檔中還留著舊名字，
