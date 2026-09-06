@@ -390,18 +390,55 @@
 </div>
 
 <nav class="nav">
-  <button class="nav-btn active" onclick="showPage('dashboard',this)">📊 總覽</button>
-  <button class="nav-btn" onclick="showPage('members',this)">👥 人員名單</button>
-  <button class="nav-btn" onclick="showPage('attendance',this)">✅ 出席統計</button>
-  <button class="nav-btn" onclick="showPage('bento',this)">🍱 便當分配</button>
-  <button class="nav-btn" onclick="showPage('record',this);renderRecord()">📅 出席記錄</button>
-  <button class="nav-btn" onclick="showPage('manage',this);renderManagePage()">⚙️ 資料輸入及編輯</button>
+  <button class="nav-btn active" id="nav-btn-home" onclick="showPage('home',this)">🏠 主畫面</button>
+  <button class="nav-btn" id="nav-btn-dashboard" onclick="showPage('dashboard',this)">📊 總覽</button>
+  <button class="nav-btn" id="nav-btn-members" onclick="showPage('members',this)">👥 人員名單</button>
+  <button class="nav-btn" id="nav-btn-attendance" onclick="showPage('attendance',this)">✅ 出席統計</button>
+  <button class="nav-btn" id="nav-btn-bento" onclick="showPage('bento',this)">🍱 便當分配</button>
+  <button class="nav-btn" id="nav-btn-record" onclick="showPage('record',this);renderRecord()">📅 出席記錄</button>
+  <button class="nav-btn" id="nav-btn-manage" onclick="showPage('manage',this);renderManagePage()">⚙️ 資料輸入及編輯</button>
 </nav>
 
 <div class="main">
 
+  <!-- ══ PAGE 0: HOME（主畫面）══ -->
+  <div class="page active" id="page-home">
+    <div class="section-title">🏠 管理主畫面</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;">
+
+      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+        <div style="font-size:2rem;">👥</div>
+        <div style="font-weight:700;font-size:0.95rem;color:var(--teal);">人員名單</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">查看與管理所有學員、學輔、資輔、家長名單</div>
+        <button onclick="goToPage('members')" style="padding:8px 0;width:100%;background:var(--teal);color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">➡️ 進入人員名單</button>
+      </div>
+
+      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+        <div style="font-size:2rem;">✅</div>
+        <div style="font-weight:700;font-size:0.95rem;color:#1565c0;">參加名單</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">將本次報名人員統計表匯出成一張圖片</div>
+        <button onclick="exportAttendanceImage(this)" style="padding:8px 0;width:100%;background:#1565c0;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🖼️ 參加名單匯出</button>
+      </div>
+
+      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+        <div style="font-size:2rem;">🍱</div>
+        <div style="font-weight:700;font-size:0.95rem;color:#0f6e3a;">便當名單</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">將本次便當分配內容匯出成一張圖片</div>
+        <button onclick="exportBentoImage(this)" style="padding:8px 0;width:100%;background:#0f6e3a;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🖼️ 便當名單匯出</button>
+      </div>
+
+      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+        <div style="font-size:2rem;">🏆</div>
+        <div style="font-weight:700;font-size:0.95rem;color:#c0392b;">全勤名單</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">查看今年全勤獎學員名單，並可開啟LINE回報</div>
+        <button onclick="showFullAttendanceModal()" style="padding:8px 0;width:100%;background:#c0392b;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🏆 全勤名單匯出</button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ══ PAGE 1: DASHBOARD ══ -->
-  <div class="page active" id="page-dashboard">
+  <div class="page" id="page-dashboard">
     <div class="section-title">總覽儀表板</div>
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-num" id="dash-total">68</div><div class="stat-label">登記總人數</div></div>
@@ -451,7 +488,10 @@
 
   <!-- ══ PAGE 3: ATTENDANCE ══ -->
   <div class="page" id="page-attendance">
-    <div class="section-title"><span id="date-attend"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 報名人員統計表</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:1.2rem;">
+      <div class="section-title" style="margin-bottom:0;"><span id="date-attend"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 報名人員統計表</div>
+      <button onclick="exportAttendanceImage(this)" style="padding:7px 18px;background:#1565c0;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">🖼️ 參加名單匯出</button>
+    </div>
     <div class="attend-grid-wrap">
       <table class="attend-grid-table">
         <thead>
@@ -472,18 +512,21 @@
 
   <!-- ══ PAGE 4: BENTO ══ -->
   <div class="page" id="page-bento">
-    <div class="section-title"><span id="date-bento"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 便當分配表　<span id="bento-area-badge-wrap" style="position:relative;display:inline-block;vertical-align:middle;">
-      <span id="bento-area-badge"
-        onclick="toggleAreaDropdown(event)"
-        title="點擊切換本月負責區"
-        style="font-size:0.85rem;font-weight:600;background:var(--gold);color:var(--ink);padding:3px 14px;border-radius:20px;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:6px;"></span>
-      <div id="bento-area-dropdown"
-        style="display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:130px;
-               background:white;border-radius:10px;box-shadow:0 6px 24px rgba(26,26,46,0.18);
-               border:1px solid var(--border);z-index:999;overflow:hidden;font-family:'Noto Sans TC',sans-serif;">
-        <div id="bento-area-options"></div>
-      </div>
-    </span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:0.2rem;">
+      <div class="section-title" style="margin-bottom:0;"><span id="date-bento"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 便當分配表　<span id="bento-area-badge-wrap" style="position:relative;display:inline-block;vertical-align:middle;">
+        <span id="bento-area-badge"
+          onclick="toggleAreaDropdown(event)"
+          title="點擊切換本月負責區"
+          style="font-size:0.85rem;font-weight:600;background:var(--gold);color:var(--ink);padding:3px 14px;border-radius:20px;cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:6px;"></span>
+        <div id="bento-area-dropdown"
+          style="display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:130px;
+                 background:white;border-radius:10px;box-shadow:0 6px 24px rgba(26,26,46,0.18);
+                 border:1px solid var(--border);z-index:999;overflow:hidden;font-family:'Noto Sans TC',sans-serif;">
+          <div id="bento-area-options"></div>
+        </div>
+      </span></div>
+      <button onclick="exportBentoImage(this)" style="padding:7px 18px;background:#1565c0;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">🖼️ 便當名單匯出</button>
+    </div>
     <div class="table-wrap">
       <div class="table-header-row">
         <h3>便當領取明細</h3>
@@ -1390,6 +1433,61 @@ function updateDashboard() {
 // ══════════════════════════════════════════
 // ATTENDANCE GRID
 // ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// 出席名單（報名人員統計表）匯出（單一圖片）
+// ══════════════════════════════════════════
+function exportAttendanceImage(btn) {
+  if (typeof html2canvas !== 'function') {
+    alert('圖片匯出功能尚未載入完成，請稍候再試一次');
+    return;
+  }
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '⏳ 產生圖片中...'; btn.disabled = true; }
+
+  const dateLabel = document.getElementById('date-attend')?.textContent || '';
+  const gridWrap = document.querySelector('#page-attendance .attend-grid-wrap');
+  const noteBox = document.querySelector('#page-attendance .note-box');
+
+  const holder = document.createElement('div');
+  holder.style.position = 'fixed';
+  holder.style.left = '-99999px';
+  holder.style.top = '0';
+  holder.style.background = '#ffffff';
+  holder.style.padding = '20px';
+  holder.style.display = 'inline-block';
+  holder.style.fontFamily = "'Noto Sans TC', sans-serif";
+  holder.innerHTML = `<div style="font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:900;color:#1a1a2e;margin-bottom:14px;">📋 ${dateLabel} 報名人員統計表</div>`;
+  if (gridWrap) { const g = gridWrap.cloneNode(true); g.style.marginBottom = '1.2rem'; holder.appendChild(g); }
+  if (noteBox) holder.appendChild(noteBox.cloneNode(true));
+  document.body.appendChild(holder);
+
+  html2canvas(holder, {
+    backgroundColor: '#ffffff',
+    scale: 2,
+    useCORS: true
+  }).then(canvas => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `青少班參加名單_${stamp}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      document.body.removeChild(holder);
+      if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+    }, 'image/png');
+  }).catch(err => {
+    document.body.removeChild(holder);
+    alert('圖片匯出失敗：' + err.message);
+    if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+  });
+}
+
 function renderAttendGrid() {
   const attending = allMembers.filter(m => m.attend);
   const codes = areaDefs.map(a => a.code);
@@ -1547,6 +1645,92 @@ function calcBentoTotal() {
     staffTeaOffRoster.filter(n => !noBentoNames.includes(n)).length;
   const staffTotal = staffGroups.reduce((s, g) => s + g.bentoCnt, 0);
   return bentoBase + teaBento + staffTotal;
+}
+
+// ══════════════════════════════════════════
+// 便當名單匯出（單一圖片）
+// ══════════════════════════════════════════
+function exportBentoImage(btn) {
+  if (typeof html2canvas !== 'function') {
+    alert('圖片匯出功能尚未載入完成，請稍候再試一次');
+    return;
+  }
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '⏳ 產生圖片中...'; btn.disabled = true; }
+
+  const dateLabel = document.getElementById('date-bento')?.textContent || '';
+  const areaLabel = document.getElementById('bento-area-badge')?.textContent || '';
+  const wrap = document.querySelector('#page-bento .table-wrap');
+
+  const holder = document.createElement('div');
+  holder.style.position = 'fixed';
+  holder.style.left = '-99999px';
+  holder.style.top = '0';
+  holder.style.background = '#ffffff';
+  holder.style.padding = '20px';
+  holder.style.display = 'inline-block';
+  holder.style.fontFamily = "'Noto Sans TC', sans-serif";
+  holder.innerHTML = `<div style="font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:900;color:#1a1a2e;margin-bottom:14px;">🍱 ${dateLabel} 便當分配表${areaLabel ? `　<span style="font-size:0.85rem;font-weight:600;background:#c9a84c;color:#1a1a2e;padding:3px 14px;border-radius:20px;">${areaLabel}</span>` : ''}</div>`;
+
+  if (wrap) {
+    const clone = wrap.cloneNode(true);
+
+    // 篩選按鈕在圖片中無作用，移除
+    const filterBar = clone.querySelector('#bento-filter-bar');
+    if (filterBar) filterBar.remove();
+
+    // textarea 的即時輸入值不會被 cloneNode 帶入，改用純文字呈現
+    const staffTextarea = document.getElementById('meal-staff-names');
+    const cloneStaffTextarea = clone.querySelector('#meal-staff-names');
+    if (cloneStaffTextarea) {
+      const div = document.createElement('div');
+      div.style.cssText = cloneStaffTextarea.getAttribute('style') || '';
+      div.style.whiteSpace = 'pre-wrap';
+      div.style.minHeight = '2.2em';
+      div.style.boxSizing = 'border-box';
+      div.textContent = staffTextarea ? staffTextarea.value : '';
+      cloneStaffTextarea.replaceWith(div);
+    }
+    const noBentoTextarea = document.getElementById('no-bento-names');
+    const cloneNoBentoTextarea = clone.querySelector('#no-bento-names');
+    if (cloneNoBentoTextarea) {
+      const div = document.createElement('div');
+      div.style.cssText = cloneNoBentoTextarea.getAttribute('style') || '';
+      div.style.whiteSpace = 'pre-wrap';
+      div.style.minHeight = '2.2em';
+      div.style.boxSizing = 'border-box';
+      div.textContent = noBentoTextarea ? noBentoTextarea.value : '';
+      cloneNoBentoTextarea.replaceWith(div);
+    }
+    holder.appendChild(clone);
+  }
+  document.body.appendChild(holder);
+
+  html2canvas(holder, {
+    backgroundColor: '#ffffff',
+    scale: 2,
+    useCORS: true
+  }).then(canvas => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `青少班便當名單_${stamp}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      document.body.removeChild(holder);
+      if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+    }, 'image/png');
+  }).catch(err => {
+    document.body.removeChild(holder);
+    alert('圖片匯出失敗：' + err.message);
+    if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+  });
 }
 
 function renderBento() {
@@ -2559,6 +2743,12 @@ function showPage(id, btn) {
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   btn.classList.add('active');
+}
+
+// 供主畫面卡片按鈕呼叫，透過對應的導覽按鈕id切換頁面
+function goToPage(id) {
+  const btn = document.getElementById('nav-btn-' + id);
+  if (btn) showPage(id, btn);
 }
 
 
