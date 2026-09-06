@@ -13,6 +13,7 @@
 <meta name="theme-color" content="#1a1a2e">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root {
     --ink: #1a1a2e;
@@ -993,6 +994,10 @@ const RECORD_MONTHS = [
   {year:2026,month:12,label:'2026/12'},
   {year:2027,month:1,label:'2027/1'},
 ];
+const RECORD_AREA_LABELS = {
+  '1-1':'台中 1-1','1-2':'彰化 1-2','1-3':'太平 1-3','1-4':'坪林 1-4',
+  '2-1':'嘉義 2-1','2-2':'馬光 2-2','2-3':'斗六 2-3'
+};
 const LS_RECORD_KEY = 'qsb_monthly_record_v1';
 let monthlyRecord = {};
 
@@ -2742,16 +2747,14 @@ function getFilteredRecordMembers() {
 function renderRecord() {
   loadMonthlyRecord();
   const members = getFilteredRecordMembers();
-  const areaLabels = {
-    '1-1':'台中 1-1','1-2':'彰化 1-2','1-3':'太平 1-3','1-4':'坪林 1-4',
-    '2-1':'嘉義 2-1','2-2':'馬光 2-2','2-3':'斗六 2-3'
-  };
+  const areaLabels = RECORD_AREA_LABELS;
 
   let html = `<div class="record-filter-bar">
     <span style="font-size:0.82rem;color:var(--muted);">僅列學員（資輔、學輔、家長不計入此表）。各月欄位請手動勾選，與「參班」無連動。</span>
     <button class="record-export-btn" onclick="exportRecordCSV()" style="margin-left:auto;">📥 匯出CSV</button>
+    <button class="record-export-btn" onclick="exportRecordImage(this)" style="background:#1565c0;">🖼️ 出席記錄匯出（圖片）</button>
   </div>
-  <div class="record-wrap"><table class="record-table"><thead><tr>
+  <div class="record-wrap" id="record-table-capture"><table class="record-table"><thead><tr>
     <th style="width:28px;">序</th>
     <th style="width:52px;">代號</th>
     <th style="width:68px;">姓名</th>
@@ -2815,6 +2818,101 @@ function exportRecordCSV() {
   a.href = URL.createObjectURL(blob);
   a.download = '青少班學員出席記錄.csv';
   a.click();
+}
+
+// ══════════════════════════════════════════
+// 出席記錄 匯出（單一圖片）
+// ══════════════════════════════════════════
+function buildRecordImageHTML() {
+  loadMonthlyRecord();
+  const members = getFilteredRecordMembers();
+  const areaLabels = RECORD_AREA_LABELS;
+  const colSpan = 4 + RECORD_MONTHS.length + 1;
+
+  let html = `<div style="font-family:'Noto Sans TC',sans-serif;background:#ffffff;padding:20px;display:inline-block;">
+    <div style="font-size:1.1rem;font-weight:900;color:#1a1a2e;margin-bottom:12px;">📅 青少班學員出席記錄表（2026/3～2027/1，不含 7 月、11 月）</div>
+    <table style="border-collapse:collapse;font-size:0.78rem;">
+    <thead><tr style="background:#0f6e3a;color:#ffffff;">
+      <th style="padding:6px 8px;border:1px solid #ccc;">序</th>
+      <th style="padding:6px 8px;border:1px solid #ccc;">代號</th>
+      <th style="padding:6px 8px;border:1px solid #ccc;">姓名</th>
+      <th style="padding:6px 8px;border:1px solid #ccc;">乾坤</th>`;
+  RECORD_MONTHS.forEach(m => { html += `<th style="padding:6px 8px;border:1px solid #ccc;white-space:nowrap;">${m.label}</th>`; });
+  html += `<th style="padding:6px 8px;border:1px solid #ccc;">合計</th></tr></thead><tbody>`;
+
+  let lastCode = null, idx = 0;
+  members.forEach(m => {
+    if (m.code !== lastCode) {
+      lastCode = m.code;
+      html += `<tr><td colspan="${colSpan}" style="background:#0f6e3a;color:#ffffff;font-weight:700;text-align:left;padding:5px 10px;border:1px solid #ccc;">▌ ${areaLabels[m.code]||m.code}</td></tr>`;
+    }
+    idx++;
+    const total = RECORD_MONTHS.filter(mo => monthlyRecord[m.name]?.[mo.label]).length;
+    const genderColor = m.gender==='乾道'?'#1565c0':'#c2185b';
+    html += `<tr style="background:${idx%2===0?'#f7f7f7':'#ffffff'};">
+      <td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:#888;">${idx}</td>
+      <td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:#888;">${m.code}</td>
+      <td style="padding:5px 8px;border:1px solid #ccc;font-weight:700;">${m.name}</td>
+      <td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:${genderColor};font-weight:700;">${m.gender==='乾道'?'乾':'坤'}</td>`;
+    RECORD_MONTHS.forEach(mo => {
+      const checked = monthlyRecord[m.name]?.[mo.label];
+      html += `<td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:#0f6e3a;font-weight:900;">${checked?'✓':''}</td>`;
+    });
+    html += `<td style="padding:5px 8px;border:1px solid #ccc;text-align:center;font-weight:900;color:${total>0?'#1565c0':'#888'};">${total||'—'}</td></tr>`;
+  });
+
+  html += `<tr><td colspan="4" style="background:#1a1a2e;color:#ffffff;font-weight:700;padding:6px 10px;border:1px solid #ccc;text-align:left;">合計人次</td>`;
+  RECORD_MONTHS.forEach(m => {
+    const cnt = members.filter(mem => monthlyRecord[mem.name]?.[m.label]).length;
+    html += `<td style="background:#1a1a2e;color:#e0b84c;font-weight:900;padding:6px 8px;border:1px solid #ccc;text-align:center;">${cnt||'—'}</td>`;
+  });
+  const grand = members.reduce((s,mem)=>s+RECORD_MONTHS.filter(m=>monthlyRecord[mem.name]?.[m.label]).length,0);
+  html += `<td style="background:#1a1a2e;color:#f5d98a;font-weight:900;padding:6px 8px;border:1px solid #ccc;text-align:center;">${grand||'—'}</td></tr>`;
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+function exportRecordImage(btn) {
+  if (typeof html2canvas !== 'function') {
+    alert('圖片匯出功能尚未載入完成，請稍候再試一次');
+    return;
+  }
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) { btn.innerHTML = '⏳ 產生圖片中...'; btn.disabled = true; }
+
+  const holder = document.createElement('div');
+  holder.style.position = 'fixed';
+  holder.style.left = '-99999px';
+  holder.style.top = '0';
+  holder.innerHTML = buildRecordImageHTML();
+  document.body.appendChild(holder);
+  const target = holder.firstElementChild;
+
+  html2canvas(target, {
+    backgroundColor: '#ffffff',
+    scale: 2,
+    useCORS: true
+  }).then(canvas => {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `青少班學員出席記錄_${stamp}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      document.body.removeChild(holder);
+      if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+    }, 'image/png');
+  }).catch(err => {
+    document.body.removeChild(holder);
+    alert('圖片匯出失敗：' + err.message);
+    if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+  });
 }
 </script>
 </body>
