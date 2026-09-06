@@ -2744,6 +2744,52 @@ function getFilteredRecordMembers() {
   });
 }
 
+// ══════════════════════════════════════════
+// 全勤名單（彈窗 ＋ LINE 回報）
+// ══════════════════════════════════════════
+function getFullAttendanceMembers() {
+  loadMonthlyRecord();
+  const members = getFilteredRecordMembers();
+  return members.filter(m => RECORD_MONTHS.every(mo => monthlyRecord[m.name]?.[mo.label]));
+}
+
+function buildFullAttendanceMessage() {
+  const fullList = getFullAttendanceMembers();
+  const namesText = fullList.length ? fullList.map(m => m.name).join('、') : '（目前尚無全勤學員）';
+  return `今年青少班全勤獎人員名單如下：\n${namesText}`;
+}
+
+function showFullAttendanceModal() {
+  const existing = document.getElementById('full-attendance-modal');
+  if (existing) existing.remove();
+
+  const fullList = getFullAttendanceMembers();
+  const listHtml = fullList.length
+    ? fullList.map((m,i) => `${i+1}. ${m.name}`).join('<br>')
+    : '（目前尚無全勤學員）';
+
+  const modal = document.createElement('div');
+  modal.id = 'full-attendance-modal';
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `
+    <div class="modal">
+      <div class="modal-title">🏆 全勤名單</div>
+      <div style="font-size:0.92rem;font-weight:700;color:var(--ink);margin-bottom:0.8rem;">今年青少班全勤獎人員名單如下：</div>
+      <div style="font-size:0.9rem;line-height:1.9;color:#c0392b;font-weight:700;background:#fdf3f2;border:1px solid #f0d5d2;border-radius:10px;padding:0.8rem 1rem;margin-bottom:1.2rem;max-height:40vh;overflow-y:auto;">${listHtml}</div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="document.getElementById('full-attendance-modal').remove()">關閉</button>
+        <button class="btn-confirm" style="background:#06c755;" onclick="shareFullAttendanceToLine()">📱 開啟LINE回報</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function shareFullAttendanceToLine() {
+  const message = buildFullAttendanceMessage();
+  const url = 'https://line.me/R/msg/text/?' + encodeURIComponent(message);
+  window.open(url, '_blank');
+}
+
 function renderRecord() {
   loadMonthlyRecord();
   const members = getFilteredRecordMembers();
@@ -2751,6 +2797,7 @@ function renderRecord() {
 
   let html = `<div class="record-filter-bar">
     <span style="font-size:0.82rem;color:var(--muted);">僅列學員（資輔、學輔、家長不計入此表）。各月欄位請手動勾選，與「參班」無連動。</span>
+    <button class="record-export-btn" onclick="showFullAttendanceModal()" style="background:#c0392b;">🏆 全勤名單</button>
     <button class="record-export-btn" onclick="exportRecordCSV()" style="margin-left:auto;">📥 匯出CSV</button>
     <button class="record-export-btn" onclick="exportRecordImage(this)" style="background:#1565c0;">🖼️ 出席記錄匯出（圖片）</button>
   </div>
@@ -2774,6 +2821,7 @@ function renderRecord() {
     idx++;
     const safeName = m.name.replace(/[^\u4e00-\u9fff\w]/g,'_');
     const total = RECORD_MONTHS.filter(mo => monthlyRecord[m.name]?.[mo.label]).length;
+    const isFullAttend = total === RECORD_MONTHS.length;
     const genderColor = m.gender==='乾道'?'#1565c0':'#c2185b';
 
     html += `<tr>
@@ -2787,7 +2835,7 @@ function renderRecord() {
       html += `<td><input type="checkbox" class="rec-check" ${checked} onchange="toggleRecord('${m.name}','${mo.label}')" title="${m.name} ${mo.label}"></td>`;
     });
 
-    html += `<td class="total-col" id="rec-total-${safeName}" style="color:${total>0?'var(--teal)':'var(--muted)'};">${total||'—'}</td></tr>`;
+    html += `<td class="total-col" id="rec-total-${safeName}" style="color:${isFullAttend?'#c0392b':(total>0?'var(--teal)':'var(--muted)')};font-weight:${isFullAttend?900:700};">${total||'—'}</td></tr>`;
   });
 
   html += `<tr><td colspan="4" style="background:var(--ink);color:white;font-weight:700;font-size:0.8rem;text-align:left;padding-left:0.6rem;border:none;">合計人次</td>`;
@@ -2848,6 +2896,7 @@ function buildRecordImageHTML() {
     }
     idx++;
     const total = RECORD_MONTHS.filter(mo => monthlyRecord[m.name]?.[mo.label]).length;
+    const isFullAttend = total === RECORD_MONTHS.length;
     const genderColor = m.gender==='乾道'?'#1565c0':'#c2185b';
     html += `<tr style="background:${idx%2===0?'#f7f7f7':'#ffffff'};">
       <td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:#888;">${idx}</td>
@@ -2858,7 +2907,7 @@ function buildRecordImageHTML() {
       const checked = monthlyRecord[m.name]?.[mo.label];
       html += `<td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:#0f6e3a;font-weight:900;">${checked?'✓':''}</td>`;
     });
-    html += `<td style="padding:5px 8px;border:1px solid #ccc;text-align:center;font-weight:900;color:${total>0?'#1565c0':'#888'};">${total||'—'}</td></tr>`;
+    html += `<td style="padding:5px 8px;border:1px solid #ccc;text-align:center;font-weight:900;color:${isFullAttend?'#c0392b':(total>0?'#1565c0':'#888')};">${total||'—'}</td></tr>`;
   });
 
   html += `<tr><td colspan="4" style="background:#1a1a2e;color:#ffffff;font-weight:700;padding:6px 10px;border:1px solid #ccc;text-align:left;">合計人次</td>`;
