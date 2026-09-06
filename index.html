@@ -95,6 +95,22 @@
   .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; font-weight: 500; }
 
   .area-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+
+  /* 主畫面：左右二個功能鈕 */
+  .home-fn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+  .home-fn-card {
+    background: var(--white); border-radius: 16px; box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border); padding: 1.6rem 1.2rem;
+    display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.7rem;
+  }
+  /* 卡片總數為奇數時，最後一張撐滿整列並置中，不單獨卡在左邊 */
+  .home-fn-grid > .home-fn-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1; max-width: 420px; margin: 0 auto; width: 100%;
+  }
+  @media (max-width: 600px) {
+    .home-fn-grid { grid-template-columns: 1fr; }
+    .home-fn-grid > .home-fn-card:last-child:nth-child(odd) { grid-column: auto; }
+  }
   .area-card { background: var(--white); border-radius: 10px; padding: 1.2rem; box-shadow: var(--shadow); border-left: 4px solid var(--teal); }
   .area-name { font-family: 'Noto Serif TC', serif; font-size: 1rem; font-weight: 700; color: var(--teal); margin-bottom: 0.6rem; }
   .area-breakdown { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 8px; }
@@ -413,34 +429,41 @@
   <!-- ══ PAGE 0: HOME（主畫面）══ -->
   <div class="page active" id="page-home">
     <div class="section-title">🏠 管理主畫面</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;">
+    <div class="home-fn-grid">
 
-      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+      <div class="home-fn-card">
         <div style="font-size:2rem;">👥</div>
         <div style="font-weight:700;font-size:0.95rem;color:var(--teal);">人員名單</div>
         <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">查看與管理所有學員、學輔、資輔、家長名單</div>
         <button onclick="goToPage('members')" style="padding:8px 0;width:100%;background:var(--teal);color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">➡️ 進入人員名單</button>
       </div>
 
-      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+      <div class="home-fn-card">
         <div style="font-size:2rem;">✅</div>
         <div style="font-weight:700;font-size:0.95rem;color:#1565c0;">參加名單</div>
         <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">將本次報名人員統計表匯出成一張圖片</div>
         <button onclick="exportAttendanceImage(this)" style="padding:8px 0;width:100%;background:#1565c0;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🖼️ 參加名單匯出</button>
       </div>
 
-      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+      <div class="home-fn-card">
         <div style="font-size:2rem;">🍱</div>
         <div style="font-weight:700;font-size:0.95rem;color:#0f6e3a;">便當名單</div>
         <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">將本次便當分配內容匯出成一張圖片</div>
         <button onclick="exportBentoImage(this)" style="padding:8px 0;width:100%;background:#0f6e3a;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🖼️ 便當名單匯出</button>
       </div>
 
-      <div style="background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);border:1px solid var(--border);padding:1.6rem 1.2rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0.7rem;">
+      <div class="home-fn-card">
         <div style="font-size:2rem;">🏆</div>
         <div style="font-weight:700;font-size:0.95rem;color:#c0392b;">全勤名單</div>
         <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">查看今年全勤獎學員名單，並可開啟LINE回報</div>
         <button onclick="showFullAttendanceModal()" style="padding:8px 0;width:100%;background:#c0392b;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🏆 全勤名單匯出</button>
+      </div>
+
+      <div class="home-fn-card">
+        <div style="font-size:2rem;">🎂</div>
+        <div style="font-weight:700;font-size:0.95rem;color:#7b3f9e;">當月理天生日名單</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">依學員理天生日自動判斷本次應公布之月份名單，並可開啟LINE回報</div>
+        <button onclick="showMonthlyLdBirthdayModal()" style="padding:8px 0;width:100%;background:#7b3f9e;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🎂 當月理天生日名單</button>
       </div>
 
     </div>
@@ -3365,6 +3388,84 @@ function showFullAttendanceModal() {
 
 function shareFullAttendanceToLine() {
   const message = buildFullAttendanceMessage();
+  const url = 'https://line.me/R/msg/text/?' + encodeURIComponent(message);
+  window.open(url, '_blank');
+}
+
+// ══════════════════════════════════════════
+// 當月理天生日名單（依學員資料理天生日 ld 欄位）
+// 因青少班並非每月上課（缺 2、7、11 月），故部分月份需合併顯示：
+//   ‧ 當月是 4 月 → 顯示 3 月名單
+//   ‧ 當月是 9 月 → 顯示 7、8 月合併名單
+//   ‧ 當月是 12 月 → 顯示 10、11 月合併名單
+//   ‧ 當年度第一次上課月份為 3 月（承接去年最後一次上課 1 月）
+//     → 當月是 3 月時，顯示 1、2 月合併名單
+//   ‧ 其餘月份 → 顯示當月名單
+// ══════════════════════════════════════════
+function getMonthlyLdTargetMonths(refMonth) {
+  const m = refMonth || (new Date().getMonth() + 1);
+  if (m === 3)  return [1, 2];
+  if (m === 4)  return [3];
+  if (m === 9)  return [7, 8];
+  if (m === 12) return [10, 11];
+  return [m];
+}
+
+// 解析理天生日欄位（ld）中的「月份」，相容多種寫法：
+//   "1997/01/06"（西元年/月/日）、"101閏4/19"（民國年+閏月/日）、"103年2月29曰"（年+中文月日）
+function parseLdMonth(ld) {
+  if (!ld) return null;
+  let m = String(ld).match(/(\d{1,2})\/(\d{1,2})\s*$/); // 取結尾「月/日」
+  if (m) { const mm = parseInt(m[1], 10); if (mm >= 1 && mm <= 12) return mm; }
+  m = String(ld).match(/(\d{1,2})\s*月/); // 取「N月」
+  if (m) { const mm = parseInt(m[1], 10); if (mm >= 1 && mm <= 12) return mm; }
+  return null;
+}
+
+function getMonthlyLdBirthdayMembers(refMonth) {
+  const months = getMonthlyLdTargetMonths(refMonth);
+  const rows = getStudentBirthdayRows().filter(r => r.role === '學員'); // 只取「學員」身份，不含學輔
+  const list = rows.filter(r => {
+    const mm = parseLdMonth(r.ld);
+    return mm !== null && months.includes(mm);
+  });
+  return { months, list };
+}
+
+function buildMonthlyLdMessage(refMonth) {
+  const { months, list } = getMonthlyLdBirthdayMembers(refMonth);
+  const monthLabel = months.join('、') + '月';
+  const namesText = list.length ? list.map(m => m.name).join('、') : '（本期尚無理天生日學員）';
+  return `${monthLabel}份理天生日學員名單如下：\n${namesText}`;
+}
+
+function showMonthlyLdBirthdayModal() {
+  const existing = document.getElementById('monthly-ld-modal');
+  if (existing) existing.remove();
+
+  const { months, list } = getMonthlyLdBirthdayMembers();
+  const monthLabel = months.join('、') + '月';
+  const listHtml = list.length
+    ? list.map((m, i) => `${i+1}. ${m.name}<span style="font-size:0.72rem;opacity:0.65;margin-left:4px;">（${m.ld || '—'}）</span>`).join('<br>')
+    : '（本期尚無理天生日學員）';
+
+  const modal = document.createElement('div');
+  modal.id = 'monthly-ld-modal';
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `
+    <div class="modal">
+      <div class="modal-title">🎂 ${monthLabel}份理天生日名單</div>
+      <div style="font-size:0.9rem;line-height:1.9;color:#6a1b9a;font-weight:700;background:#faf0ff;border:1px solid #d4b8e8;border-radius:10px;padding:0.8rem 1rem;margin-bottom:1.2rem;max-height:40vh;overflow-y:auto;">${listHtml}</div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="document.getElementById('monthly-ld-modal').remove()">關閉</button>
+        <button class="btn-confirm" style="background:#06c755;" onclick="shareMonthlyLdToLine()">📱 開啟LINE回報</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function shareMonthlyLdToLine() {
+  const message = buildMonthlyLdMessage();
   const url = 'https://line.me/R/msg/text/?' + encodeURIComponent(message);
   window.open(url, '_blank');
 }
