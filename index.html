@@ -1682,12 +1682,9 @@ function renderAttendGrid() {
   const { staffTeaMarkedNames: _stm } = parseMealStaffInput(document.getElementById('meal-staff-names')?.value || '');
   const teaOffRosterNote = [..._stm].filter(n => !allMembers.some(m => m.name === n));
   const _teaRoleOrder = {'資輔':0,'學輔':1,'學員':2,'家長':3};
-  const _codeOrder = {'1-1':0,'1-2':1,'1-3':2,'1-4':3,'2-1':4,'2-2':5,'2-3':6,'2區':7};
   const _teaSort = (a,b) => {
     const ra = _teaRoleOrder[a.role]??9, rb = _teaRoleOrder[b.role]??9;
     if (ra !== rb) return ra - rb;
-    const ca = _codeOrder[a.code]??9, cb = _codeOrder[b.code]??9;
-    if (ca !== cb) return ca - cb;
     return compareBirthdate(a, b);
   };
   const teaMales   = teaAll.filter(m=>m.gender==='乾道').sort(_teaSort);
@@ -2203,12 +2200,9 @@ function renderBento() {
   if (teaNamesEl) {
     if (teaMembers.length || staffTeaOffRoster.length) {
       const _teaRO = { '資輔': 0, '學輔': 1, '學員': 2, '家長': 3 };
-      const _teaCO = { '1-1': 0, '1-2': 1, '1-3': 2, '1-4': 3, '2-1': 4, '2-2': 5, '2-3': 6, '2區': 7 };
       const _teaSort = (a, b) => {
         const ra = _teaRO[a.role] ?? 9, rb = _teaRO[b.role] ?? 9;
         if (ra !== rb) return ra - rb;
-        const ca = _teaCO[a.code] ?? 9, cb = _teaCO[b.code] ?? 9;
-        if (ca !== cb) return ca - cb;
         return compareBirthdate(a, b);
       };
       const normalTea     = teaMembers.filter(m => !noBentoNames.includes(m.name));
