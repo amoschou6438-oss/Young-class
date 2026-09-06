@@ -277,6 +277,13 @@
     white-space: nowrap; transition: opacity 0.15s;
   }
   .btn-edit-member:hover { opacity: 0.85; }
+  .btn-bday-edit {
+    padding: 4px 12px; border-radius: 14px; border: 1px solid var(--teal);
+    background: transparent; color: var(--teal); cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif; font-size: 0.72rem; font-weight: 600;
+    white-space: nowrap; transition: all 0.15s;
+  }
+  .btn-bday-edit:hover { background: var(--teal); color: white; }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--cream); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -397,6 +404,7 @@
   <button class="nav-btn" id="nav-btn-bento" onclick="showPage('bento',this)">🍱 便當分配</button>
   <button class="nav-btn" id="nav-btn-record" onclick="showPage('record',this);renderRecord()">📅 出席記錄</button>
   <button class="nav-btn" id="nav-btn-birthday" onclick="showPage('birthday',this);renderBirthdayPage()">🎂 學員資料</button>
+  <button class="nav-btn" id="nav-btn-birthday-parent" onclick="showPage('birthday-parent',this);renderBirthdayParentPage()">🎂 資輔家長生日</button>
   <button class="nav-btn" id="nav-btn-manage" onclick="showPage('manage',this);renderManagePage()">⚙️ 資料輸入及編輯</button>
 </nav>
 
@@ -620,7 +628,8 @@
     <div class="note-box" style="margin-bottom:1.2rem;">
       <div class="note-title">📖 資料說明</div>
       <div class="note-text">
-        名單以「理天生日整合表」中查得到求道日期的學輔／學員為主，並比對「出生日整合表」補上出生日期；<br>
+        名單即「人員名單」中目前所有身份為學輔／學員的成員，理天生日、出生日期可點列表最右側「✎ 修改」自行編輯（會自動存檔）；<br>
+        身份、乾坤、地區皆依「人員名單」即時同步 — 在人員名單修改身份（如學員變學輔）或新增／刪除人員後，本頁會自動更新並重新排序；<br>
         排列順序：先乾道、後坤道，各組內先學輔、後學員，同組再依出生日期由前到後排序。
       </div>
     </div>
@@ -638,9 +647,45 @@
             <th style="width:70px;">姓名</th>
             <th style="width:100px;">理天生日</th>
             <th style="width:100px;">出生日期</th>
+            <th style="width:80px;">編輯</th>
           </tr>
         </thead>
         <tbody id="birthday-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ PAGE 5c: BIRTHDAY（資輔家長）══ -->
+  <div class="page" id="page-birthday-parent">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:1.2rem;">
+      <div class="section-title" style="margin-bottom:0;">🎂 資輔／家長 生日一覽</div>
+    </div>
+    <div class="note-box" style="margin-bottom:1.2rem;">
+      <div class="note-title">📖 資料說明</div>
+      <div class="note-text">
+        名單即「人員名單」中目前所有身份為資輔／家長的成員，姓氏、出生日期可點列表最右側「✎ 修改」自行編輯（會自動存檔）；<br>
+        身份、乾坤、地區皆依「人員名單」即時同步 — 在人員名單修改身份或新增／刪除人員後，本頁會自動更新並重新排序；<br>
+        排列順序：先乾道、後坤道，各組內先資輔、後家長，同組再依出生年月日由早到晚排序；<br>
+        僅查得出生年份、無月日資料者可於出生日期欄位填寫如「1963年（無月日資料）」，會自動排在同組最後。
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header-row">
+        <h3>資輔／家長 生日一覽</h3>
+      </div>
+      <table id="birthday-parent-table">
+        <thead>
+          <tr>
+            <th style="width:44px;">序號</th>
+            <th style="width:56px;">身份</th>
+            <th style="width:56px;">乾坤</th>
+            <th style="width:56px;">地區</th>
+            <th style="width:70px;">姓名</th>
+            <th style="width:100px;">出生日期</th>
+            <th style="width:80px;">編輯</th>
+          </tr>
+        </thead>
+        <tbody id="birthday-parent-tbody"></tbody>
       </table>
     </div>
   </div>
@@ -912,63 +957,71 @@ const allMembers = [
 allMembers.forEach(m => { if (m.familyOrder == null) m.familyOrder = 1; });
 
 // ══════════════════════════════════════════
-// 學員資料（理天生日 ‧ 出生日期）
-// 資料來源：學輔學員資料表.xlsx「求道日整合表」比對「出生日整合表」
-// 已依：乾坤 → 學輔／學員 → 出生日期（西元年/月/日，由早到晚）排序
+// 學員資料 額外欄位對照表（理天生日 ld、出生日期 bd）— 依「姓名」對應「人員名單」(allMembers)
+// 身份／乾坤／地區一律以人員名單為準（人員名單異動會自動反映在此頁，排序也會自動更新）
+// 此表只保留人員名單中沒有的欄位；可在「學員資料」頁面點 ✎ 修改，資料會自動存檔
 // ══════════════════════════════════════════
-const birthdayMembers = [
-  {no:1, role:"學輔", gender:"乾道", area:"太平", name:"士華", ld:"1997/01/06", bd:"1991/07/31"},
-  {no:2, role:"學輔", gender:"乾道", area:"坪林", name:"晉德", ld:"1991/11/30", bd:"1991/12/07"},
-  {no:3, role:"學輔", gender:"乾道", area:"太平", name:"耀輝", ld:"1997/07/08", bd:"1993/08/15"},
-  {no:4, role:"學輔", gender:"乾道", area:"太平", name:"忠緯", ld:"1994/08/17", bd:"1994/07/22"},
-  {no:5, role:"學輔", gender:"乾道", area:"台中", name:"智憲", ld:"1999/03/09", bd:"1998/12/25"},
-  {no:6, role:"學輔", gender:"乾道", area:"太平", name:"勝利", ld:"2002/04/02", bd:"1999/10/12"},
-  {no:7, role:"學員", gender:"乾道", area:"太平", name:"桓毅", ld:"2001/09/03", bd:"2001/09/03"},
-  {no:8, role:"學員", gender:"乾道", area:"坪林", name:"川磊", ld:"2002/04/02", bd:"2002/04/10"},
-  {no:9, role:"學員", gender:"乾道", area:"台中", name:"智穎", ld:"2004/02/28", bd:"2004/01/04"},
-  {no:10, role:"學員", gender:"乾道", area:"斗六", name:"瑄承", ld:"2004/07/01", bd:"2004/05/12"},
-  {no:11, role:"學員", gender:"乾道", area:"台中", name:"皓程", ld:"2004/08/24", bd:"2004/08/07"},
-  {no:12, role:"學員", gender:"乾道", area:"台中", name:"少庸", ld:"2007/06/02", bd:"2007/04/18"},
-  {no:13, role:"學員", gender:"乾道", area:"太平", name:"凱鈦", ld:"2010/05/08", bd:"2008/03/05"},
-  {no:14, role:"學員", gender:"乾道", area:"坪林", name:"川陞", ld:"2008/11/01", bd:"2008/11/07"},
-  {no:15, role:"學員", gender:"乾道", area:"台中", name:"子暘", ld:"2011/03/15", bd:"2010/12/06"},
-  {no:16, role:"學員", gender:"乾道", area:"坪林", name:"柏謙", ld:"2013/11/12", bd:"2011/04/27"},
-  {no:17, role:"學員", gender:"乾道", area:"太平", name:"亞奕", ld:"2011/10/10", bd:"2011/09/01"},
-  {no:18, role:"學員", gender:"乾道", area:"台中", name:"立祐", ld:"2012/04/30", bd:"2012/04/11"},
-  {no:19, role:"學員", gender:"乾道", area:"台中", name:"星瑋", ld:"2012/08/07", bd:"2012/07/26"},
-  {no:20, role:"學員", gender:"乾道", area:"坪林", name:"立勤", ld:"2013/05/17", bd:"2013/02/14"},
-  {no:21, role:"學員", gender:"乾道", area:"坪林", name:"竣棠", ld:"2015/01/10", bd:"2015/01/26"},
-  {no:22, role:"學員", gender:"乾道", area:"坪林", name:"士博", ld:"2015/06/03", bd:"2015/04/22"},
-  {no:23, role:"學輔", gender:"坤道", area:"坪林", name:"以心", ld:"2020/08/25", bd:"1991/01/14"},
-  {no:24, role:"學輔", gender:"坤道", area:"台中", name:"佩君", ld:"1993/06/21", bd:"1993/05/23"},
-  {no:25, role:"學輔", gender:"坤道", area:"台中", name:"宛君", ld:"1993/06/21", bd:"1993/05/23"},
-  {no:26, role:"學輔", gender:"坤道", area:"嘉義", name:"雅如", ld:"", bd:"1994/10/12"},
-  {no:27, role:"學輔", gender:"坤道", area:"彰化", name:"琇尹", ld:"1996/12/04", bd:"1996/12/03"},
-  {no:28, role:"學輔", gender:"坤道", area:"坪林", name:"珮安", ld:"2000/11/23", bd:"2000/11/03"},
-  {no:29, role:"學員", gender:"坤道", area:"太平", name:"玟娜", ld:"2022/05/08", bd:"1999/07/25"},
-  {no:30, role:"學員", gender:"坤道", area:"嘉義", name:"妙慧", ld:"", bd:"1999/09/22"},
-  {no:31, role:"學員", gender:"坤道", area:"斗六", name:"瑜霠", ld:"2001/02/10", bd:"2000/12/11"},
-  {no:32, role:"學員", gender:"坤道", area:"太平", name:"妤嫻", ld:"2002/12/10", bd:"2001/11/30"},
-  {no:33, role:"學員", gender:"坤道", area:"斗六", name:"咏恩", ld:"", bd:"2002/11/08"},
-  {no:34, role:"學員", gender:"坤道", area:"斗六", name:"藝芯", ld:"2007/01/28", bd:"2006/07/09"},
-  {no:35, role:"學員", gender:"坤道", area:"台中", name:"沛希", ld:"2008/07/23", bd:"2008/05/19"},
-  {no:36, role:"學員", gender:"坤道", area:"太平", name:"亞宸", ld:"2008/11/16", bd:"2008/10/02"},
-  {no:37, role:"學員", gender:"坤道", area:"台中", name:"詠晴", ld:"2012/02/25", bd:"2012/02/14"},
-  {no:38, role:"學員", gender:"坤道", area:"坪林", name:"晏瑄", ld:"101閏4/19", bd:"2012/02/16"},
-  {no:39, role:"學員", gender:"坤道", area:"坪林", name:"芊衣", ld:"103年2月29曰", bd:"2014/02/05"},
-  {no:40, role:"學員", gender:"坤道", area:"台中", name:"若彤", ld:"2014/09/05", bd:"2014/05/27"},
-  {no:41, role:"學員", gender:"坤道", area:"坪林", name:"珮綸", ld:"2014/08/27", bd:"2014/06/02"},
-  {no:42, role:"學員", gender:"坤道", area:"太平", name:"妤恩", ld:"2015/01/10", bd:"2015/01/11"},
-];
+const studentBirthdayExtra = {
+  "士華": {ld:"1997/01/06", bd:"1991/07/31"},
+  "晉德": {ld:"1991/11/30", bd:"1991/12/07"},
+  "耀輝": {ld:"1997/07/08", bd:"1993/08/15"},
+  "忠緯": {ld:"1994/08/17", bd:"1994/07/22"},
+  "智憲": {ld:"1999/03/09", bd:"1998/12/25"},
+  "勝利": {ld:"2002/04/02", bd:"1999/10/12"},
+  "桓毅": {ld:"2001/09/03", bd:"2001/09/03"},
+  "川磊": {ld:"2002/04/02", bd:"2002/04/10"},
+  "智穎": {ld:"2004/02/28", bd:"2004/01/04"},
+  "瑄承": {ld:"2004/07/01", bd:"2004/05/12"},
+  "皓程": {ld:"2004/08/24", bd:"2004/08/07"},
+  "少庸": {ld:"2007/06/02", bd:"2007/04/18"},
+  "凱鈦": {ld:"2010/05/08", bd:"2008/03/05"},
+  "川陞": {ld:"2008/11/01", bd:"2008/11/07"},
+  "子暘": {ld:"2011/03/15", bd:"2010/12/06"},
+  "柏謙": {ld:"2013/11/12", bd:"2011/04/27"},
+  "亞奕": {ld:"2011/10/10", bd:"2011/09/01"},
+  "立祐": {ld:"2012/04/30", bd:"2012/04/11"},
+  "星瑋": {ld:"2012/08/07", bd:"2012/07/26"},
+  "立勤": {ld:"2013/05/17", bd:"2013/02/14"},
+  "竣棠": {ld:"2015/01/10", bd:"2015/01/26"},
+  "士博": {ld:"2015/06/03", bd:"2015/04/22"},
+  "以心": {ld:"2020/08/25", bd:"1991/01/14"},
+  "佩君": {ld:"1993/06/21", bd:"1993/05/23"},
+  "宛君": {ld:"1993/06/21", bd:"1993/05/23"},
+  "雅如": {ld:"", bd:"1994/10/12"},
+  "琇尹": {ld:"1996/12/04", bd:"1996/12/03"},
+  "珮安": {ld:"2000/11/23", bd:"2000/11/03"},
+  "玟娜": {ld:"2022/05/08", bd:"1999/07/25"},
+  "妙慧": {ld:"", bd:"1999/09/22"},
+  "瑜霠": {ld:"2001/02/10", bd:"2000/12/11"},
+  "妤嫻": {ld:"2002/12/10", bd:"2001/11/30"},
+  "咏恩": {ld:"", bd:"2002/11/08"},
+  "藝芯": {ld:"2007/01/28", bd:"2006/07/09"},
+  "沛希": {ld:"2008/07/23", bd:"2008/05/19"},
+  "亞宸": {ld:"2008/11/16", bd:"2008/10/02"},
+  "詠晴": {ld:"2012/02/25", bd:"2012/02/14"},
+  "晏瑄": {ld:"101閏4/19", bd:"2012/02/16"},
+  "芊衣": {ld:"103年2月29曰", bd:"2014/02/05"},
+  "若彤": {ld:"2014/09/05", bd:"2014/05/27"},
+  "珮綸": {ld:"2014/08/27", bd:"2014/06/02"},
+  "妤恩": {ld:"2015/01/10", bd:"2015/01/11"},
+};
 
-// 把出生日期併入 allMembers（依姓名比對），供各頁面「依出生年月日排序」使用
+// 把出生資料併入 allMembers（依姓名比對），供各頁面「依出生年月日排序」使用
+// 學輔／學員 取自 studentBirthdayExtra；資輔／家長 取自 parentBirthdayExtra
 // 注意：loadData() 會用 localStorage 的舊資料重建 allMembers，所以每次重建後都要重新呼叫本函式
 function attachBirthdates() {
-  const bdMap = {};
-  birthdayMembers.forEach(b => { bdMap[b.name] = b.bd; });
-  allMembers.forEach(m => { m.bd = bdMap[m.name] || null; });
+  allMembers.forEach(m => {
+    let bd = null;
+    if (m.role === '學輔' || m.role === '學員') {
+      const ex = studentBirthdayExtra[m.name];
+      bd = ex ? (ex.bd || null) : null;
+    } else if (m.role === '資輔' || m.role === '家長') {
+      const ex = (typeof parentBirthdayExtra !== 'undefined') ? parentBirthdayExtra[m.name] : null;
+      bd = ex ? (ex.bd || null) : null;
+    }
+    m.bd = bd;
+  });
 }
-attachBirthdates();
 
 // 人員姓名修正對照表：若瀏覽器 localStorage／備份檔中還留著舊名字，
 // 重新載入名單時會自動改成正確名字，避免生日資料比對失敗
@@ -991,12 +1044,163 @@ function compareBirthdate(a, b) {
   return (a.no ?? 9999) - (b.no ?? 9999);
 }
 
+// 身份分組排序（同乾坤內，先後順序）
+const ROLE_ORDER_STUDENT = { '學輔': 0, '學員': 1 };
+const ROLE_ORDER_PARENT  = { '資輔': 0, '家長': 1 };
+
+// 依「目前人員名單」即時組出「學員資料」頁要顯示的資料列
+// 身份／乾坤／地區一律取自 allMembers（人員名單異動會自動反映在這裡）
+// ld／bd 兩個欄位則取自 studentBirthdayExtra（可在頁面上編輯）
+function getStudentBirthdayRows() {
+  return allMembers
+    .filter(m => m.role === '學輔' || m.role === '學員')
+    .map(m => {
+      const ex = studentBirthdayExtra[m.name] || {};
+      return { no: m.no, name: m.name, role: m.role, gender: m.gender, area: m.area,
+               ld: ex.ld || '', bd: ex.bd || '' };
+    })
+    .sort((a, b) => {
+      const ga = a.gender === '乾道' ? 0 : 1, gb = b.gender === '乾道' ? 0 : 1;
+      if (ga !== gb) return ga - gb;
+      const ra = ROLE_ORDER_STUDENT[a.role] ?? 9, rb = ROLE_ORDER_STUDENT[b.role] ?? 9;
+      if (ra !== rb) return ra - rb;
+      return compareBirthdate(a, b);
+    });
+}
+
 function renderBirthdayPage() {
   const tbody = document.getElementById('birthday-tbody');
   if (!tbody) return;
+  const rows = getStudentBirthdayRows();
   let html = '';
   let lastGroup = null;
-  birthdayMembers.forEach((m, i) => {
+  rows.forEach((m, i) => {
+    const groupKey = m.gender + m.role;
+    if (groupKey !== lastGroup) {
+      const label = `▌ ${m.gender}・${m.role}`;
+      html += `<tr class="record-sep-row"><td colspan="8">${label}</td></tr>`;
+      lastGroup = groupKey;
+    }
+    html += `<tr>
+      <td>${i+1}</td>
+      <td><span class="badge badge-${m.role}">${m.role}</span></td>
+      <td><span class="badge badge-${m.gender}">${m.gender}</span></td>
+      <td>${m.area}</td>
+      <td class="name">${m.name}</td>
+      <td>${m.ld || '—'}</td>
+      <td>${m.bd || '—'}</td>
+      <td><button type="button" class="btn-bday-edit" onclick="openEditStudentBirthday('${m.name}')">✎ 修改</button></td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+// ── 修改「學員資料」理天生日／出生日期 ──
+function openEditStudentBirthday(name) {
+  const ex = studentBirthdayExtra[name] || {};
+  const existing = document.getElementById('edit-bday-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'edit-bday-modal';
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `
+    <div class="modal">
+      <div class="modal-title">✏️ 修改生日資料 — ${name}</div>
+      <div class="modal-row">
+        <div class="modal-field"><label>理天生日</label><input type="text" id="edit-bday-ld" value="${(ex.ld||'').replace(/"/g,'&quot;')}" placeholder="例：1997/01/06"></div>
+        <div class="modal-field"><label>出生日期</label><input type="text" id="edit-bday-bd" value="${(ex.bd||'').replace(/"/g,'&quot;')}" placeholder="例：1991/07/31"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="document.getElementById('edit-bday-modal').remove()">取消</button>
+        <button class="btn-confirm" onclick="confirmEditStudentBirthday('${name}')">✔ 確認修改</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+function confirmEditStudentBirthday(name) {
+  const ld = document.getElementById('edit-bday-ld').value.trim();
+  const bd = document.getElementById('edit-bday-bd').value.trim();
+  studentBirthdayExtra[name] = { ld, bd };
+  attachBirthdates();
+  saveData();
+  renderBirthdayPage();
+  const modal = document.getElementById('edit-bday-modal');
+  if (modal) modal.remove();
+}
+
+// ══════════════════════════════════════════
+// 資輔／家長 額外欄位對照表（姓氏 surname、出生日期 bd）— 依「姓名」對應「人員名單」(allMembers)
+// 身份／乾坤／地區一律以人員名單為準（人員名單異動會自動反映在此頁，排序也會自動更新）
+// 姓名欄顯示為 姓氏＋人員名單中的名字；可在「資輔家長生日」頁面點 ✎ 修改，資料會自動存檔
+// ══════════════════════════════════════════
+const parentBirthdayExtra = {
+  "仁成": {surname:"羅", bd:"1956/10/12"},
+  "吉男": {surname:"羅", bd:"1960年（無月日資料）"},
+  "松欽": {surname:"蕭", bd:"1963/03/12"},
+  "議法": {surname:"張", bd:"1964/03/01"},
+  "善光": {surname:"劉", bd:"1965/03/08"},
+  "錫章": {surname:"蔡", bd:"1966/11/22"},
+  "坤財": {surname:"古", bd:"1967/04/01"},
+  "輔澄": {surname:"劉", bd:"1968/05/27"},
+  "家銘": {surname:"張", bd:"1969/08/19"},
+  "鄭強": {surname:"", bd:"1970/03/29"},
+  "弘書": {surname:"高", bd:"1974年（無月日資料）"},
+  "文聰": {surname:"施", bd:"1974/08/31"},
+  "明輝": {surname:"周", bd:"1975/03/08"},
+  "普文": {surname:"薛", bd:"1978年（無月日資料）"},
+  "昆秦": {surname:"吳", bd:"1980年（無月日資料）"},
+  "佳俊": {surname:"陳", bd:"1980/07/18"},
+  "志文": {surname:"楊", bd:"1976年（無月日資料）"},
+  "宏銘": {surname:"陳", bd:"1977年（無月日資料）"},
+  "銘季": {surname:"黃", bd:"1955/11/12"},
+  "麗雪": {surname:"林", bd:"1965/05/23"},
+  "秀琴": {surname:"羅", bd:"1967年（無月日資料）"},
+  "嫺雅": {surname:"廖", bd:"1967/07/25"},
+  "怡珍": {surname:"劉", bd:"1969/05/26"},
+  "美蓉": {surname:"馮", bd:"1969/11/26"},
+  "瓊瑤": {surname:"黃", bd:"1970年（無月日資料）"},
+  "小清": {surname:"邱", bd:"1970年（無月日資料）"},
+  "月嬌": {surname:"曾", bd:"1973/07/12"},
+  "湘梅": {surname:"周", bd:"1974年（無月日資料）"},
+  "淑貞": {surname:"黃", bd:"1974/09/18"},
+  "靜瑜": {surname:"林", bd:"1974/09/26"},
+  "益美": {surname:"陳", bd:"1975/02/11"},
+  "濬綾": {surname:"白", bd:"1976/12/08"},
+  "玫芳": {surname:"蔡", bd:"1978/06/02"},
+  "姿利": {surname:"林", bd:"1979/01/13"},
+  "靜兒": {surname:"林", bd:"1980年（無月日資料）"},
+  "惠雯": {surname:"詹", bd:"1981/05/26"},
+  "雅芳": {surname:"郭", bd:"1981/09/25"},
+};
+
+// studentBirthdayExtra 與 parentBirthdayExtra 都已宣告完成，這裡才能正式把生日併入 allMembers
+attachBirthdates();
+
+// 依「目前人員名單」即時組出「資輔／家長生日」頁要顯示的資料列
+function getParentBirthdayRows() {
+  return allMembers
+    .filter(m => m.role === '資輔' || m.role === '家長')
+    .map(m => {
+      const ex = parentBirthdayExtra[m.name] || {};
+      return { no: m.no, name: m.name, fullname: (ex.surname || '') + m.name,
+               role: m.role, gender: m.gender, area: m.area, bd: ex.bd || '' };
+    })
+    .sort((a, b) => {
+      const ga = a.gender === '乾道' ? 0 : 1, gb = b.gender === '乾道' ? 0 : 1;
+      if (ga !== gb) return ga - gb;
+      const ra = ROLE_ORDER_PARENT[a.role] ?? 9, rb = ROLE_ORDER_PARENT[b.role] ?? 9;
+      if (ra !== rb) return ra - rb;
+      return compareBirthdate(a, b);
+    });
+}
+
+function renderBirthdayParentPage() {
+  const tbody = document.getElementById('birthday-parent-tbody');
+  if (!tbody) return;
+  const rows = getParentBirthdayRows();
+  let html = '';
+  let lastGroup = null;
+  rows.forEach((m, i) => {
     const groupKey = m.gender + m.role;
     if (groupKey !== lastGroup) {
       const label = `▌ ${m.gender}・${m.role}`;
@@ -1008,12 +1212,44 @@ function renderBirthdayPage() {
       <td><span class="badge badge-${m.role}">${m.role}</span></td>
       <td><span class="badge badge-${m.gender}">${m.gender}</span></td>
       <td>${m.area}</td>
-      <td class="name">${m.name}</td>
-      <td>${m.ld}</td>
-      <td>${m.bd}</td>
+      <td class="name">${m.fullname}</td>
+      <td>${m.bd || '—'}</td>
+      <td><button type="button" class="btn-bday-edit" onclick="openEditParentBirthday('${m.name}')">✎ 修改</button></td>
     </tr>`;
   });
   tbody.innerHTML = html;
+}
+
+// ── 修改「資輔／家長生日」姓氏／出生日期 ──
+function openEditParentBirthday(name) {
+  const ex = parentBirthdayExtra[name] || {};
+  const existing = document.getElementById('edit-bday-parent-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'edit-bday-parent-modal';
+  modal.className = 'modal-overlay open';
+  modal.innerHTML = `
+    <div class="modal">
+      <div class="modal-title">✏️ 修改生日資料 — ${name}</div>
+      <div class="modal-row">
+        <div class="modal-field"><label>姓氏</label><input type="text" id="edit-bday-parent-surname" value="${(ex.surname||'').replace(/"/g,'&quot;')}" placeholder="例：蕭"></div>
+        <div class="modal-field"><label>出生日期</label><input type="text" id="edit-bday-parent-bd" value="${(ex.bd||'').replace(/"/g,'&quot;')}" placeholder="例：1963/03/12 或 1963年（無月日資料）"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="document.getElementById('edit-bday-parent-modal').remove()">取消</button>
+        <button class="btn-confirm" onclick="confirmEditParentBirthday('${name}')">✔ 確認修改</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+function confirmEditParentBirthday(name) {
+  const surname = document.getElementById('edit-bday-parent-surname').value.trim();
+  const bd = document.getElementById('edit-bday-parent-bd').value.trim();
+  parentBirthdayExtra[name] = { surname, bd };
+  saveData();
+  renderBirthdayParentPage();
+  const modal = document.getElementById('edit-bday-parent-modal');
+  if (modal) modal.remove();
 }
 
 // ══════════════════════════════════════════
@@ -1029,7 +1265,9 @@ function saveData() {
       attend: m.attend, tea: m.tea
     })),
     staffNames:   document.getElementById('meal-staff-names')?.value || '',
-    noBentoNames: document.getElementById('no-bento-names')?.value || ''
+    noBentoNames: document.getElementById('no-bento-names')?.value || '',
+    studentBirthdayExtra: studentBirthdayExtra,
+    parentBirthdayExtra:  parentBirthdayExtra
   };
   localStorage.setItem(LS_KEY_QSB, JSON.stringify(data));
 }
@@ -1061,6 +1299,9 @@ function loadData() {
     }
     allMembers.forEach(m => { if (m.familyOrder == null) m.familyOrder = 1; });
     applyNameMigrations(allMembers);
+    // 學員資料／資輔家長生日 的額外欄位（若使用者曾在頁面上修改過，載入時以 localStorage 為準）
+    if (d.studentBirthdayExtra) Object.assign(studentBirthdayExtra, d.studentBirthdayExtra);
+    if (d.parentBirthdayExtra)  Object.assign(parentBirthdayExtra,  d.parentBirthdayExtra);
     attachBirthdates();
     if (d.staffNames)   { const el = document.getElementById('meal-staff-names'); if (el) el.value = d.staffNames; }
     if (d.noBentoNames) { const el = document.getElementById('no-bento-names');   if (el) el.value = d.noBentoNames; }
@@ -2883,6 +3124,9 @@ function syncAll() {
   updateDashboard();
   renderAttendGrid();
   if (document.getElementById('page-record')?.classList.contains('active')) renderRecord();
+  // 人員名單（身份／乾坤／地區／新增／刪除）異動後，「學員資料」「資輔家長生日」兩頁需同步更新身份與排序
+  renderBirthdayPage();
+  renderBirthdayParentPage();
 }
 
 function showPage(id, btn) {
