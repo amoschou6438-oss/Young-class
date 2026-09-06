@@ -1109,17 +1109,35 @@ function applyNameMigrations(list) {
   list.forEach(m => { if (NAME_MIGRATIONS[m.name]) m.name = NAME_MIGRATIONS[m.name]; });
 }
 
+// 把生日字串轉成可比較的數值 key（年*10000+月*100+日），避免因日期未補零（如 "1991/12/1"）
+// 造成文字比較順序錯誤；僅有年份「YYYY年（無月日資料）」的視為當年度最後（sentinel 1301 大於任何合法月日組合）
+// 無法解析的字串回傳 null（視同「沒有生日資料」）
+function bdSortKey(bd) {
+  if (!bd) return null;
+  const full = bd.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+  if (full) {
+    const y = parseInt(full[1], 10), m = parseInt(full[2], 10), d = parseInt(full[3], 10);
+    return y * 10000 + m * 100 + d;
+  }
+  const yearOnly = bd.match(/^(\d{4})年/);
+  if (yearOnly) {
+    return parseInt(yearOnly[1], 10) * 10000 + 1301;
+  }
+  return null;
+}
+
 // 通用「依出生年月日排序」比較函式：
 // ‧ 兩人都有生日 → 生日早的（年紀較長）排前面
 // ‧ 只有一人有生日 → 沒有生日資料的人維持原本名單順序，排在前面
 // ‧ 兩人都沒有生日 → 維持原本名單順序（依 no）
 function compareBirthdate(a, b) {
-  if (a.bd && b.bd) {
-    if (a.bd !== b.bd) return a.bd < b.bd ? -1 : 1;
+  const ka = bdSortKey(a.bd), kb = bdSortKey(b.bd);
+  if (ka != null && kb != null) {
+    if (ka !== kb) return ka - kb;
     return (a.no ?? 9999) - (b.no ?? 9999);
   }
-  if (a.bd && !b.bd) return 1;
-  if (!a.bd && b.bd) return -1;
+  if (ka != null && kb == null) return 1;
+  if (ka == null && kb != null) return -1;
   return (a.no ?? 9999) - (b.no ?? 9999);
 }
 
@@ -1203,6 +1221,7 @@ function confirmEditStudentBirthday(name) {
   attachBirthdates();
   saveData();
   renderBirthdayPage();
+  renderMembers();
   const modal = document.getElementById('edit-bday-modal');
   if (modal) modal.remove();
 }
@@ -1325,8 +1344,10 @@ function confirmEditParentBirthday(name) {
   const surname = document.getElementById('edit-bday-parent-surname').value.trim();
   const bd = document.getElementById('edit-bday-parent-bd').value.trim();
   parentBirthdayExtra[name] = { surname, bd };
+  attachBirthdates();
   saveData();
   renderBirthdayParentPage();
+  renderMembers();
   const modal = document.getElementById('edit-bday-parent-modal');
   if (modal) modal.remove();
 }
