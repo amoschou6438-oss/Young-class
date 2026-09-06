@@ -3435,7 +3435,9 @@ function getMonthlyLdBirthdayMembers(refMonth) {
 function buildMonthlyLdMessage(refMonth) {
   const { months, list } = getMonthlyLdBirthdayMembers(refMonth);
   const monthLabel = months.join('、') + '月';
-  const namesText = list.length ? list.map(m => m.name).join('、') : '（本期尚無理天生日學員）';
+  const namesText = list.length
+    ? list.map(m => `${m.name}（${m.ld || '—'}）`).join('\n')
+    : '（本期尚無理天生日學員）';
   return `${monthLabel}份理天生日學員名單如下：\n${namesText}`;
 }
 
