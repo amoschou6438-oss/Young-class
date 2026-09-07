@@ -3622,12 +3622,15 @@ function parseLdMonth(ld) {
   return null;
 }
 
+// 理天生日名單僅限 26 歲前（不含 26 歲）的學員；出生日期無法判斷者仍予保留，不因缺乏資料而被排除
 function getMonthlyLdBirthdayMembers(refMonth) {
   const months = getMonthlyLdTargetMonths(refMonth);
   const rows = getStudentBirthdayRows().filter(r => r.role === '學員'); // 只取「學員」身份，不含學輔
   const list = rows.filter(r => {
     const mm = parseLdMonth(r.ld);
-    return mm !== null && months.includes(mm);
+    if (mm === null || !months.includes(mm)) return false;
+    const age = computeAge(r.bd);
+    return age === null || age < 26; // 限 26 歲前的學員
   });
   return { months, list };
 }
