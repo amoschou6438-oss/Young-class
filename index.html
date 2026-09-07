@@ -2588,7 +2588,10 @@ function renderBento() {
     if (bentoFilter !== 'all' && Number(cnt) !== Number(bentoFilter)) return;
     const cls = bentoCountColors[cnt - 1] || 'two';
 
+    // 吉男為課程負責人，便當分配表名單永遠排在第一位，不受年齡（出生日期）排序影響
     const _sortM = (a, b) => {
+      if (a.receiver === '吉男') return -1;
+      if (b.receiver === '吉男') return 1;
       const ma = allMembers.find(m => m.name === a.receiver);
       const mb = allMembers.find(m => m.name === b.receiver);
       if (ma && mb) return compareBirthdate(ma, mb);
