@@ -2543,7 +2543,10 @@ function renderBento() {
   const _roleOrder1 = { '資輔': 0, '家長': 1, '學輔': 2, '學員': 3 };
   if ((oneGroup.length || staffSingleDisplay.length) && (bentoFilter === 'all' || bentoFilter === '1')) {
     const _getRole1 = b => allMembers.find(m => m.name === b.receiver)?.role;
+    // 吉男為課程負責人，便當分配表名單永遠排在第一位，不受年齡（出生日期）排序影響
     const _sortOne = (a, b) => {
+      if (a.receiver === '吉男') return -1;
+      if (b.receiver === '吉男') return 1;
       const ra = _roleOrder1[_getRole1(a)] ?? 9, rb = _roleOrder1[_getRole1(b)] ?? 9;
       if (ra !== rb) return ra - rb;
       const ma = allMembers.find(m => m.name === a.receiver);
