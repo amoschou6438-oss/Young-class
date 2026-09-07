@@ -514,9 +514,6 @@
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:1.2rem;">
       <div class="section-title" style="margin-bottom:0;">蕭氏青少班人員名單</div>
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
-        <button onclick="exportMembersList()" style="padding:7px 18px;background:#1565c0;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">💾 人員名單備份</button>
-        <button onclick="triggerImportMembersList()" style="padding:7px 18px;background:#c9a84c;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">📥 人員名單恢復</button>
-        <button onclick="triggerExcelAttendMembers()" style="padding:7px 18px;background:#0f6e3a;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">📂 匯入參班名單</button>
         <button onclick="resetAllAttend();" style="padding:7px 18px;background:#6a1b9a;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">🔄 清除出席記錄</button>
       </div>
     </div>
@@ -3682,7 +3679,6 @@ function renderRecord() {
 
   let html = `<div class="record-filter-bar">
     <span style="font-size:0.82rem;color:var(--muted);">僅列學員（資輔、學輔、家長不計入此表）。各月欄位請手動勾選，與「參班」無連動。</span>
-    <button class="record-export-btn" onclick="showFullAttendanceModal()" style="background:#c0392b;">🏆 全勤名單</button>
     <button class="record-export-btn" onclick="exportRecordCSV()" style="margin-left:auto;">📥 匯出CSV</button>
     <button class="record-export-btn" onclick="exportRecordImage(this)" style="background:#1565c0;">🖼️ 出席記錄匯出（圖片）</button>
   </div>
