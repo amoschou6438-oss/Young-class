@@ -683,7 +683,7 @@
             <th style="width:56px;">乾坤</th>
             <th style="width:56px;">地區</th>
             <th style="width:70px;">姓名</th>
-            <th style="width:100px;">理天生日</th>
+            <th style="width:100px;">理天生日<br>（農曆）</th>
             <th style="width:100px;">出生日期</th>
             <th style="width:80px;">編輯</th>
           </tr>
@@ -1213,7 +1213,7 @@ function openEditStudentBirthday(name) {
     <div class="modal">
       <div class="modal-title">✏️ 修改生日資料 — ${name}</div>
       <div class="modal-row">
-        <div class="modal-field"><label>理天生日</label><input type="text" id="edit-bday-ld" value="${(ex.ld||'').replace(/"/g,'&quot;')}" placeholder="例：1997/01/06"></div>
+        <div class="modal-field"><label>理天生日（農曆）</label><input type="text" id="edit-bday-ld" value="${(ex.ld||'').replace(/"/g,'&quot;')}" placeholder="例：1997/01/06"></div>
         <div class="modal-field"><label>出生日期</label><input type="text" id="edit-bday-bd" value="${(ex.bd||'').replace(/"/g,'&quot;')}" placeholder="例：1991/07/31"></div>
       </div>
       <div class="modal-actions">
