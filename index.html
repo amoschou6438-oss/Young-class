@@ -454,16 +454,12 @@
 
       <div class="home-fn-card">
         <div style="font-size:2rem;">💾</div>
-        <div style="font-weight:700;font-size:0.95rem;color:#8B6914;">一鍵備份</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">將人員名單、出席記錄、學員資料、資輔家長生日一次備份成一個檔案</div>
-        <button onclick="exportFullBackup()" style="padding:8px 0;width:100%;background:#8B6914;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">💾 一鍵備份</button>
-      </div>
-
-      <div class="home-fn-card">
-        <div style="font-size:2rem;">📤</div>
-        <div style="font-weight:700;font-size:0.95rem;color:#c9a84c;">一鍵恢復</div>
-        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">從備份檔一次恢復人員名單、出席記錄、學員資料、資輔家長生日</div>
-        <button onclick="triggerImportFullBackup()" style="padding:8px 0;width:100%;background:#c9a84c;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">📤 一鍵恢復</button>
+        <div style="font-weight:700;font-size:0.95rem;color:#8B6914;">一鍵備份／恢復</div>
+        <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;flex:1;">將人員名單、出席記錄、學員資料、資輔家長生日一次備份或恢復成單一檔案</div>
+        <div style="display:flex;gap:0.6rem;width:100%;">
+          <button onclick="exportFullBackup()" style="padding:8px 0;flex:1;background:#8B6914;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">💾 備份</button>
+          <button onclick="triggerImportFullBackup()" style="padding:8px 0;flex:1;background:#c9a84c;color:white;border:none;border-radius:20px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">📤 恢復</button>
+        </div>
       </div>
 
       <div class="home-fn-card">
