@@ -69,6 +69,8 @@
   .main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
   .page { display: none; }
   .page.active { display: block; }
+  .app-screen { display: none; }
+  .app-screen.active { display: block; }
 
   .section-title {
     font-family: 'Noto Serif TC', serif; font-size: 1.5rem; font-weight: 700;
@@ -416,22 +418,9 @@
   <div class="header-badge">中一區 ‧ 2026年版 ‧ <span id="date-badge"></span></div>
 </div>
 
-<nav class="nav">
-  <button class="nav-btn active" id="nav-btn-home" onclick="showPage('home',this)">🏠 主畫面</button>
-  <button class="nav-btn" id="nav-btn-dashboard" onclick="showPage('dashboard',this)">📊 總覽</button>
-  <button class="nav-btn" id="nav-btn-members" onclick="showPage('members',this)">👥 人員名單</button>
-  <button class="nav-btn" id="nav-btn-attendance" onclick="showPage('attendance',this)">✅ 出席統計</button>
-  <button class="nav-btn" id="nav-btn-bento" onclick="showPage('bento',this)">🍱 便當分配</button>
-  <button class="nav-btn" id="nav-btn-record" onclick="showPage('record',this);renderRecord()">📅 出席記錄</button>
-  <button class="nav-btn" id="nav-btn-birthday" onclick="showPage('birthday',this);renderBirthdayPage()">🎂 學員資料</button>
-  <button class="nav-btn" id="nav-btn-birthday-parent" onclick="showPage('birthday-parent',this);renderBirthdayParentPage()">🎂 資輔家長生日</button>
-  <button class="nav-btn" id="nav-btn-manage" onclick="showPage('manage',this);renderManagePage()">⚙️ 資料輸入及編輯</button>
-</nav>
-
-<div class="main">
-
-  <!-- ══ PAGE 0: HOME（主畫面）══ -->
-  <div class="page active" id="page-home">
+<!-- ══ 畫面一：管理主畫面（獨立畫面，不與其他介面並列）══ -->
+<div class="app-screen active" id="screen-home">
+  <div class="main">
     <div class="section-title">🏠 管理主畫面</div>
     <div class="home-fn-grid">
 
@@ -486,9 +475,26 @@
 
     </div>
   </div>
+</div>
+<!-- ══ 畫面二：其他管理介面（獨立畫面，含導覽列與各功能頁）══ -->
+<div class="app-screen" id="screen-app">
+
+<nav class="nav">
+  <button class="nav-btn" id="nav-btn-home" onclick="goHome()">🏠 返回主畫面</button>
+  <button class="nav-btn active" id="nav-btn-dashboard" onclick="showPage('dashboard',this)">📊 總覽</button>
+  <button class="nav-btn" id="nav-btn-members" onclick="showPage('members',this)">👥 人員名單</button>
+  <button class="nav-btn" id="nav-btn-attendance" onclick="showPage('attendance',this)">✅ 出席統計</button>
+  <button class="nav-btn" id="nav-btn-bento" onclick="showPage('bento',this)">🍱 便當分配</button>
+  <button class="nav-btn" id="nav-btn-record" onclick="showPage('record',this);renderRecord()">📅 出席記錄</button>
+  <button class="nav-btn" id="nav-btn-birthday" onclick="showPage('birthday',this);renderBirthdayPage()">🎂 學員資料</button>
+  <button class="nav-btn" id="nav-btn-birthday-parent" onclick="showPage('birthday-parent',this);renderBirthdayParentPage()">🎂 資輔家長生日</button>
+  <button class="nav-btn" id="nav-btn-manage" onclick="showPage('manage',this);renderManagePage()">⚙️ 資料輸入及編輯</button>
+</nav>
+
+<div class="main">
 
   <!-- ══ PAGE 1: DASHBOARD ══ -->
-  <div class="page" id="page-dashboard">
+  <div class="page active" id="page-dashboard">
     <div class="section-title">總覽儀表板</div>
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-num" id="dash-total">68</div><div class="stat-label">登記總人數</div></div>
@@ -900,6 +906,8 @@
   </div>
 
 </div><!-- end main -->
+
+</div><!-- end screen-app -->
 
 <script>
 // ══════════════════════════════════════════
@@ -3404,10 +3412,18 @@ function showPage(id, btn) {
   btn.classList.add('active');
 }
 
-// 供主畫面卡片按鈕呼叫，透過對應的導覽按鈕id切換頁面
+// 供主畫面卡片按鈕呼叫，切換到「其他介面」畫面並顯示對應頁面
 function goToPage(id) {
+  document.getElementById('screen-home').classList.remove('active');
+  document.getElementById('screen-app').classList.add('active');
   const btn = document.getElementById('nav-btn-' + id);
   if (btn) showPage(id, btn);
+}
+
+// 從「其他介面」畫面返回獨立的管理主畫面
+function goHome() {
+  document.getElementById('screen-app').classList.remove('active');
+  document.getElementById('screen-home').classList.add('active');
 }
 
 
