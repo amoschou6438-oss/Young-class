@@ -409,6 +409,20 @@
   .record-sep-row td { background: var(--teal) !important; color: white; font-weight: 700; font-size: 0.8rem; padding: 0.3rem 0.6rem; text-align: left; }
   .record-export-btn { padding: 6px 16px; border-radius: 20px; border: none; background: var(--green); color: white; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: 'Noto Sans TC', sans-serif; display: inline-flex; align-items: center; gap: 4px; }
   .record-export-btn:hover { opacity: 0.85; }
+
+  /* ── 回到主畫面：右下角浮動按鈕 ── */
+  .back-home-fab {
+    position: fixed; right: 22px; bottom: 22px; z-index: 9999;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--ink);
+    border: 3px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.7rem; line-height: 1; cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.15s ease;
+  }
+  .back-home-fab:hover { transform: scale(1.08); }
+  .back-home-fab:active { transform: scale(0.94); }
 </style>
 </head>
 <body>
@@ -474,6 +488,7 @@
 </div>
 <!-- ══ 畫面二：其他管理介面（獨立畫面，含導覽列與各功能頁）══ -->
 <div class="app-screen" id="screen-app">
+<button class="back-home-fab" onclick="goHome()" title="回到主畫面" aria-label="回到主畫面">🏠</button>
 
 <nav class="nav">
   <button class="nav-btn" id="nav-btn-home" onclick="goHome()">🏠 返回主畫面</button>
