@@ -2326,18 +2326,29 @@ function exportBentoImage(btn) {
   const areaLabel = document.getElementById('bento-area-badge')?.textContent || '';
   const wrap = document.querySelector('#page-bento .table-wrap');
 
+  // 固定為直式（手機直向）寬度，避免因表格內容較少而被瀏覽器拉成橫式圖片。
   const holder = document.createElement('div');
   holder.style.position = 'fixed';
   holder.style.left = '-99999px';
   holder.style.top = '0';
   holder.style.background = '#ffffff';
   holder.style.padding = '20px';
-  holder.style.display = 'inline-block';
+  holder.style.display = 'block';
+  holder.style.width = '680px';
+  holder.style.boxSizing = 'border-box';
   holder.style.fontFamily = "'Noto Sans TC', sans-serif";
   holder.innerHTML = `<div style="font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:900;color:#1a1a2e;margin-bottom:14px;">🍱 ${dateLabel} 便當分配表${areaLabel ? `　<span style="font-size:0.85rem;font-weight:600;background:#c9a84c;color:#1a1a2e;padding:3px 14px;border-radius:20px;">${areaLabel}</span>` : ''}</div>`;
 
   if (wrap) {
     const clone = wrap.cloneNode(true);
+    clone.style.width = '100%';
+    clone.style.maxWidth = '100%';
+    clone.style.boxSizing = 'border-box';
+    clone.style.overflowX = 'visible';
+    const cloneTable = clone.querySelector('table');
+    if (cloneTable) { cloneTable.style.width = '100%'; cloneTable.style.tableLayout = 'fixed'; }
+    const memberCol = clone.querySelectorAll('td:nth-child(3), th:nth-child(3)');
+    memberCol.forEach(td => { td.style.wordBreak = 'break-word'; td.style.whiteSpace = 'normal'; });
 
     // 篩選按鈕在圖片中無作用，移除
     const filterBar = clone.querySelector('#bento-filter-bar');
