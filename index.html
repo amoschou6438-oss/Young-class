@@ -469,6 +469,18 @@
   .fab-menu.open .fab-home { transform: translateY(-70px) scale(1); transition-delay: 0s; }
   .fab-menu.open .fab-top  { transform: translateY(-140px) scale(1); transition-delay: 0.05s; }
   .fab-item:active { filter: brightness(0.92); }
+  /* 可拖曳：按住 📂 移動；靠上時往下展開；靠左時標籤放右側 */
+  .fab-main { touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+  .fab-menu.fm-dragging .fab-main { cursor: grabbing; transition: none; transform: scale(1.1); box-shadow: 0 10px 26px rgba(0,0,0,0.35); }
+  .fab-menu.fm-down.open .fab-home { transform: translateY(70px) scale(1); }
+  .fab-menu.fm-down.open .fab-top  { transform: translateY(140px) scale(1); }
+  .fm-label {
+    position: absolute; top: 50%; right: calc(100% + 10px); transform: translateY(-50%);
+    background: rgba(28,35,64,0.88); color: #fff; font: 700 0.8rem/1 'Noto Sans TC', sans-serif;
+    padding: 6px 11px; border-radius: 999px; white-space: nowrap; pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .fm-label-right .fm-label { right: auto; left: calc(100% + 10px); }
 </style>
 </head>
 <body>
@@ -535,9 +547,9 @@
 <!-- ══ 畫面二：其他管理介面（獨立畫面，含導覽列與各功能頁）══ -->
 <div class="app-screen" id="screen-app">
 <div class="fab-menu" id="fab-menu">
-  <button class="fab-item fab-top" onclick="scrollToTop()" title="到頂端" aria-label="到頂端"><span style="filter:brightness(0);">🔝</span></button>
-  <button class="fab-item fab-home" onclick="toggleFabMenu(false); goHome()" title="主畫面" aria-label="主畫面">🏠</button>
-  <button class="fab-main" id="fab-main" onclick="toggleFabMenu()" title="展開選單" aria-label="展開選單" aria-expanded="false">📂</button>
+  <button class="fab-item fab-top" onclick="scrollToTop()" title="到頂端" aria-label="到頂端"><span style="filter:brightness(0);">🔝</span><span class="fm-label">到頂端</span></button>
+  <button class="fab-item fab-home" onclick="toggleFabMenu(false); goHome()" title="主畫面" aria-label="主畫面">🏠<span class="fm-label">主畫面</span></button>
+  <button class="fab-main" id="fab-main" onclick="toggleFabMenu()" title="展開選單（可按住拖曳移動）" aria-label="展開選單" aria-expanded="false">📂</button>
 </div>
 
 <nav class="nav">
@@ -3518,10 +3530,102 @@ function toggleFabMenu(force) {
   const open = (typeof force === 'boolean') ? force : !menu.classList.contains('open');
   menu.classList.toggle('open', open);
   main.textContent = open ? '📁' : '📂';
-  main.title = open ? '收起選單' : '展開選單';
-  main.setAttribute('aria-label', main.title);
+  main.title = open ? '收起選單' : '展開選單（可按住拖曳移動）';
+  main.setAttribute('aria-label', open ? '收起選單' : '展開選單');
   main.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
+
+// ── 選單可自由拖曳：按住 📂 拖曳即可移到畫面任何位置，放開後會記住位置 ──
+// 靠近上方時往下展開；靠近左邊時標籤改放右側
+function initDraggableMenu(cfg) {
+  const menu = cfg.menu, main = cfg.main;
+  if (!menu || !main) return;
+  const M = 8, DRAG_PX = 6;
+  const vw = () => document.documentElement.clientWidth || window.innerWidth;
+  const vh = () => document.documentElement.clientHeight || window.innerHeight;
+  const size = () => menu.offsetWidth || cfg.size;
+  const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), Math.max(lo, hi));
+  const limits = () => ({ minX: M, minY: M, maxX: vw() - size() - M, maxY: vh() - size() - M });
+  let saved = null, drag = null, justDragged = false;
+  try { saved = JSON.parse(localStorage.getItem(cfg.key) || 'null'); } catch (e) {}
+  if (saved && !(isFinite(saved.x) && isFinite(saved.y))) saved = null;
+
+  function place(left, top) {
+    const L = limits();
+    menu.style.right = 'auto'; menu.style.bottom = 'auto';
+    menu.style.left = clamp(left, L.minX, L.maxX) + 'px';
+    menu.style.top  = clamp(top,  L.minY, L.maxY) + 'px';
+  }
+  function applySaved() {
+    if (!saved) return;
+    const L = limits();
+    place(L.minX + clamp(saved.x, 0, 1) * (L.maxX - L.minX),
+          L.minY + clamp(saved.y, 0, 1) * (L.maxY - L.minY));
+  }
+  function save() {
+    const r = menu.getBoundingClientRect(), L = limits();
+    saved = {
+      x: L.maxX > L.minX ? (r.left - L.minX) / (L.maxX - L.minX) : 0,
+      y: L.maxY > L.minY ? (r.top  - L.minY) / (L.maxY - L.minY) : 0
+    };
+    try { localStorage.setItem(cfg.key, JSON.stringify(saved)); } catch (e) {}
+  }
+  // 依目前位置決定：往上／往下展開、標籤放左／放右
+  function updateLayout() {
+    const r = menu.getBoundingClientRect();
+    if (!r.width) return;
+    const need = cfg.items * (r.width + 10) + M;
+    const above = r.top, below = vh() - r.bottom;
+    menu.classList.toggle('fm-down', above < need && below > above);
+    const leftRoom = r.left, rightRoom = vw() - r.right;
+    menu.classList.toggle('fm-label-right', leftRoom < 112 && rightRoom > leftRoom);
+  }
+
+  main.addEventListener('pointerdown', e => {
+    if (e.button !== undefined && e.button !== 0) return;
+    const r = menu.getBoundingClientRect();
+    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: r.left, oy: r.top, moved: false };
+    try { main.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  main.addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    if (!drag.moved) {
+      if (Math.hypot(dx, dy) < DRAG_PX) return;
+      drag.moved = true;
+      menu.classList.add('fm-dragging');
+      cfg.close();
+    }
+    place(drag.ox + dx, drag.oy + dy);
+    e.preventDefault();
+  });
+  function endDrag(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    const moved = drag.moved;
+    drag = null;
+    menu.classList.remove('fm-dragging');
+    if (moved) {
+      save(); updateLayout();
+      justDragged = true;
+      setTimeout(() => { justDragged = false; }, 80);
+    }
+  }
+  main.addEventListener('pointerup', endDrag);
+  main.addEventListener('pointercancel', endDrag);
+  // 拖曳結束時不要當成「點一下」；正常點擊則在展開前先算好方向
+  menu.addEventListener('click', e => {
+    if (justDragged) { e.stopPropagation(); e.preventDefault(); return; }
+    if (main.contains(e.target)) updateLayout();
+  }, true);
+  window.addEventListener('resize', () => { applySaved(); updateLayout(); });
+  applySaved();
+  updateLayout();
+}
+function __startDraggableMenu(cfg) {
+  const go = () => initDraggableMenu(cfg);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+}
+__startDraggableMenu({ menu: document.getElementById('fab-menu'), main: document.getElementById('fab-main'), key: 'fabPos_青少', close: () => toggleFabMenu(false), size: 60, items: 2 });
 
 
 // ── 計算當月第三個禮拜日 ──
