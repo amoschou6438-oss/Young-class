@@ -404,8 +404,32 @@
   .record-table tr:nth-child(even) td { background-color: #faf6ef; }
   .record-table tr:nth-child(even) td.total-col { background: #daeef2; }
   .record-table tbody tr:hover td { background: #fff8e8 !important; }
+
+  /* 序、姓名欄位左側凍結：橫向滑動時姓名一律保持可見 */
+  .record-table td.no-col, .record-table td.name-col {
+    position: sticky; z-index: 1; background: var(--white);
+  }
+  .record-table td.no-col { left: 0; }
+  .record-table td.name-col { left: 30px; box-shadow: 2px 0 4px -2px rgba(0,0,0,0.18); }
+  .record-table tr:nth-child(even) td.no-col,
+  .record-table tr:nth-child(even) td.name-col { background: #faf6ef; }
+  .record-table thead th:nth-child(1) { position: sticky; left: 0; z-index: 3; }
+  .record-table thead th:nth-child(2) { position: sticky; left: 30px; z-index: 3; box-shadow: 2px 0 4px -2px rgba(0,0,0,0.25); }
   .rec-check { width: 20px; height: 20px; cursor: pointer; accent-color: var(--teal); }
   .record-filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+
+  /* 手機畫面：縮小出席記錄表，減少橫向捲動 */
+  @media (max-width: 700px) {
+    .record-table { min-width: 600px; }
+    .record-table thead th { font-size: 0.62rem; padding: 0.32rem 0.18rem; }
+    .record-table thead th.month-col { min-width: 32px; }
+    .record-table td { font-size: 0.66rem; padding: 0.26rem 0.18rem; }
+    .record-table td.name-col { font-size: 0.68rem; padding-left: 0.35rem; }
+    .record-table td.no-col { font-size: 0.58rem; }
+    .rec-check { width: 15px; height: 15px; }
+    .record-filter-bar span { font-size: 0.7rem; }
+    .record-export-btn { padding: 5px 12px; font-size: 0.72rem; }
+  }
   .record-sep-row td { background: var(--teal) !important; color: white; font-weight: 700; font-size: 0.8rem; padding: 0.3rem 0.6rem; text-align: left; }
   .record-export-btn { padding: 6px 16px; border-radius: 20px; border: none; background: var(--green); color: white; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: 'Noto Sans TC', sans-serif; display: inline-flex; align-items: center; gap: 4px; }
   .record-export-btn:hover { opacity: 0.85; }
@@ -423,6 +447,22 @@
   }
   .back-home-fab:hover { transform: scale(1.08); }
   .back-home-fab:active { transform: scale(0.94); }
+
+  /* ── 回到頂端：右下角浮動按鈕(疊在回主畫面按鈕上方) ── */
+  .back-top-fab {
+    position: fixed; right: 22px; bottom: 92px; z-index: 9999;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: white; color: var(--teal);
+    border: 3px solid var(--gold);
+    display: none; align-items: center; justify-content: center;
+    font-size: 1.7rem; line-height: 1; cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    opacity: 0.92;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+  }
+  .back-top-fab.show { display: flex; }
+  .back-top-fab:hover { transform: scale(1.08); opacity: 1; }
+  .back-top-fab:active { transform: scale(0.94); }
 </style>
 </head>
 <body>
@@ -489,6 +529,7 @@
 <!-- ══ 畫面二：其他管理介面（獨立畫面，含導覽列與各功能頁）══ -->
 <div class="app-screen" id="screen-app">
 <button class="back-home-fab" onclick="goHome()" title="回到主畫面" aria-label="回到主畫面">🏠</button>
+<button class="back-top-fab" id="back-top-fab" onclick="scrollToTop()" title="回到頂端" aria-label="回到頂端"><span style="filter:brightness(0);">🔝</span></button>
 
 <nav class="nav">
   <button class="nav-btn" id="nav-btn-home" onclick="goHome()">🏠 返回主畫面</button>
@@ -3448,6 +3489,21 @@ function goHome() {
   document.getElementById('screen-home').classList.add('active');
 }
 
+// ── 回到頂端按鈕：捲動超過一定距離才顯示，點擊平滑捲回最上方 ──
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+(function initBackTopFab() {
+  const btn = document.getElementById('back-top-fab');
+  if (!btn) return;
+  const toggle = () => {
+    if (window.scrollY > 280) btn.classList.add('show');
+    else btn.classList.remove('show');
+  };
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+})();
+
 
 // ── 計算當月第三個禮拜日 ──
 function getThirdSunday(year, month) {
@@ -3771,8 +3827,7 @@ function renderRecord() {
     <button class="record-export-btn" onclick="exportRecordImage(this)" style="background:#1565c0;">🖼️ 出席記錄匯出（圖片）</button>
   </div>
   <div class="record-wrap" id="record-table-capture"><table class="record-table"><thead><tr>
-    <th style="width:28px;">序</th>
-    <th style="width:52px;">代號</th>
+    <th style="width:30px;">序</th>
     <th style="width:68px;">姓名</th>
     <th style="width:36px;">乾坤</th>`;
 
@@ -3780,7 +3835,7 @@ function renderRecord() {
   html += `<th style="width:44px;">合計</th></tr></thead><tbody>`;
 
   let lastCode = null, idx = 0;
-  const colSpan = 4 + RECORD_MONTHS.length + 1;
+  const colSpan = 3 + RECORD_MONTHS.length + 1;
 
   members.forEach(m => {
     if (m.code !== lastCode) {
@@ -3795,7 +3850,6 @@ function renderRecord() {
 
     html += `<tr>
       <td class="no-col">${idx}</td>
-      <td style="color:var(--muted);font-size:0.75rem;">${m.code}</td>
       <td class="name-col">${m.name}</td>
       <td style="font-size:0.72rem;color:${genderColor};font-weight:700;">${m.gender==='乾道'?'乾':'坤'}</td>`;
 
@@ -3807,7 +3861,7 @@ function renderRecord() {
     html += `<td class="total-col" id="rec-total-${safeName}" style="color:${isFullAttend?'#c0392b':(total>0?'var(--teal)':'var(--muted)')};font-weight:${isFullAttend?900:700};">${total||'—'}</td></tr>`;
   });
 
-  html += `<tr><td colspan="4" style="background:var(--ink);color:white;font-weight:700;font-size:0.8rem;text-align:left;padding-left:0.6rem;border:none;">合計人次</td>`;
+  html += `<tr><td colspan="3" style="background:var(--ink);color:white;font-weight:700;font-size:0.8rem;text-align:left;padding-left:0.6rem;border:none;">合計人次</td>`;
   RECORD_MONTHS.forEach(m => {
     const cnt = members.filter(mem => monthlyRecord[mem.name]?.[m.label]).length;
     html += `<td id="rec-col-total-${m.label.replace('/','_')}" style="background:var(--ink);color:var(--gold);font-weight:900;border:none;">${cnt||'—'}</td>`;
@@ -3821,13 +3875,13 @@ function renderRecord() {
 
 function exportRecordCSV() {
   const members = getFilteredRecordMembers();
-  const headers = ['序號','代號','姓名','乾坤',...RECORD_MONTHS.map(m=>m.label),'合計'];
+  const headers = ['序號','姓名','乾坤',...RECORD_MONTHS.map(m=>m.label),'合計'];
   const rows = [headers.join(',')];
   let idx = 0;
   members.forEach(m => {
     idx++;
     const total = RECORD_MONTHS.filter(mo=>monthlyRecord[m.name]?.[mo.label]).length;
-    const cols = [idx,m.code,m.name,m.gender,...RECORD_MONTHS.map(mo=>monthlyRecord[m.name]?.[mo.label]?'✓':''),total];
+    const cols = [idx,m.name,m.gender,...RECORD_MONTHS.map(mo=>monthlyRecord[m.name]?.[mo.label]?'✓':''),total];
     rows.push(cols.map(c=>`"${c}"`).join(','));
   });
   const blob = new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
@@ -3844,14 +3898,13 @@ function buildRecordImageHTML() {
   loadMonthlyRecord();
   const members = getFilteredRecordMembers();
   const areaLabels = RECORD_AREA_LABELS;
-  const colSpan = 4 + RECORD_MONTHS.length + 1;
+  const colSpan = 3 + RECORD_MONTHS.length + 1;
 
   let html = `<div style="font-family:'Noto Sans TC',sans-serif;background:#ffffff;padding:20px;display:inline-block;">
     <div style="font-size:1.1rem;font-weight:900;color:#1a1a2e;margin-bottom:12px;">📅 青少班學員出席記錄表（2026/3～2027/1，不含 7 月、11 月）</div>
     <table style="border-collapse:collapse;font-size:0.78rem;">
     <thead><tr style="background:#0f6e3a;color:#ffffff;">
       <th style="padding:6px 8px;border:1px solid #ccc;">序</th>
-      <th style="padding:6px 8px;border:1px solid #ccc;">代號</th>
       <th style="padding:6px 8px;border:1px solid #ccc;">姓名</th>
       <th style="padding:6px 8px;border:1px solid #ccc;">乾坤</th>`;
   RECORD_MONTHS.forEach(m => { html += `<th style="padding:6px 8px;border:1px solid #ccc;white-space:nowrap;">${m.label}</th>`; });
@@ -3869,7 +3922,6 @@ function buildRecordImageHTML() {
     const genderColor = m.gender==='乾道'?'#1565c0':'#c2185b';
     html += `<tr style="background:${idx%2===0?'#f7f7f7':'#ffffff'};">
       <td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:#888;">${idx}</td>
-      <td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:#888;">${m.code}</td>
       <td style="padding:5px 8px;border:1px solid #ccc;font-weight:700;">${m.name}</td>
       <td style="padding:5px 8px;border:1px solid #ccc;text-align:center;color:${genderColor};font-weight:700;">${m.gender==='乾道'?'乾':'坤'}</td>`;
     RECORD_MONTHS.forEach(mo => {
@@ -3879,7 +3931,7 @@ function buildRecordImageHTML() {
     html += `<td style="padding:5px 8px;border:1px solid #ccc;text-align:center;font-weight:900;color:${isFullAttend?'#c0392b':(total>0?'#1565c0':'#888')};">${total||'—'}</td></tr>`;
   });
 
-  html += `<tr><td colspan="4" style="background:#1a1a2e;color:#ffffff;font-weight:700;padding:6px 10px;border:1px solid #ccc;text-align:left;">合計人次</td>`;
+  html += `<tr><td colspan="3" style="background:#1a1a2e;color:#ffffff;font-weight:700;padding:6px 10px;border:1px solid #ccc;text-align:left;">合計人次</td>`;
   RECORD_MONTHS.forEach(m => {
     const cnt = members.filter(mem => monthlyRecord[mem.name]?.[m.label]).length;
     html += `<td style="background:#1a1a2e;color:#e0b84c;font-weight:900;padding:6px 8px;border:1px solid #ccc;text-align:center;">${cnt||'—'}</td>`;
