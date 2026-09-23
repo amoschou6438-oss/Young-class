@@ -2214,11 +2214,20 @@ function renderAttendGrid() {
       const allNames = attending.filter(m=>m.role===r.role&&m.code===c);
       const males   = allNames.filter(m=>m.gender==='乾道').sort(compareBirthdate).map(m=>m.name);
       const females = allNames.filter(m=>m.gender==='坤道').sort(compareBirthdate).map(m=>m.name);
-      const renderGroup = (arr, color) => arr.map((n, i) => {
-        const sep = i < arr.length - 1 ? '、' : '';
-        const br  = (i + 1) % 3 === 0 && i < arr.length - 1 ? '<br>' : '';
-        return `<span class="name-item" style="color:${color};">${n}${sep}</span>${br}`;
-      }).join('');
+      const renderGroup = (arr, color) => {
+        let out = '';
+        for (let i = 0; i < arr.length; i += 3) {
+          const chunk = arr.slice(i, i + 3);
+          const chunkHtml = chunk.map((n, j) => {
+            const idx = i + j;
+            const sep = idx < arr.length - 1 ? '、' : '';
+            return `<span class="name-item" style="color:${color};">${n}${sep}</span>`;
+          }).join('');
+          out += `<span style="white-space:nowrap;">${chunkHtml}</span>`;
+          if (i + 3 < arr.length) out += '<br>';
+        }
+        return out;
+      };
       let nameHtml = '';
       if (males.length)   nameHtml += renderGroup(males, '#1565c0');
       if (males.length && females.length) nameHtml += '<br>';
