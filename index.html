@@ -2522,6 +2522,11 @@ function exportBentoImage(btn) {
     if (cloneTable) { cloneTable.style.width = '100%'; cloneTable.style.tableLayout = 'fixed'; }
     const memberCol = clone.querySelectorAll('td:nth-child(3), th:nth-child(3)');
     memberCol.forEach(td => { td.style.wordBreak = 'break-word'; td.style.whiteSpace = 'normal'; });
+    // 匯出圖：序號／便當數量欄縮窄，讓「包含成員」欄有足夠寬度，名單依換行規則整齊排列
+    const _colW = ['9%', '21%', '70%'];
+    _colW.forEach((w, idx) => {
+      clone.querySelectorAll(`th:nth-child(${idx + 1}), td:nth-child(${idx + 1})`).forEach(c => { c.style.width = w; });
+    });
 
     // 篩選按鈕在圖片中無作用，移除
     const filterBar = clone.querySelector('#bento-filter-bar');
