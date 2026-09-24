@@ -2859,11 +2859,15 @@ function renderBento() {
       );
       const allInParens = [...otherMembers, ...staffLabels];
       const membersHtml = allInParens.length
-        ? `<span style="white-space:nowrap;">(${allInParens.join('、')})</span>`
+        ? `(${allInParens.join('、')})`
         : '';
-      const sep = i < g.length - 1 ? '、' : '';
-      const br  = (i + 1) % 3 === 0 && i < g.length - 1 ? '<br>' : '';
-      return `<span style="color:${receiverColor};font-weight:700;">${b.receiver}</span>${membersHtml}${sep}${br}`;
+      // 換行規則：4個以上＝每1組家庭換行；3個＝每2組家庭換行；2個＝每3組家庭換行
+      const perLine = cnt >= 4 ? 1 : (cnt === 3 ? 2 : 3);
+      const lineEnd = (i + 1) % perLine === 0 && i < g.length - 1;
+      const sep = i < g.length - 1 && !lineEnd ? '、' : '';
+      const br  = lineEnd ? '<br>' : '';
+      // 領取人＋括號成員包成同一個區塊，避免括號被單獨折到下一行
+      return `<span style="display:inline-block;"><span style="color:${receiverColor};font-weight:700;">${b.receiver}</span>${membersHtml}</span>${sep}${br}`;
     }).join('');
 
     let nameStr = '';
