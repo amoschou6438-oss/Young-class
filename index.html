@@ -837,7 +837,7 @@ svg.rb { position:absolute; left:0; top:0; overflow:visible; pointer-events:none
   <!-- ══ PAGE 3: ATTENDANCE ══ -->
   <div class="page" id="page-attendance">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:1.2rem;">
-      <div class="section-title" style="margin-bottom:0;"><span id="date-attend"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 報名人員統計表</div>
+      <div class="section-title" style="margin-bottom:0;"><span id="date-attend"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 青少班報名人員統計表</div>
       <button onclick="exportAttendanceImage(this)" style="padding:7px 18px;background:#1565c0;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">🖼️ 參加名單匯出</button>
     </div>
     <div class="attend-grid-wrap">
@@ -861,7 +861,7 @@ svg.rb { position:absolute; left:0; top:0; overflow:visible; pointer-events:none
   <!-- ══ PAGE 4: BENTO ══ -->
   <div class="page" id="page-bento">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.7rem;margin-bottom:0.2rem;">
-      <div class="section-title" style="margin-bottom:0;"><span id="date-bento"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 便當分配表　<span id="bento-area-badge-wrap" style="position:relative;display:inline-block;vertical-align:middle;">
+      <div class="section-title" style="margin-bottom:0;"><span id="date-bento"></span><span onclick="openDateEdit()" title="點擊修改日期" style="cursor:pointer;font-size:0.75rem;margin-left:6px;opacity:0.55;vertical-align:middle;">✏️</span> 青少班便當分配表　<span id="bento-area-badge-wrap" style="position:relative;display:inline-block;vertical-align:middle;">
         <span id="bento-area-badge"
           onclick="toggleAreaDropdown(event)"
           title="點擊切換本月負責區"
@@ -2368,7 +2368,7 @@ function exportAttendanceImage(btn) {
   holder.style.padding = '20px';
   holder.style.display = 'inline-block';
   holder.style.fontFamily = "'Noto Sans TC', sans-serif";
-  holder.innerHTML = `<div style="font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:900;color:#1a1a2e;margin-bottom:14px;">📋 ${dateLabel} 報名人員統計表</div>`;
+  holder.innerHTML = `<div style="font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:900;color:#1a1a2e;margin-bottom:14px;">📋 ${dateLabel} 青少班報名人員統計表</div>`;
   if (gridWrap) { const g = gridWrap.cloneNode(true); g.style.marginBottom = '1.2rem'; holder.appendChild(g); }
   if (noteBox) holder.appendChild(noteBox.cloneNode(true));
   document.body.appendChild(holder);
@@ -2593,7 +2593,7 @@ function exportBentoImage(btn) {
   holder.style.width = '680px';
   holder.style.boxSizing = 'border-box';
   holder.style.fontFamily = "'Noto Sans TC', sans-serif";
-  holder.innerHTML = `<div style="font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:900;color:#1a1a2e;margin-bottom:14px;">🍱 ${dateLabel} 便當分配表${areaLabel ? `　<span style="font-size:0.85rem;font-weight:600;background:#c9a84c;color:#1a1a2e;padding:3px 14px;border-radius:20px;">${areaLabel}</span>` : ''}</div>`;
+  holder.innerHTML = `<div style="font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:900;color:#1a1a2e;margin-bottom:14px;">🍱 ${dateLabel} 青少班便當分配表${areaLabel ? `　<span style="font-size:0.85rem;font-weight:600;background:#c9a84c;color:#1a1a2e;padding:3px 14px;border-radius:20px;">${areaLabel}</span>` : ''}</div>`;
 
   if (wrap) {
     const clone = wrap.cloneNode(true);
@@ -4487,7 +4487,7 @@ function pad(n){ return (n<10?'0':'')+n; }
 /* ── 主畫面：一個功能鈕 = 一條橫條 ── */
 var HOME=[
  {pal:0, ico:'people', title:'參加名單點選', desc:'查看與管理所有學員、學輔、資輔、家長名單', on:"goToPage('members')"},
- {pal:1, ico:'image',  title:'參加名單匯出', desc:'將本次報名人員統計表匯出成一張圖片', on:"exportAttendanceImage(this.querySelector('.hc-chip'))"},
+ {pal:1, ico:'image',  title:'參加名單匯出', desc:'將本次青少班報名人員統計表匯出成一張圖片', on:"exportAttendanceImage(this.querySelector('.hc-chip'))"},
  {pal:2, ico:'bento',  title:'便當名單匯出', desc:'將本次便當分配內容匯出成一張圖片', on:"exportBentoImage(this.querySelector('.hc-chip'))"},
  {pal:3, ico:'cake',   title:'理天生日名單', desc:'依學員理天生日自動判斷本次應公布之月份名單，並可開啟LINE回報', on:"showMonthlyLdBirthdayModal()"},
  {pal:4, ico:'save',   title:'一鍵備份',     desc:'將人員名單、出席記錄、學員資料、資輔家長生日一次備份成單一檔案', on:"exportFullBackup()"},
@@ -4526,7 +4526,7 @@ function layoutHome(){
 var PG={
  'dashboard':{pal:7,ico:'chart',title:'總覽',desc:'人數、茶會與便當一眼掌握'},
  'members':{pal:0,ico:'people',title:'人員名單',desc:'點選姓名，登記本次參班與茶會'},
- 'attendance':{pal:1,ico:'check',title:'出席統計',desc:'各地區報名人員統計表'},
+ 'attendance':{pal:1,ico:'check',title:'出席統計',desc:'各地區青少班報名人員統計表'},
  'bento':{pal:2,ico:'bento',title:'便當分配',desc:'自動計算便當份數與備餐人員'},
  'record':{pal:6,ico:'calendar',title:'出席記錄',desc:'學員全年出席勾選與匯出'},
  'birthday':{pal:3,ico:'cake',title:'學員資料',desc:'理天生日與出生日期一覽'},
