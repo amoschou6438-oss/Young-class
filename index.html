@@ -1808,10 +1808,8 @@ const RECORD_MONTHS = [
 
 // 尚未到達的月份不開放勾選（僅能勾選「本月及之前」的月份），避免橫向滑動時誤觸未來月份的勾選框
 function isRecordMonthLocked(mo) {
-  const now = new Date();
-  const curYM = now.getFullYear() * 12 + (now.getMonth() + 1);
-  const moYM = mo.year * 12 + mo.month;
-  return moYM > curYM;
+  // 已取消「未來月份鎖定」，所有月份皆可勾選
+  return false;
 }
 const RECORD_AREA_LABELS = {
   '1-1':'台中 1-1','1-2':'彰化 1-2','1-3':'太平 1-3','1-4':'坪林 1-4',
