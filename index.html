@@ -2512,6 +2512,44 @@ let bentoFilter = 'all';
 let _cachedAreaText = '';
 let _cachedAreaBg = 'var(--gold)';
 
+/** 備餐人員若屬同一家庭（依人員名單的家庭欄位），自動併成同一組並依家庭順序排列，例如 銀國、碧純 → 銀國+碧純 */
+function mergeStaffFamilyGroups(groupsNames) {
+  const roleOrd = { '資輔': 0, '家長': 1, '學輔': 2, '小學輔': 3, '學員': 4 };
+  const find = n => allMembers.find(m => m.name === n);
+  const fam = n => { const m = find(n); return m && m.family ? m.family : null; };
+  const cmp = (a, b) => {
+    const ma = find(a), mb = find(b);
+    const ra = roleOrd[ma?.role] ?? 9, rb = roleOrd[mb?.role] ?? 9;
+    if (ra !== rb) return ra - rb;
+    const oa = ma?.familyOrder ?? 99, ob = mb?.familyOrder ?? 99;
+    if (oa !== ob) return oa - ob;
+    return ma && mb ? compareBirthdate(ma, mb) : (ma?.no ?? 9999) - (mb?.no ?? 9999);
+  };
+  const out = [], famIdx = {};
+  groupsNames.forEach(names => {
+    let target = -1;
+    for (const n of names) {
+      const f = fam(n);
+      if (f !== null && famIdx[f] !== undefined) { target = famIdx[f]; break; }
+    }
+    if (target === -1) {
+      out.push({ names: [...names], merged: false });
+      const i = out.length - 1;
+      names.forEach(n => { const f = fam(n); if (f !== null && famIdx[f] === undefined) famIdx[f] = i; });
+    } else {
+      const g = out[target];
+      names.forEach(n => {
+        if (!g.names.includes(n)) g.names.push(n);
+        const f = fam(n);
+        if (f !== null && famIdx[f] === undefined) famIdx[f] = target;
+      });
+      g.merged = true;
+    }
+  });
+  out.forEach(g => { if (g.merged) g.names.sort(cmp); });
+  return out.map(g => g.names);
+}
+
 /** 解析備餐輸入：名字尾端 ＊ 或 * 表示參加茶會（不計備餐）。回傳 staffTeaMarkedNames、供便當計算用的 staffGroups。 */
 function parseMealStaffInput(raw) {
   const staffTeaMarkedNames = new Set();
@@ -2534,7 +2572,8 @@ function parseMealStaffInput(raw) {
       isPlus: staffNamesOnly.length > 1
     });
   });
-  return { staffTeaMarkedNames, staffGroups };
+  const mergedNames = mergeStaffFamilyGroups(staffGroups.map(g => g.names));
+  return { staffTeaMarkedNames, staffGroups: mergedNames.map(n => ({ names: n, bentoCnt: n.length, isPlus: n.length > 1 })) };
 }
 
 function calcBentoList() {
@@ -2768,9 +2807,27 @@ function renderBento() {
 
   staffGroups.forEach(grp => {
     if (grp.isPlus) {
-      // D 類
-      staffPlusGroups.push(grp);
-      staffTotalBento += grp.bentoCnt;
+      // D 類：同家庭若有人參班 → 一併列入該家庭行；其餘才獨立成「備餐」組
+      const rest = [];
+      grp.names.forEach(name => {
+        const inRoster = allMembers.find(m => m.name === name);
+        const famAttend = inRoster ? allMembers.filter(m =>
+          m.family === inRoster.family && m.attend && !m.tea && !noBentoNames.includes(m.name) && !grp.names.includes(m.name)
+        ) : [];
+        if (inRoster && famAttend.length > 0) {
+          staffRosterMap[name] = inRoster.family;
+          staffTotalBento += 1;
+        } else {
+          rest.push(name);
+        }
+      });
+      if (rest.length > 1) {
+        staffPlusGroups.push({ names: rest, bentoCnt: rest.length, isPlus: true });
+        staffTotalBento += rest.length;
+      } else if (rest.length === 1) {
+        staffSingleDisplay.push(rest[0]);
+        staffTotalBento += 1;
+      }
     } else {
       const name = grp.names[0];
       const inRoster = allMembers.find(m => m.name === name);
@@ -4582,6 +4639,98 @@ window.addEventListener('resize',function(){ layoutHome(); document.querySelecto
 if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(function(){ layoutHome(); }); }
 })();
 
+</script>
+
+<script>
+/* 長按姓名 3 秒 → 自動加入備餐人員 */
+(function(){
+  var HOLD_MS = 3000, timer = null, startX = 0, startY = 0, fired = false, target = null;
+  function chipName(chip){
+    var n = chip.firstChild && chip.firstChild.nodeType === 3 ? chip.firstChild.textContent : chip.textContent;
+    return (n || '').trim();
+  }
+  function isAttendChip(chip){
+    var oc = chip.getAttribute('onclick') || '';
+    return oc.indexOf('toggleAttendIdx') !== -1;
+  }
+  function toast(msg){
+    var t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:rgba(30,50,60,.92);color:#fff;padding:.6rem 1.1rem;border-radius:20px;font-size:.9rem;z-index:99999;pointer-events:none;';
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 2200);
+  }
+  function addStaff(name){
+    var el = document.getElementById('meal-staff-names');
+    if (!el || !name) return;
+    var strip = function(n){ return (n || '').trim().replace(/[＊*]+$/, '').replace(/[（(].*$/, '').trim(); };
+    var segs = el.value.split(/[、,，\n]/).map(function(s){ return s.trim(); }).filter(Boolean);
+    var already = segs.some(function(seg){ return seg.split(/[+＋]/).some(function(n){ return strip(n) === name; }); });
+    if (already) { toast(name + ' 已是備餐人員'); return; }
+    var roleOrd = { '資輔':0, '家長':1, '學輔':2, '小學輔':3, '學員':4 };
+    var find = function(n){ return allMembers.find(function(m){ return m.name === strip(n); }); };
+    var cmp = function(a, b){
+      var ma = find(a), mb = find(b);
+      var ra = roleOrd[ma && ma.role]; ra = ra === undefined ? 9 : ra;
+      var rb = roleOrd[mb && mb.role]; rb = rb === undefined ? 9 : rb;
+      if (ra !== rb) return ra - rb;
+      var oa = ma && ma.familyOrder != null ? ma.familyOrder : 99;
+      var ob = mb && mb.familyOrder != null ? mb.familyOrder : 99;
+      if (oa !== ob) return oa - ob;
+      if (ma && mb && typeof compareBirthdate === 'function') return compareBirthdate(ma, mb);
+      return ((ma && ma.no) || 9999) - ((mb && mb.no) || 9999);
+    };
+    var mem = allMembers.find(function(m){ return m.name === name; });
+    var idx = -1;
+    if (mem && mem.family) {
+      idx = segs.findIndex(function(seg){
+        return seg.split(/[+＋]/).some(function(n){ var x = find(n); return x && x.family === mem.family; });
+      });
+    }
+    var merged = '';
+    if (idx !== -1) {
+      var parts = segs[idx].split(/[+＋]/).map(function(s){ return s.trim(); }).filter(Boolean);
+      parts.push(name);
+      parts.sort(cmp);
+      segs[idx] = parts.join('+');
+      merged = segs[idx];
+    } else {
+      segs.push(name);
+    }
+    el.value = segs.join('、');
+    try { if (typeof saveData === 'function') saveData(); } catch(e){}
+    try { if (typeof renderBento === 'function') renderBento(); } catch(e){}
+    toast(merged ? ('✓ 已併入同家庭備餐：' + merged) : ('✓ ' + name + ' 已加入備餐人員'));
+    if (navigator.vibrate) navigator.vibrate(60);
+  }
+  function cancel(){ if (timer) { clearTimeout(timer); timer = null; } }
+  document.addEventListener('pointerdown', function(e){
+    var chip = e.target.closest && e.target.closest('.roster-name-chip');
+    if (!chip || !isAttendChip(chip)) return;
+    fired = false; target = chip; startX = e.clientX; startY = e.clientY;
+    cancel();
+    timer = setTimeout(function(){
+      timer = null; fired = true;
+      addStaff(chipName(chip));
+    }, HOLD_MS);
+  }, true);
+  document.addEventListener('pointermove', function(e){
+    if (timer && (Math.abs(e.clientX - startX) > 10 || Math.abs(e.clientY - startY) > 10)) cancel();
+  }, true);
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+    document.addEventListener(ev, cancel, true);
+  });
+  // 長按完成後，吞掉隨後的 click，避免同時切換出席
+  document.addEventListener('click', function(e){
+    if (fired) { e.stopPropagation(); e.preventDefault(); fired = false; }
+  }, true);
+  document.addEventListener('contextmenu', function(e){
+    if (e.target.closest && e.target.closest('.roster-name-chip')) e.preventDefault();
+  });
+  var st = document.createElement('style');
+  st.textContent = '.roster-name-chip{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}';
+  document.head.appendChild(st);
+})();
 </script>
 </body>
 </html>
