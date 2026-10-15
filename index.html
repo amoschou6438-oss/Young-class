@@ -4720,6 +4720,35 @@ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(function(){ 
   ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
     document.addEventListener(ev, cancel, true);
   });
+  // 連續點兩下姓名 → 切換「不要便當」（同時確保為參班）
+  var lastTapName = '', lastTapTime = 0;
+  document.addEventListener('click', function(e){
+    var chip = e.target.closest && e.target.closest('.roster-name-chip');
+    if (!chip || !isAttendChip(chip) || fired) return;
+    var name = chipName(chip), now = Date.now();
+    if (name && name === lastTapName && now - lastTapTime < 400) {
+      lastTapName = ''; lastTapTime = 0;
+      e.stopPropagation(); e.preventDefault();
+      toggleNoBento(name);
+      return;
+    }
+    lastTapName = name; lastTapTime = now;
+  }, true);
+  function toggleNoBento(name){
+    var el = document.getElementById('no-bento-names');
+    var m = allMembers.find(function(x){ return x.name === name; });
+    if (!el || !m) return;
+    var list = el.value.split(/[、，,\n]/).map(function(s){ return s.trim(); }).filter(Boolean);
+    var i = list.indexOf(name), on = i === -1;
+    if (on) { list.push(name); m.attend = true; } else { list.splice(i, 1); }
+    el.value = list.join('、');
+    try { if (typeof saveData === 'function') saveData(); } catch(e){}
+    try { if (typeof syncAll === 'function') syncAll(); } catch(e){}
+    try { if (typeof renderMembers === 'function') renderMembers(); } catch(e){}
+    try { if (typeof renderBento === 'function') renderBento(); } catch(e){}
+    toast(on ? ('✓ ' + name + ' 不要便當') : (name + ' 已取消不要便當'));
+    if (navigator.vibrate) navigator.vibrate(40);
+  }
   // 長按完成後，吞掉隨後的 click，避免同時切換出席
   document.addEventListener('click', function(e){
     if (fired) { e.stopPropagation(); e.preventDefault(); fired = false; }
