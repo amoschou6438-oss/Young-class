@@ -764,6 +764,14 @@ svg.rb { position:absolute; left:0; top:0; overflow:visible; pointer-events:none
 #page-dashboard, #nav-btn-dashboard { --d:#46627E;--b:#6485A3;--l:#93B3CF;--t:#0E1E2C;--a:#46627E;--nt:#fff;--teal:#46627E; }
 #nav-btn-home { --d:#46627E; --b:#6485A3; --l:#93B3CF; --nt:#fff; }
 </style>
+<style>
+/* 人員名單面板標題：每段文字不拆行（標題＋人數同一行，提示文字獨立一行） */
+#members-roster-wrap .roster-panel-header{display:flex;flex-wrap:wrap;align-items:center;gap:.15rem .5rem;}
+#members-roster-wrap .roster-panel-header > span:first-child{white-space:nowrap;flex:0 1 auto;}
+#members-roster-wrap .roster-panel-header > span:first-child > span{display:block;white-space:nowrap;margin:.15rem 0 0 0 !important;}
+#members-roster-wrap .roster-panel-header > span:not(:first-child):not(.count-pill){flex:0 0 100%;order:3;white-space:nowrap;margin:0 !important;}
+#members-roster-wrap .roster-panel-header .count-pill{order:2;margin-left:auto;white-space:nowrap;flex:none;}
+</style>
 </head>
 <body>
 
@@ -830,6 +838,11 @@ svg.rb { position:absolute; left:0; top:0; overflow:visible; pointer-events:none
       <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
         <button onclick="resetAllAttend();" style="padding:7px 18px;background:#6a1b9a;color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:4px;white-space:nowrap;">🔄 清除出席記錄</button>
       </div>
+    </div>
+    <div class="roster-note" style="margin:0 0 1rem;padding:0.7rem 0.95rem;background:#fff8e6;border:1px solid #f0d9a0;border-radius:10px;font-size:0.88rem;line-height:1.8;color:#3a3a3a;">
+      <div style="font-weight:800;">📝 備注：</div>
+      <div>名字如果<span style="color:#d62828;font-weight:700;">連續點二下</span>，則自動定義為<span style="color:#d62828;font-weight:700;">不要便當</span>。</div>
+      <div>名字如果<span style="color:#d62828;font-weight:700;">長按超過三秒</span>，則自動定義為<span style="color:#d62828;font-weight:700;">備餐人員</span>。</div>
     </div>
     <div id="members-excel-result" style="margin-bottom:0.8rem;font-size:0.8rem;line-height:1.8;"></div>
 
@@ -2204,7 +2217,8 @@ function renderMembers() {
         </div>
         <div class="roster-areas">${buildAreaRows('tea')}</div>
       </div>
-    </div>`;
+    </div>
+    `;
 }
 
 function toggleAttendIdx(idx) {
