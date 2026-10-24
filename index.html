@@ -552,6 +552,10 @@ body { background:#EEF0F4; color:#33465A; font-family:'Noto Sans TC',sans-serif;
 .table-wrap, .attend-grid-wrap, .record-wrap, .roster-panel { background:#fff; box-shadow:var(--shadow-lg); overflow:hidden; }
 /* 出席記錄表需要左右滑動查看月份，姓名/序號欄需固定不動，故此處恢復可橫向捲動 */
 .record-wrap, .attend-grid-wrap { overflow-x:auto !important; overflow-y:hidden; -webkit-overflow-scrolling:touch; touch-action:pan-x; }
+/* 出席記錄表：表格區自成垂直捲動容器，表頭（年月）固定在上方不隨捲動消失 */
+.record-wrap { overflow-y:auto !important; max-height:calc(100vh - 150px); max-height:calc(100dvh - 150px); touch-action:auto; overscroll-behavior:contain; }
+.record-table thead th { position:sticky; top:0; z-index:2; }
+.record-table thead th:nth-child(1), .record-table thead th:nth-child(2) { z-index:4; }
 .table-header-row { background:linear-gradient(100deg,#fff,#F6F8FB); border-bottom:0; padding:1rem 1.5rem; position:relative; }
 .table-header-row::after { content:''; position:absolute; left:1.5rem; right:1.5rem; bottom:0; height:3px; border-radius:2px; background:linear-gradient(90deg,var(--b),var(--l),transparent); opacity:.85; }
 .table-header-row h3 { color:#33465A; font-weight:900; font-size:1.02rem; }
