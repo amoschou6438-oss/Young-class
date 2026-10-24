@@ -551,11 +551,7 @@ body { background:#EEF0F4; color:#33465A; font-family:'Noto Sans TC',sans-serif;
 .stat-card, .table-wrap, .attend-grid-wrap, .record-wrap, .roster-panel, .area-card, .note-box { border:0; border-radius:26px; }
 .table-wrap, .attend-grid-wrap, .record-wrap, .roster-panel { background:#fff; box-shadow:var(--shadow-lg); overflow:hidden; }
 /* 出席記錄表需要左右滑動查看月份，姓名/序號欄需固定不動，故此處恢復可橫向捲動 */
-.record-wrap, .attend-grid-wrap { overflow-x:auto !important; overflow-y:hidden; -webkit-overflow-scrolling:touch; touch-action:pan-x; }
-/* 出席記錄表：表格區自成垂直捲動容器，表頭（年月）固定在上方不隨捲動消失 */
-.record-wrap { overflow-y:auto !important; max-height:calc(100vh - 150px); max-height:calc(100dvh - 150px); touch-action:auto; overscroll-behavior:contain; }
-.record-table thead th { position:sticky; top:0; z-index:2; }
-.record-table thead th:nth-child(1), .record-table thead th:nth-child(2) { z-index:4; }
+.record-wrap, .attend-grid-wrap { overflow-x:auto !important; overflow-y:hidden; -webkit-overflow-scrolling:touch; touch-action:pan-x pan-y; }
 .table-header-row { background:linear-gradient(100deg,#fff,#F6F8FB); border-bottom:0; padding:1rem 1.5rem; position:relative; }
 .table-header-row::after { content:''; position:absolute; left:1.5rem; right:1.5rem; bottom:0; height:3px; border-radius:2px; background:linear-gradient(90deg,var(--b),var(--l),transparent); opacity:.85; }
 .table-header-row h3 { color:#33465A; font-weight:900; font-size:1.02rem; }
@@ -3820,6 +3816,7 @@ function syncAll() {
 }
 
 function showPage(id, btn) {
+  { const _fh=document.getElementById('record-float-head'); if(_fh) _fh.style.display='none'; }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -4340,6 +4337,60 @@ function renderRecord() {
 
   html += `</tbody></table></div>`;
   document.getElementById('record-page-content').innerHTML = html;
+  setupRecordFloatHead();
+}
+
+// 出席記錄：頁面往下捲時，浮動表頭（年月）固定在頂部，並與表格左右捲動同步
+function setupRecordFloatHead() {
+  const old = document.getElementById('record-float-head');
+  if (old) old.remove();
+  if (window._recFloatCleanup) { window._recFloatCleanup(); window._recFloatCleanup = null; }
+  const wrap = document.getElementById('record-table-capture');
+  if (!wrap) return;
+  const table = wrap.querySelector('table');
+  const thead = table && table.querySelector('thead');
+  if (!thead) return;
+
+  const box = document.createElement('div');
+  box.id = 'record-float-head';
+  box.style.cssText = 'position:fixed;top:64px;z-index:90;overflow:hidden;display:none;box-shadow:0 3px 6px rgba(0,0,0,0.18);';
+  const ct = document.createElement('table');
+  ct.className = 'record-table';
+  ct.style.cssText = 'width:auto;min-width:0;table-layout:fixed;';
+  ct.appendChild(thead.cloneNode(true));
+  box.appendChild(ct);
+  document.body.appendChild(box);
+
+  function sync() {
+    const page = document.getElementById('page-record');
+    if (!page || !page.classList.contains('active')) { box.style.display = 'none'; return; }
+    const wr = wrap.getBoundingClientRect();
+    const hh = thead.getBoundingClientRect().height;
+    const stickTop = 64;
+    if (wr.top > stickTop - 1 || wr.bottom < stickTop + hh + 30) { box.style.display = 'none'; return; }
+    const ths = thead.querySelectorAll('th');
+    const cths = ct.querySelectorAll('th');
+    let total = 0;
+    ths.forEach((th, i) => {
+      const w = th.getBoundingClientRect().width;
+      total += w;
+      if (cths[i]) { cths[i].style.width = w + 'px'; cths[i].style.minWidth = w + 'px'; cths[i].style.maxWidth = w + 'px'; }
+    });
+    ct.style.width = total + 'px';
+    box.style.left = wr.left + 'px';
+    box.style.width = wr.width + 'px';
+    box.style.display = 'block';
+    box.scrollLeft = wrap.scrollLeft;
+  }
+  window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  wrap.addEventListener('scroll', sync, { passive: true });
+  window._recFloatCleanup = () => {
+    window.removeEventListener('scroll', sync);
+    window.removeEventListener('resize', sync);
+    box.remove();
+  };
+  sync();
 }
 
 function exportRecordCSV() {
