@@ -3816,6 +3816,7 @@ function syncAll() {
 }
 
 function showPage(id, btn) {
+  { const _fx=document.getElementById('record-fixed-head'); if(_fx) _fx.style.display='none'; }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -4340,6 +4341,12 @@ function renderRecord() {
 }
 
 // 出席記錄：年月表頭做成獨立的 sticky 橫條（放在橫向捲動區外），蓋在表格原表頭上，往下捲時固定在頂部
+function recHeaderBottom() {
+  const hd = document.querySelector('.header');
+  if (!hd) return 0;
+  const r = hd.getBoundingClientRect();
+  return Math.max(0, Math.round(r.bottom));
+}
 function setupRecordFloatHead() {
   if (window._recFloatCleanup) { window._recFloatCleanup(); window._recFloatCleanup = null; }
   const old = document.getElementById('record-sticky-head');
@@ -4352,39 +4359,85 @@ function setupRecordFloatHead() {
 
   const bar = document.createElement('div');
   bar.id = 'record-sticky-head';
-  bar.style.cssText = 'position:sticky;top:64px;z-index:90;overflow:hidden;border-radius:26px 26px 0 0;box-shadow:0 3px 6px rgba(0,0,0,0.18);';
+  bar.style.cssText = 'position:sticky;top:' + recHeaderBottom() + 'px;z-index:90;overflow:hidden;border-radius:26px 26px 0 0;box-shadow:0 3px 6px rgba(0,0,0,0.18);';
   const ct = document.createElement('table');
   ct.className = 'record-table';
   ct.style.cssText = 'width:auto;min-width:0;table-layout:fixed;border-collapse:collapse;';
   ct.appendChild(thead.cloneNode(true));
   bar.appendChild(ct);
   wrap.parentNode.insertBefore(bar, wrap);
+  const oldFx = document.getElementById('record-fixed-head');
+  if (oldFx) oldFx.remove();
+  const fx = document.createElement('div');
+  fx.id = 'record-fixed-head';
+  fx.style.cssText = 'position:fixed;top:' + recHeaderBottom() + 'px;z-index:91;overflow:hidden;display:none;box-shadow:0 3px 6px rgba(0,0,0,0.18);';
+  document.body.appendChild(fx);
 
-  function layout() {
+  let lastSig = '';
+  function layout(force) {
+    const tw = table.getBoundingClientRect().width;
+    const sig = tw + '|' + wrap.clientWidth + '|' + thead.getBoundingClientRect().height;
+    if (!force && sig === lastSig) { bar.scrollLeft = wrap.scrollLeft; updateFx(); return; }
+    lastSig = sig;
     const ths = thead.querySelectorAll('th');
     const cths = ct.querySelectorAll('th');
     let total = 0;
-    ths.forEach((th, i) => {
-      const w = th.getBoundingClientRect().width;
-      total += w;
-      if (cths[i]) { const v = w + 'px'; cths[i].style.width = v; cths[i].style.minWidth = v; cths[i].style.maxWidth = v; }
-    });
+    const ws = [];
+    ths.forEach(th => { const w = th.getBoundingClientRect().width; ws.push(w); total += w; });
+    // 把與整張表寬度的差額補到最後一欄（合計），確保兩邊可捲動範圍一致
+    if (ws.length && tw > total) { ws[ws.length - 1] += (tw - total); total = tw; }
+    ws.forEach((w, i) => { if (cths[i]) { const v = w + 'px'; cths[i].style.width = v; cths[i].style.minWidth = v; cths[i].style.maxWidth = v; } });
     const h = thead.getBoundingClientRect().height;
     ct.style.width = total + 'px';
+    ct.style.minWidth = total + 'px';
     bar.style.width = wrap.clientWidth + 'px';
     bar.style.height = h + 'px';
     bar.style.marginBottom = (-h) + 'px';
+    bar.style.top = recHeaderBottom() + 'px';
     bar.scrollLeft = wrap.scrollLeft;
+    fx.innerHTML = '';
+    fx.appendChild(ct.cloneNode(true));
+    fx.style.height = h + 'px';
+    updateFx();
+  }
+  // 備援：若 sticky 沒有生效（表頭條已被捲出畫面），改用 fixed 表頭在頂部顯示
+  function updateFx() {
+    const page = document.getElementById('page-record');
+    if (!page || !page.classList.contains('active')) { fx.style.display = 'none'; return; }
+    const wr = wrap.getBoundingClientRect();
+    const br = bar.getBoundingClientRect();
+    const h = parseFloat(bar.style.height) || 40;
+    const top = recHeaderBottom();
+    fx.style.top = top + 'px';
+    bar.style.top = top + 'px';
+    const stuck = br.top >= top - 1 && br.top <= top + 2;
+    const need = wr.top < top - 1 && wr.bottom > top + h + 20 && !stuck;
+    if (!need) { fx.style.display = 'none'; return; }
+    fx.style.left = wr.left + 'px';
+    fx.style.width = wr.width + 'px';
+    fx.style.display = 'block';
+    fx.scrollLeft = wrap.scrollLeft;
   }
   // 原表頭文字隱藏（版面高度保留），由上方 sticky 橫條顯示
   thead.querySelectorAll('th').forEach(th => { th.style.visibility = 'hidden'; });
-  const onScroll = () => { bar.scrollLeft = wrap.scrollLeft; };
+  const onScroll = () => { layout(false); bar.scrollLeft = wrap.scrollLeft; updateFx(); };
+  const onResize = () => layout(true);
   wrap.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', layout);
-  window._recFloatCleanup = () => { window.removeEventListener('resize', layout); wrap.removeEventListener('scroll', onScroll); };
-  layout();
-  requestAnimationFrame(layout);
-  setTimeout(layout, 300);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onResize);
+  let ro = null;
+  if (window.ResizeObserver) { ro = new ResizeObserver(onResize); ro.observe(table); ro.observe(wrap); }
+  window._recFloatCleanup = () => {
+    window.removeEventListener('resize', onResize);
+    window.removeEventListener('scroll', onScroll);
+    wrap.removeEventListener('scroll', onScroll);
+    if (ro) ro.disconnect();
+    fx.remove();
+  };
+  layout(true);
+  requestAnimationFrame(() => layout(true));
+  setTimeout(() => layout(true), 300);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layout(true));
 }
 
 function exportRecordCSV() {
