@@ -3816,7 +3816,6 @@ function syncAll() {
 }
 
 function showPage(id, btn) {
-  { const _fh=document.getElementById('record-float-head'); if(_fh) _fh.style.display='none'; }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -4340,57 +4339,52 @@ function renderRecord() {
   setupRecordFloatHead();
 }
 
-// 出席記錄：頁面往下捲時，浮動表頭（年月）固定在頂部，並與表格左右捲動同步
+// 出席記錄：年月表頭做成獨立的 sticky 橫條（放在橫向捲動區外），蓋在表格原表頭上，往下捲時固定在頂部
 function setupRecordFloatHead() {
-  const old = document.getElementById('record-float-head');
-  if (old) old.remove();
   if (window._recFloatCleanup) { window._recFloatCleanup(); window._recFloatCleanup = null; }
+  const old = document.getElementById('record-sticky-head');
+  if (old) old.remove();
   const wrap = document.getElementById('record-table-capture');
   if (!wrap) return;
   const table = wrap.querySelector('table');
   const thead = table && table.querySelector('thead');
   if (!thead) return;
 
-  const box = document.createElement('div');
-  box.id = 'record-float-head';
-  box.style.cssText = 'position:fixed;top:64px;z-index:90;overflow:hidden;display:none;box-shadow:0 3px 6px rgba(0,0,0,0.18);';
+  const bar = document.createElement('div');
+  bar.id = 'record-sticky-head';
+  bar.style.cssText = 'position:sticky;top:64px;z-index:90;overflow:hidden;border-radius:26px 26px 0 0;box-shadow:0 3px 6px rgba(0,0,0,0.18);';
   const ct = document.createElement('table');
   ct.className = 'record-table';
-  ct.style.cssText = 'width:auto;min-width:0;table-layout:fixed;';
+  ct.style.cssText = 'width:auto;min-width:0;table-layout:fixed;border-collapse:collapse;';
   ct.appendChild(thead.cloneNode(true));
-  box.appendChild(ct);
-  document.body.appendChild(box);
+  bar.appendChild(ct);
+  wrap.parentNode.insertBefore(bar, wrap);
 
-  function sync() {
-    const page = document.getElementById('page-record');
-    if (!page || !page.classList.contains('active')) { box.style.display = 'none'; return; }
-    const wr = wrap.getBoundingClientRect();
-    const hh = thead.getBoundingClientRect().height;
-    const stickTop = 64;
-    if (wr.top > stickTop - 1 || wr.bottom < stickTop + hh + 30) { box.style.display = 'none'; return; }
+  function layout() {
     const ths = thead.querySelectorAll('th');
     const cths = ct.querySelectorAll('th');
     let total = 0;
     ths.forEach((th, i) => {
       const w = th.getBoundingClientRect().width;
       total += w;
-      if (cths[i]) { cths[i].style.width = w + 'px'; cths[i].style.minWidth = w + 'px'; cths[i].style.maxWidth = w + 'px'; }
+      if (cths[i]) { const v = w + 'px'; cths[i].style.width = v; cths[i].style.minWidth = v; cths[i].style.maxWidth = v; }
     });
+    const h = thead.getBoundingClientRect().height;
     ct.style.width = total + 'px';
-    box.style.left = wr.left + 'px';
-    box.style.width = wr.width + 'px';
-    box.style.display = 'block';
-    box.scrollLeft = wrap.scrollLeft;
+    bar.style.width = wrap.clientWidth + 'px';
+    bar.style.height = h + 'px';
+    bar.style.marginBottom = (-h) + 'px';
+    bar.scrollLeft = wrap.scrollLeft;
   }
-  window.addEventListener('scroll', sync, { passive: true });
-  window.addEventListener('resize', sync);
-  wrap.addEventListener('scroll', sync, { passive: true });
-  window._recFloatCleanup = () => {
-    window.removeEventListener('scroll', sync);
-    window.removeEventListener('resize', sync);
-    box.remove();
-  };
-  sync();
+  // 原表頭文字隱藏（版面高度保留），由上方 sticky 橫條顯示
+  thead.querySelectorAll('th').forEach(th => { th.style.visibility = 'hidden'; });
+  const onScroll = () => { bar.scrollLeft = wrap.scrollLeft; };
+  wrap.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', layout);
+  window._recFloatCleanup = () => { window.removeEventListener('resize', layout); wrap.removeEventListener('scroll', onScroll); };
+  layout();
+  requestAnimationFrame(layout);
+  setTimeout(layout, 300);
 }
 
 function exportRecordCSV() {
