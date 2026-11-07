@@ -777,6 +777,7 @@ svg.rb { position:absolute; left:0; top:0; overflow:visible; pointer-events:none
 #members-roster-wrap .roster-panel-header > span:first-child > span{display:block;white-space:nowrap;margin:.15rem 0 0 0 !important;}
 #members-roster-wrap .roster-panel-header > span:not(:first-child):not(.count-pill){flex:0 0 100%;order:3;white-space:nowrap;margin:0 !important;}
 #members-roster-wrap .roster-panel-header .count-pill{order:2;margin-left:auto;white-space:nowrap;flex:none;}
+#page-birthday .table-wrap,#page-birthday-parent .table-wrap{overflow-x:auto !important;-webkit-overflow-scrolling:touch;}
 </style>
 </head>
 <body>
@@ -999,7 +1000,7 @@ svg.rb { position:absolute; left:0; top:0; overflow:visible; pointer-events:none
     <div class="note-box" style="margin-bottom:1.2rem;">
       <div class="note-title">📖 資料說明</div>
       <div class="note-text">
-        名單即「人員名單」中目前所有身份為學輔／學員的成員，理天生日、出生日期可點列表最右側「✎ 修改」自行編輯（會自動存檔）；<br>
+        名單即「人員名單」中目前所有身份為學輔／學員的成員，理天生日、出生日期可點姓名或列表最右側「✎ 修改」自行編輯（會自動存檔）；<br>
         身份、乾坤、地區皆依「人員名單」即時同步 — 在人員名單修改身份（如學員變學輔）或新增／刪除人員後，本頁會自動更新並重新排序；<br>
         排列順序：先乾道、後坤道，各組內先學輔、後學員，同組再依出生日期由前到後排序。
       </div>
@@ -1034,7 +1035,7 @@ svg.rb { position:absolute; left:0; top:0; overflow:visible; pointer-events:none
     <div class="note-box" style="margin-bottom:1.2rem;">
       <div class="note-title">📖 資料說明</div>
       <div class="note-text">
-        名單即「人員名單」中目前所有身份為資輔／家長的成員，姓氏、出生日期可點列表最右側「✎ 修改」自行編輯（會自動存檔）；<br>
+        名單即「人員名單」中目前所有身份為資輔／家長的成員，姓氏、出生日期可點姓名或列表最右側「✎ 修改」自行編輯（會自動存檔）；<br>
         身份、乾坤、地區皆依「人員名單」即時同步 — 在人員名單修改身份或新增／刪除人員後，本頁會自動更新並重新排序；<br>
         排列順序：先乾道、後坤道，各組內先資輔、後家長，同組再依出生年月日由早到晚排序；<br>
         僅查得出生年份、無月日資料者可於出生日期欄位填寫如「1963年（無月日資料）」，會自動排在同組最後。
@@ -1490,7 +1491,7 @@ function renderBirthdayPage() {
       <td><span class="badge badge-${m.role}">${m.role}</span></td>
       <td><span class="badge badge-${m.gender}">${m.gender}</span></td>
       <td>${m.area}</td>
-      <td class="name">${m.name}</td>
+      <td class="name" style="cursor:pointer;color:var(--a);text-decoration:underline dotted;" onclick="openEditStudentBirthday('${m.name}')">${m.name}</td>
       <td>${m.ld || '—'}</td>
       <td>${m.bd || '—'}</td>
       <td><button type="button" class="btn-bday-edit" onclick="openEditStudentBirthday('${m.name}')">✎ 修改</button></td>
@@ -1619,7 +1620,7 @@ function renderBirthdayParentPage() {
       <td><span class="badge badge-${m.role}">${m.role}</span></td>
       <td><span class="badge badge-${m.gender}">${m.gender}</span></td>
       <td>${m.area}</td>
-      <td class="name">${m.fullname}</td>
+      <td class="name" style="cursor:pointer;color:var(--a);text-decoration:underline dotted;" onclick="openEditParentBirthday('${m.name}')">${m.fullname}</td>
       <td>${m.bd || '—'}</td>
       <td><button type="button" class="btn-bday-edit" onclick="openEditParentBirthday('${m.name}')">✎ 修改</button></td>
     </tr>`;
